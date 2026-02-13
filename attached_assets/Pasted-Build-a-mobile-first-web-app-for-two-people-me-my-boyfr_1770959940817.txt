@@ -1,0 +1,58 @@
+Build a mobile-first web app for two people (me + my boyfriend) to track wins across small competitive games (Rubik’s cube races, Tetris, wiki speedruns, etc.). The core UX is super low-lift: the home screen shows two large circular avatar buttons (our faces) and tapping one instantly logs a win for the currently selected game (with haptic/animation feedback). The app should make it effortless to switch games, see who’s leading, and review a timeline of past wins.
+
+Primary goals
+	•	Fastest possible win logging: open app → tap a face → point is recorded.
+	•	Clear scoreboard: always show who’s ahead overall + per game.
+	•	Historical log: see all past wins over time and filter by game.
+
+Data model (minimum)
+	•	Users: exactly 2 players
+	•	playerA { id, name, avatarUrl }
+	•	playerB { id, name, avatarUrl }
+	•	Games:
+	•	game { id, name, iconOrEmoji, createdAt, isArchived }
+	•	Win events (append-only log):
+	•	event { id, gameId, winnerPlayerId, timestamp, note?, source:"tap" }
+
+App structure / screens
+	1.	Home / Log Win
+	•	Top: current game selector (dropdown or horizontal chips).
+	•	Center: two big avatar buttons side-by-side (player A and player B).
+	•	Tap avatar → instantly creates a win event for selected game with timestamp = now.
+	•	Show micro-animation + toast: “+1 for [Name]”
+	•	Include Undo action for ~5–10 seconds (removes last event).
+	•	Below: score summary for selected game
+	•	[A score] - [B score], plus “A leads by X” or “Tied”
+	•	Optional: quick add note after logging (bottom sheet) but keep default flow 1-tap.
+	2.	Games
+	•	List of games with mini score line per game (A vs B).
+	•	Add new game (name + emoji/icon).
+	•	Tap game to set it as active and return to Home.
+	•	Archive game (doesn’t delete history).
+	3.	History / Timeline
+	•	Feed of win events reverse chronological.
+	•	Each row: game name + winner avatar + timestamp + optional note.
+	•	Filters:
+	•	by game (chip filter)
+	•	by winner (A/B)
+	•	date range (optional simple “Last 7 / 30 / All”)
+	•	“Stats” header:
+	•	overall wins (all games)
+	•	streaks: current streak per player (consecutive wins within a game optional; overall streak OK)
+
+Key UI details
+	•	Mobile-first, one-handed friendly.
+	•	Big hit targets for avatars (minimum 72px).
+	•	Always show:
+	•	active game name
+	•	per-game score
+	•	quick access to History and Games (bottom tab bar)
+	•	Use playful, lightweight visual style.
+	•	Empty states:
+	•	No games: show “Create your first game” + CTA
+	•	No history: show explanation + sample row
+
+Core interactions
+	•	One tap logging: tapping an avatar writes a new event immediately.
+	•	Undo last action: remove last event if it’s within last 10 seconds (or last event regardless, but confirm).
+	•	Game switching: switching game instantly updates avatar screen scores and new events go to that game.
