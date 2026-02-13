@@ -11,9 +11,12 @@ import {
   Platform,
   Alert,
   KeyboardAvoidingView,
+  ActionSheetIOS,
 } from "react-native";
+import { Image } from "expo-image";
 import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
+import * as ImagePicker from "expo-image-picker";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import Colors from "@/constants/colors";
@@ -202,6 +205,7 @@ export default function GamesScreen() {
     deleteGame,
     getScoreForGame,
     updatePlayer,
+    updatePlayerAvatar,
   } = useStorage();
 
   const [showAdd, setShowAdd] = useState(false);
@@ -239,6 +243,63 @@ export default function GamesScreen() {
     setShowSettings(false);
     if (Platform.OS !== "web") {
       Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+    }
+  };
+
+  const pickPhoto = async (playerId: string, useCamera: boolean) => {
+    try {
+      if (useCamera) {
+        const { status } = await ImagePicker.requestCameraPermissionsAsync();
+        if (status !== "granted") {
+          Alert.alert("Permission needed", "Camera access is required to take a photo.");
+          return;
+        }
+        const result = await ImagePicker.launchCameraAsync({
+          allowsEditing: true,
+          aspect: [1, 1],
+          quality: 0.7,
+        });
+        if (!result.canceled && result.assets[0]) {
+          updatePlayerAvatar(playerId, result.assets[0].uri);
+        }
+      } else {
+        const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== "granted") {
+          Alert.alert("Permission needed", "Photo library access is required.");
+          return;
+        }
+        const result = await ImagePicker.launchImageLibraryAsync({
+          allowsEditing: true,
+          aspect: [1, 1],
+          quality: 0.7,
+        });
+        if (!result.canceled && result.assets[0]) {
+          updatePlayerAvatar(playerId, result.assets[0].uri);
+        }
+      }
+    } catch (e) {
+      console.error("Photo pick error:", e);
+    }
+  };
+
+  const showPhotoOptions = (playerId: string) => {
+    if (Platform.OS === "ios") {
+      ActionSheetIOS.showActionSheetWithOptions(
+        {
+          options: ["Cancel", "Take Photo", "Choose from Library"],
+          cancelButtonIndex: 0,
+        },
+        (buttonIndex) => {
+          if (buttonIndex === 1) pickPhoto(playerId, true);
+          else if (buttonIndex === 2) pickPhoto(playerId, false);
+        }
+      );
+    } else {
+      Alert.alert("Set Photo", "Choose an option", [
+        { text: "Cancel", style: "cancel" },
+        { text: "Take Photo", onPress: () => pickPhoto(playerId, true) },
+        { text: "Choose from Library", onPress: () => pickPhoto(playerId, false) },
+      ]);
     }
   };
 
@@ -444,10 +505,28 @@ export default function GamesScreen() {
                 <View style={[styles.handle, { backgroundColor: colors.border }]} />
               </View>
               <Text style={[styles.sheetTitle, { color: colors.text }]}>
-                Player Names
+                Players
               </Text>
-              <View style={styles.playerInputRow}>
-                <View style={[styles.playerDot, { backgroundColor: colors.playerA }]} />
+              <View style={styles.playerSettingsRow}>
+                <Pressable
+                  onPress={() => showPhotoOptions("player_a")}
+                  style={[styles.playerAvatarPicker, { borderColor: colors.playerA }]}
+                >
+                  {data.players[0].avatarUri ? (
+                    <Image
+                      source={{ uri: data.players[0].avatarUri }}
+                      style={styles.playerAvatarImg}
+                      contentFit="cover"
+                    />
+                  ) : (
+                    <View style={[styles.playerAvatarPlaceholder, { backgroundColor: colors.playerA }]}>
+                      <Text style={styles.playerAvatarInitial}>{data.players[0].initial}</Text>
+                    </View>
+                  )}
+                  <View style={[styles.cameraIconBadge, { backgroundColor: colors.playerA }]}>
+                    <Ionicons name="camera" size={12} color="#fff" />
+                  </View>
+                </Pressable>
                 <TextInput
                   style={[
                     styles.input,
@@ -464,8 +543,26 @@ export default function GamesScreen() {
                   onChangeText={setPlayer1Name}
                 />
               </View>
-              <View style={styles.playerInputRow}>
-                <View style={[styles.playerDot, { backgroundColor: colors.playerB }]} />
+              <View style={styles.playerSettingsRow}>
+                <Pressable
+                  onPress={() => showPhotoOptions("player_b")}
+                  style={[styles.playerAvatarPicker, { borderColor: colors.playerB }]}
+                >
+                  {data.players[1].avatarUri ? (
+                    <Image
+                      source={{ uri: data.players[1].avatarUri }}
+                      style={styles.playerAvatarImg}
+                      contentFit="cover"
+                    />
+                  ) : (
+                    <View style={[styles.playerAvatarPlaceholder, { backgroundColor: colors.playerB }]}>
+                      <Text style={styles.playerAvatarInitial}>{data.players[1].initial}</Text>
+                    </View>
+                  )}
+                  <View style={[styles.cameraIconBadge, { backgroundColor: colors.playerB }]}>
+                    <Ionicons name="camera" size={12} color="#fff" />
+                  </View>
+                </Pressable>
                 <TextInput
                   style={[
                     styles.input,
@@ -679,6 +776,49 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     gap: 12,
+  },
+  playerSettingsRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 14,
+    marginBottom: 4,
+  },
+  playerAvatarPicker: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    borderWidth: 2,
+    overflow: "hidden" as const,
+    position: "relative" as const,
+  },
+  playerAvatarImg: {
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+  },
+  playerAvatarPlaceholder: {
+    width: 52,
+    height: 52,
+    borderRadius: 26,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  playerAvatarInitial: {
+    fontSize: 22,
+    fontFamily: "Nunito_800ExtraBold",
+    color: "#fff",
+  },
+  cameraIconBadge: {
+    position: "absolute" as const,
+    bottom: 0,
+    right: 0,
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    justifyContent: "center",
+    alignItems: "center",
+    borderWidth: 2,
+    borderColor: "#fff",
   },
   playerDot: {
     width: 16,

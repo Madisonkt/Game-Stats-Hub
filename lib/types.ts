@@ -3,6 +3,7 @@ export interface Player {
   name: string;
   avatarColor: string;
   initial: string;
+  avatarUri?: string;
 }
 
 export interface Game {

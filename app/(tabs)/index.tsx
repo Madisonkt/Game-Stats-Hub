@@ -10,6 +10,7 @@ import {
   Animated as RNAnimated,
   Dimensions,
 } from "react-native";
+import { Image } from "expo-image";
 import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -124,6 +125,7 @@ function AvatarButton({
   color,
   score,
   isLeading,
+  avatarUri,
   onPress,
 }: {
   name: string;
@@ -131,6 +133,7 @@ function AvatarButton({
   color: string;
   score: number;
   isLeading: boolean;
+  avatarUri?: string;
   onPress: () => void;
 }) {
   const scale = useSharedValue(1);
@@ -168,7 +171,15 @@ function AvatarButton({
           ]}
         />
         <View style={[styles.avatar, { backgroundColor: color }]}>
-          <Text style={styles.avatarInitial}>{initial}</Text>
+          {avatarUri ? (
+            <Image
+              source={{ uri: avatarUri }}
+              style={styles.avatarImage}
+              contentFit="cover"
+            />
+          ) : (
+            <Text style={styles.avatarInitial}>{initial}</Text>
+          )}
         </View>
         {isLeading && (
           <View style={[styles.crownBadge, { backgroundColor: "#FFD93D" }]}>
@@ -418,6 +429,7 @@ export default function LogScreen() {
                 color={colors.playerA}
                 score={score.a}
                 isLeading={score.a > score.b}
+                avatarUri={data.players[0].avatarUri}
                 onPress={() => handleWin("player_a")}
               />
               <AvatarButton
@@ -426,6 +438,7 @@ export default function LogScreen() {
                 color={colors.playerB}
                 score={score.b}
                 isLeading={score.b > score.a}
+                avatarUri={data.players[1].avatarUri}
                 onPress={() => handleWin("player_b")}
               />
             </View>
@@ -545,6 +558,12 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     justifyContent: "center",
     alignItems: "center",
+    overflow: "hidden" as const,
+  },
+  avatarImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
   },
   avatarInitial: {
     fontSize: 40,

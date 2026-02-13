@@ -28,6 +28,7 @@ interface StorageContextValue {
   logWin: (playerId: string, note?: string) => WinEvent | null;
   undoLastWin: () => boolean;
   updatePlayer: (playerId: string, name: string) => void;
+  updatePlayerAvatar: (playerId: string, avatarUri: string) => void;
   addNote: (eventId: string, note: string) => void;
   getScoreForGame: (gameId: string) => { a: number; b: number };
   getOverallScore: () => { a: number; b: number };
@@ -177,6 +178,17 @@ export function StorageProvider({ children }: { children: ReactNode }) {
     });
   }, [persist]);
 
+  const updatePlayerAvatar = useCallback((playerId: string, avatarUri: string) => {
+    setData(prev => {
+      const newPlayers = prev.players.map(p =>
+        p.id === playerId ? { ...p, avatarUri } : p
+      ) as [Player, Player];
+      const newData = { ...prev, players: newPlayers };
+      persist(newData);
+      return newData;
+    });
+  }, [persist]);
+
   const addNote = useCallback((eventId: string, note: string) => {
     setData(prev => {
       const newEvents = prev.events.map(e =>
@@ -228,13 +240,14 @@ export function StorageProvider({ children }: { children: ReactNode }) {
     logWin,
     undoLastWin,
     updatePlayer,
+    updatePlayerAvatar,
     addNote,
     getScoreForGame,
     getOverallScore,
     getStreak,
     lastEvent,
     lastEventTime,
-  }), [data, isLoading, setActiveGame, addGame, archiveGame, unarchiveGame, deleteGame, logWin, undoLastWin, updatePlayer, addNote, getScoreForGame, getOverallScore, getStreak, lastEvent, lastEventTime]);
+  }), [data, isLoading, setActiveGame, addGame, archiveGame, unarchiveGame, deleteGame, logWin, undoLastWin, updatePlayer, updatePlayerAvatar, addNote, getScoreForGame, getOverallScore, getStreak, lastEvent, lastEventTime]);
 
   return (
     <StorageContext.Provider value={value}>

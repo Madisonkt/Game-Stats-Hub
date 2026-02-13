@@ -13,6 +13,7 @@ import {
   TextInput,
   Modal,
 } from "react-native";
+import { Image } from "expo-image";
 import { Ionicons } from "@expo/vector-icons";
 import * as Haptics from "expo-haptics";
 import * as FileSystem from "expo-file-system";
@@ -77,6 +78,8 @@ function EventRow({
   gameIcon,
   winnerName,
   winnerColor,
+  winnerAvatarUri,
+  winnerInitial,
   colors,
   onAddNote,
 }: {
@@ -85,12 +88,20 @@ function EventRow({
   gameIcon: string;
   winnerName: string;
   winnerColor: string;
+  winnerAvatarUri?: string;
+  winnerInitial: string;
   colors: any;
   onAddNote: (id: string) => void;
 }) {
   return (
     <View style={[styles.eventRow, { backgroundColor: colors.card, borderColor: colors.border }]}>
-      <View style={[styles.eventDot, { backgroundColor: winnerColor }]} />
+      <View style={[styles.eventDot, { backgroundColor: winnerColor }]}>
+        {winnerAvatarUri ? (
+          <Image source={{ uri: winnerAvatarUri }} style={styles.eventDotImage} contentFit="cover" />
+        ) : (
+          <Text style={styles.eventDotInitial}>{winnerInitial}</Text>
+        )}
+      </View>
       <View style={styles.eventContent}>
         <View style={styles.eventTop}>
           <View style={styles.eventLeft}>
@@ -698,9 +709,22 @@ const styles = StyleSheet.create({
     gap: 10,
   },
   eventDot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    overflow: "hidden" as const,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  eventDotImage: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+  },
+  eventDotInitial: {
+    fontSize: 10,
+    fontFamily: "Nunito_700Bold",
+    color: "#fff",
   },
   eventContent: {
     flex: 1,
