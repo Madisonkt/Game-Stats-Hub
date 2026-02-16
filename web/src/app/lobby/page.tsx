@@ -153,7 +153,7 @@ export default function LobbyPage() {
 
         {/* Pulsing indicator */}
         <div className="flex items-center gap-2 mt-2">
-          <div className="w-2 h-2 rounded-full bg-[#3A7BD5] animate-pulse" />
+          <div className="w-2 h-2 rounded-full bg-[#3A7BD5] dark:bg-white animate-pulse" />
           <p className="text-xs text-[#98989D] dark:text-[#636366] font-[family-name:var(--font-nunito)]">
             Listening for partner via Supabase Realtime
           </p>

@@ -185,8 +185,8 @@ export default function GamesPage() {
           Games
         </h1>
         <div className="flex items-center gap-4">
-          <button className="text-[#3A7BD5]"><IoHeart style={{ fontSize: 22 }} /></button>
-          <button onClick={handleOpenPlayerSettings} className="text-[#3A7BD5]"><IoPeople style={{ fontSize: 24 }} /></button>
+          <button className="text-[#3A7BD5] dark:text-white"><IoHeart style={{ fontSize: 22 }} /></button>
+          <button onClick={handleOpenPlayerSettings} className="text-[#3A7BD5] dark:text-white"><IoPeople style={{ fontSize: 24 }} /></button>
         </div>
       </div>
 
@@ -235,7 +235,7 @@ export default function GamesPage() {
             backgroundColor: "rgba(58,123,213,0.15)",
           }}
         >
-          <span style={{ fontSize: 22 }}><IoTimerOutline className="text-[#3A7BD5]" /></span>
+          <span style={{ fontSize: 22 }}><IoTimerOutline className="text-[#3A7BD5] dark:text-white" /></span>
         </div>
         <div className="flex-1 flex flex-col min-w-0">
           <span
@@ -319,7 +319,7 @@ export default function GamesPage() {
           </div>
           <button
             onClick={handleCopyCode}
-            className="flex items-center gap-1 text-[#3A7BD5] hover:text-[#2C5F9E] transition-colors font-[family-name:var(--font-nunito)]"
+            className="flex items-center gap-1 text-[#3A7BD5] dark:text-white hover:text-[#2C5F9E] dark:hover:text-[#ECE7DE] transition-colors font-[family-name:var(--font-nunito)]"
             style={{ fontSize: 13, fontWeight: 600 }}
           >
             {codeCopied ? (
@@ -428,10 +428,10 @@ export default function GamesPage() {
                   )}
                 </div>
                 <div
-                  className="absolute -bottom-1 -right-1 bg-[#3A7BD5] flex items-center justify-center"
+                  className="absolute -bottom-1 -right-1 bg-[#3A7BD5] dark:bg-white flex items-center justify-center"
                   style={{ width: 22, height: 22, borderRadius: 11 }}
                 >
-                  <IoCamera className="text-white" style={{ fontSize: 12 }} />
+                  <IoCamera className="text-white dark:text-[#0A0A0C]" style={{ fontSize: 12 }} />
                 </div>
               </button>
               <input
@@ -457,8 +457,8 @@ export default function GamesPage() {
             {/* Save button */}
             <button
               onClick={handleSavePlayer}
-              className="flex items-center justify-center gap-2 w-full text-white font-[family-name:var(--font-nunito)]
-                bg-[#3A7BD5] hover:bg-[#2C5F9E] active:scale-[0.98] transition-all"
+              className="flex items-center justify-center gap-2 w-full text-white dark:text-[#0A0A0C] font-[family-name:var(--font-nunito)]
+                bg-[#3A7BD5] dark:bg-white hover:bg-[#2C5F9E] dark:hover:bg-[#ECE7DE] active:scale-[0.98] transition-all"
               style={{ borderRadius: 14, padding: 14, fontSize: 16, fontWeight: 700 }}
             >
               <IoSave style={{ fontSize: 18 }} />

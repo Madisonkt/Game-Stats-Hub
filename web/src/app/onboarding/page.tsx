@@ -117,7 +117,7 @@ export default function OnboardingPage() {
               text-[#0A0A0C] dark:text-[#F3F0EA]
               border border-[#ECE7DE] dark:border-[#1A1A1C]
               placeholder:text-[#636366] dark:placeholder:text-[#98989D]
-              focus:outline-none focus:ring-2 focus:ring-[#3A7BD5]
+              focus:outline-none focus:ring-2 focus:ring-[#3A7BD5] dark:focus:ring-white
               font-[family-name:var(--font-nunito)]"
           />
 
@@ -133,7 +133,7 @@ export default function OnboardingPage() {
                 text-[#0A0A0C] dark:text-[#F3F0EA]
                 border border-[#ECE7DE] dark:border-[#1A1A1C]
                 placeholder:text-[#636366] dark:placeholder:text-[#98989D] placeholder:tracking-normal
-                focus:outline-none focus:ring-2 focus:ring-[#3A7BD5]
+                focus:outline-none focus:ring-2 focus:ring-[#3A7BD5] dark:focus:ring-white
                 font-[family-name:var(--font-nunito)]"
             />
           )}
@@ -149,8 +149,8 @@ export default function OnboardingPage() {
               <button
                 onClick={() => setMode("create")}
                 className="flex items-center justify-center gap-2.5 w-full py-4 rounded-2xl
-                  bg-[#3A7BD5] text-white font-bold text-lg
-                  hover:bg-[#2C5F9E] active:scale-[0.98] transition-all
+                  bg-[#3A7BD5] text-white dark:bg-white dark:text-[#0A0A0C] font-bold text-lg
+                  hover:bg-[#2C5F9E] dark:hover:bg-[#ECE7DE] active:scale-[0.98] transition-all
                   font-[family-name:var(--font-nunito)]"
               >
                 <IoAdd className="text-xl" />
@@ -187,8 +187,8 @@ export default function OnboardingPage() {
             <button
               onClick={handleCreateRoom}
               className="flex items-center justify-center gap-2.5 w-full py-4 rounded-2xl
-                bg-[#3A7BD5] text-white font-bold text-lg
-                hover:bg-[#2C5F9E] active:scale-[0.98] transition-all
+                bg-[#3A7BD5] text-white dark:bg-white dark:text-[#0A0A0C] font-bold text-lg
+                hover:bg-[#2C5F9E] dark:hover:bg-[#ECE7DE] active:scale-[0.98] transition-all
                 font-[family-name:var(--font-nunito)]"
             >
               <IoAdd className="text-xl" />
@@ -198,8 +198,8 @@ export default function OnboardingPage() {
             <button
               onClick={handleJoinRoom}
               className="flex items-center justify-center gap-2.5 w-full py-4 rounded-2xl
-                bg-[#3A7BD5] text-white font-bold text-lg
-                hover:bg-[#2C5F9E] active:scale-[0.98] transition-all
+                bg-[#3A7BD5] text-white dark:bg-white dark:text-[#0A0A0C] font-bold text-lg
+                hover:bg-[#2C5F9E] dark:hover:bg-[#ECE7DE] active:scale-[0.98] transition-all
                 font-[family-name:var(--font-nunito)]"
             >
               <IoPeople className="text-xl" />

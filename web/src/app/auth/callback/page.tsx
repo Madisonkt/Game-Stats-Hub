@@ -55,7 +55,7 @@ export default function AuthCallbackPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#F3F0EA] dark:bg-[#0A0A0C]">
       <div className="flex flex-col items-center gap-4">
-        <div className="h-8 w-8 animate-spin rounded-full border-3 border-[#3A7BD5] border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-3 border-[#3A7BD5] dark:border-white border-t-transparent" />
         <p className="text-sm font-semibold text-[#636366] dark:text-[#98989D] font-[family-name:var(--font-nunito)]">
           Signing you in...
         </p>

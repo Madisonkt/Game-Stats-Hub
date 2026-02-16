@@ -521,7 +521,7 @@ export default function LogPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="h-8 w-8 animate-spin rounded-full border-3 border-[#3A7BD5] border-t-transparent" />
+        <div className="h-8 w-8 animate-spin rounded-full border-3 border-[#3A7BD5] dark:border-white border-t-transparent" />
       </div>
     );
   }
@@ -638,8 +638,8 @@ export default function LogPage() {
           <button
             onClick={handleCreateRound}
             disabled={actionLoading}
-            className="flex items-center justify-center gap-2 text-white font-[family-name:var(--font-nunito)]
-              bg-[#3A7BD5] hover:bg-[#2C5F9E] active:scale-[0.98] transition-all
+            className="flex items-center justify-center gap-2 text-white dark:text-[#0A0A0C] font-[family-name:var(--font-nunito)]
+              bg-[#3A7BD5] dark:bg-white hover:bg-[#2C5F9E] dark:hover:bg-[#ECE7DE] active:scale-[0.98] transition-all
               disabled:opacity-50 disabled:cursor-not-allowed"
             style={{
               borderRadius: 999,
@@ -718,7 +718,7 @@ export default function LogPage() {
                     <button
                       onClick={handleJoinRound}
                       disabled={actionLoading}
-                      className="font-bold text-[#3A7BD5] hover:underline disabled:opacity-50 font-[family-name:var(--font-nunito)]"
+                      className="font-bold text-[#3A7BD5] dark:text-white hover:underline disabled:opacity-50 font-[family-name:var(--font-nunito)]"
                       style={{ fontSize: 13 }}
                     >
                       Tap to Join
@@ -830,8 +830,8 @@ export default function LogPage() {
           {!mySolve && !timerRunning && (
             <button
               onClick={startTimer}
-              className="flex items-center justify-center gap-2 text-white font-[family-name:var(--font-nunito)]
-                bg-[#3A7BD5] hover:bg-[#2C5F9E] active:scale-[0.98] transition-all self-center"
+              className="flex items-center justify-center gap-2 text-white dark:text-[#0A0A0C] font-[family-name:var(--font-nunito)]
+                bg-[#3A7BD5] dark:bg-white hover:bg-[#2C5F9E] dark:hover:bg-[#ECE7DE] active:scale-[0.98] transition-all self-center"
               style={{
                 borderRadius: 999,
                 paddingLeft: 56,
@@ -879,8 +879,8 @@ export default function LogPage() {
           <button
             onClick={handleCreateRound}
             disabled={actionLoading}
-            className="flex items-center justify-center gap-2 text-white font-[family-name:var(--font-nunito)]
-              bg-[#3A7BD5] hover:bg-[#2C5F9E] active:scale-[0.98] transition-all
+            className="flex items-center justify-center gap-2 text-white dark:text-[#0A0A0C] font-[family-name:var(--font-nunito)]
+              bg-[#3A7BD5] dark:bg-white hover:bg-[#2C5F9E] dark:hover:bg-[#ECE7DE] active:scale-[0.98] transition-all
               disabled:opacity-50 disabled:cursor-not-allowed"
             style={{
               borderRadius: 999,
