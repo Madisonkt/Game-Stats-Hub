@@ -549,12 +549,22 @@ export default function LogPage() {
 
       {/* Cat overlay */}
       {showCat && (
-        <div className="fixed inset-0 z-[180] flex items-center justify-center pointer-events-none" style={{ backgroundColor: "#000" }}>
+        <div
+          className="fixed inset-0 z-[180] pointer-events-none overflow-hidden"
+          style={{ backgroundColor: "#000" }}
+        >
           <img
             src="/images/cat.png"
             alt="Cat celebration"
-            className="cat-overlay object-cover"
-            style={{ width: "120%", height: "100%", marginLeft: "-20%" }}
+            className="cat-overlay"
+            style={{
+              position: "absolute",
+              top: 0,
+              left: "-10%",
+              width: "120%",
+              height: "100%",
+              objectFit: "cover",
+            }}
           />
         </div>
       )}

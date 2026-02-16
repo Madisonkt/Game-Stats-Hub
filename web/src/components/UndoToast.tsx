@@ -8,7 +8,7 @@ export default function UndoToast({
   color,
   onUndo,
   onDismiss,
-  timeoutMs = 10000,
+  timeoutMs = 5000,
 }: {
   message: string;
   visible: boolean;
