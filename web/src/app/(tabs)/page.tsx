@@ -445,11 +445,22 @@ export default function LogPage() {
   useEffect(() => {
     if (round?.id && round.id !== prevRoundIdRef.current) {
       prevRoundIdRef.current = round.id;
-      // Only reset if timer isn't already running (don't interrupt active timer)
-      if (!timerRef.current) {
-        setTimerElapsed(0);
-        setTimerRunning(false);
+      // Always reset timer for new round (regardless of timer state)
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
       }
+      setTimerElapsed(0);
+      setTimerRunning(false);
+    } else if (!round) {
+      // Round was cleared (after completion) — reset timer
+      prevRoundIdRef.current = null;
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+      setTimerElapsed(0);
+      setTimerRunning(false);
     }
   }, [round?.id]);
 
