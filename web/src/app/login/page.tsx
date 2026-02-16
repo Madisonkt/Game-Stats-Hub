@@ -2,22 +2,27 @@
 
 import { useState } from "react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
-import { IoGameController, IoMailOpenOutline, IoMailOutline, IoArrowBack } from "react-icons/io5";
+import { IoGameController, IoLogInOutline, IoPersonAddOutline } from "react-icons/io5";
 
-type Step = "email" | "sent";
+type Mode = "sign-in" | "sign-up";
 
 export default function LoginPage() {
-  const [step, setStep] = useState<Step>("email");
+  const [mode, setMode] = useState<Mode>("sign-in");
   const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
   const supabase = createSupabaseBrowserClient();
 
-  const handleSendMagicLink = async () => {
-    const trimmed = email.trim().toLowerCase();
-    if (!trimmed || !trimmed.includes("@")) {
+  const handleSubmit = async () => {
+    const trimmedEmail = email.trim().toLowerCase();
+    if (!trimmedEmail || !trimmedEmail.includes("@")) {
       setError("Enter a valid email address");
+      return;
+    }
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters");
       return;
     }
 
@@ -25,18 +30,36 @@ export default function LoginPage() {
     setError(null);
 
     try {
-      const { error: sbError } = await supabase.auth.signInWithOtp({
-        email: trimmed,
-        options: {
-          emailRedirectTo: `${window.location.origin}/auth/callback`,
-        },
-      });
+      if (mode === "sign-up") {
+        const { error: sbError } = await supabase.auth.signUp({
+          email: trimmedEmail,
+          password,
+        });
+        if (sbError) throw sbError;
+        // Supabase auto-signs in after signUp (unless email confirmation is required)
+        // The auth context listener will pick it up and redirect
+      } else {
+        const { error: sbError } = await supabase.auth.signInWithPassword({
+          email: trimmedEmail,
+          password,
+        });
+        if (sbError) throw sbError;
+      }
 
-      if (sbError) throw sbError;
-      setStep("sent");
+      // Auth state change will trigger redirect via AuthGuard
+      window.location.href = "/";
     } catch (e: unknown) {
-      const message = e instanceof Error ? e.message : "Failed to send magic link";
-      setError(message);
+      const message = e instanceof Error ? e.message : "Authentication failed";
+      // Friendlier error messages
+      if (message.includes("Invalid login credentials")) {
+        setError("Wrong email or password");
+      } else if (message.includes("User already registered")) {
+        setError("Account already exists — try signing in instead");
+      } else if (message.includes("Email rate limit exceeded")) {
+        setError("Too many attempts. Wait a minute and try again");
+      } else {
+        setError(message);
+      }
     } finally {
       setLoading(false);
     }
@@ -45,106 +68,111 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#F3F0EA] dark:bg-[#0A0A0C] p-6">
       <div className="w-full max-w-sm">
-        {step === "email" ? (
-          <>
-            {/* Title */}
-            <div className="flex flex-col items-center gap-3 mb-12">
-              <IoGameController className="text-5xl text-[#3A7BD5] dark:text-white" />
-              <h1 className="text-3xl font-extrabold text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]">
-                Welcome
-              </h1>
-              <p className="text-sm text-[#636366] dark:text-[#98989D] text-center font-[family-name:var(--font-nunito)]">
-                Sign in with your email to get started
-              </p>
-            </div>
+        {/* Title */}
+        <div className="flex flex-col items-center gap-3 mb-10">
+          <IoGameController className="text-5xl text-[#3A7BD5] dark:text-white" />
+          <h1 className="text-3xl font-extrabold text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]">
+            {mode === "sign-in" ? "Welcome back" : "Create account"}
+          </h1>
+          <p className="text-sm text-[#636366] dark:text-[#98989D] text-center font-[family-name:var(--font-nunito)]">
+            {mode === "sign-in" ? "Sign in to continue" : "Sign up to get started"}
+          </p>
+        </div>
 
-            {/* Form */}
-            <div className="flex flex-col gap-2">
-              <label className="text-xs font-semibold uppercase tracking-wider text-[#636366] dark:text-[#98989D] font-[family-name:var(--font-nunito)]">
-                Email
-              </label>
-              <input
-                type="email"
-                placeholder="you@example.com"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                autoFocus
-                autoComplete="email"
-                disabled={loading}
-                onKeyDown={(e) => e.key === "Enter" && handleSendMagicLink()}
-                className="w-full px-4 py-3.5 rounded-xl text-base font-semibold
-                  bg-[#ECE7DE] dark:bg-[#1A1A1C]
-                  text-[#0A0A0C] dark:text-[#F3F0EA]
-                  border border-[#ECE7DE] dark:border-[#1A1A1C]
-                  placeholder:text-[#636366] dark:placeholder:text-[#98989D]
-                  focus:outline-none focus:ring-2 focus:ring-[#3A7BD5] dark:focus:ring-white
-                  disabled:opacity-50
-                  font-[family-name:var(--font-nunito)]"
-              />
-
-              {error && (
-                <p className="text-sm font-semibold text-red-500 font-[family-name:var(--font-nunito)]">
-                  {error}
-                </p>
-              )}
-
-              <button
-                onClick={handleSendMagicLink}
-                disabled={loading}
-                className="flex items-center justify-center gap-2.5 w-full py-4 rounded-2xl
-                  bg-[#3A7BD5] text-white dark:bg-white dark:text-[#0A0A0C] font-bold text-lg
-                  hover:bg-[#2C5F9E] dark:hover:bg-[#ECE7DE] active:scale-[0.98] transition-all
-                  disabled:opacity-60 disabled:cursor-not-allowed
-                  font-[family-name:var(--font-nunito)]"
-              >
-                {loading ? (
-                  <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                ) : (
-                  <>
-                    <IoMailOutline className="text-xl" />
-                    Send Magic Link
-                  </>
-                )}
-              </button>
-            </div>
-          </>
-        ) : (
-          <>
-            {/* Sent confirmation */}
-            <div className="flex flex-col items-center gap-3 mb-12">
-              <IoMailOpenOutline className="text-6xl text-[#3A7BD5] dark:text-white" />
-              <h1 className="text-3xl font-extrabold text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]">
-                Check your email
-              </h1>
-              <p className="text-sm text-[#636366] dark:text-[#98989D] text-center font-[family-name:var(--font-nunito)]">
-                We sent a sign-in link to
-              </p>
-              <p className="text-base font-bold text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]">
-                {email.trim().toLowerCase()}
-              </p>
-              <p className="text-sm text-[#636366] dark:text-[#98989D] text-center mt-2 font-[family-name:var(--font-nunito)]">
-                Click the link in the email to sign in.
-                You&apos;ll be redirected automatically.
-              </p>
-            </div>
-
-            <button
-              onClick={() => {
-                setStep("email");
-                setError(null);
-              }}
-              className="flex items-center justify-center gap-2.5 w-full py-4 rounded-2xl
-                border border-[#ECE7DE] dark:border-[#1A1A1C]
+        {/* Form */}
+        <div className="flex flex-col gap-3">
+          <div>
+            <label className="text-xs font-semibold uppercase tracking-wider text-[#636366] dark:text-[#98989D] font-[family-name:var(--font-nunito)]">
+              Email
+            </label>
+            <input
+              type="email"
+              placeholder="you@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              autoFocus
+              autoComplete="email"
+              disabled={loading}
+              className="w-full px-4 py-3.5 rounded-xl text-base font-semibold mt-1
                 bg-[#ECE7DE] dark:bg-[#1A1A1C]
                 text-[#0A0A0C] dark:text-[#F3F0EA]
-                font-bold text-lg hover:opacity-80 active:scale-[0.98] transition-all
+                border border-[#ECE7DE] dark:border-[#1A1A1C]
+                placeholder:text-[#636366] dark:placeholder:text-[#98989D]
+                focus:outline-none focus:ring-2 focus:ring-[#3A7BD5] dark:focus:ring-white
+                disabled:opacity-50
                 font-[family-name:var(--font-nunito)]"
-            >
-              <IoArrowBack className="text-lg" />
-              Use a different email
-            </button>
-          </>
-        )}
+            />
+          </div>
+
+          <div>
+            <label className="text-xs font-semibold uppercase tracking-wider text-[#636366] dark:text-[#98989D] font-[family-name:var(--font-nunito)]">
+              Password
+            </label>
+            <input
+              type="password"
+              placeholder="••••••••"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              autoComplete={mode === "sign-up" ? "new-password" : "current-password"}
+              disabled={loading}
+              onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
+              className="w-full px-4 py-3.5 rounded-xl text-base font-semibold mt-1
+                bg-[#ECE7DE] dark:bg-[#1A1A1C]
+                text-[#0A0A0C] dark:text-[#F3F0EA]
+                border border-[#ECE7DE] dark:border-[#1A1A1C]
+                placeholder:text-[#636366] dark:placeholder:text-[#98989D]
+                focus:outline-none focus:ring-2 focus:ring-[#3A7BD5] dark:focus:ring-white
+                disabled:opacity-50
+                font-[family-name:var(--font-nunito)]"
+            />
+          </div>
+
+          {error && (
+            <p className="text-sm font-semibold text-red-500 font-[family-name:var(--font-nunito)]">
+              {error}
+            </p>
+          )}
+
+          <button
+            onClick={handleSubmit}
+            disabled={loading}
+            className="flex items-center justify-center gap-2.5 w-full py-4 rounded-2xl mt-1
+              bg-[#3A7BD5] text-white dark:bg-white dark:text-[#0A0A0C] font-bold text-lg
+              hover:bg-[#2C5F9E] dark:hover:bg-[#ECE7DE] active:scale-[0.98] transition-all
+              disabled:opacity-60 disabled:cursor-not-allowed
+              font-[family-name:var(--font-nunito)]"
+          >
+            {loading ? (
+              <div className="h-5 w-5 animate-spin rounded-full border-2 border-white dark:border-[#0A0A0C] border-t-transparent" />
+            ) : mode === "sign-in" ? (
+              <>
+                <IoLogInOutline className="text-xl" />
+                Sign In
+              </>
+            ) : (
+              <>
+                <IoPersonAddOutline className="text-xl" />
+                Sign Up
+              </>
+            )}
+          </button>
+
+          {/* Toggle mode */}
+          <button
+            onClick={() => {
+              setMode(mode === "sign-in" ? "sign-up" : "sign-in");
+              setError(null);
+            }}
+            className="text-sm text-[#636366] dark:text-[#98989D] hover:text-[#0A0A0C] dark:hover:text-[#F3F0EA]
+              transition-colors font-[family-name:var(--font-nunito)] mt-2 text-center"
+          >
+            {mode === "sign-in" ? (
+              <>Don&apos;t have an account? <span className="font-bold underline">Sign up</span></>
+            ) : (
+              <>Already have an account? <span className="font-bold underline">Sign in</span></>
+            )}
+          </button>
+        </div>
       </div>
     </div>
   );
