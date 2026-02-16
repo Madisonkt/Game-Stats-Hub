@@ -254,6 +254,9 @@ export default function LogPage() {
   // Cat overlay
   const [showCat, setShowCat] = useState(false);
 
+  // Track rounds that already triggered confetti (prevent duplicates from polling)
+  const confettiFiredRef = useRef<Set<string>>(new Set());
+
   // ── Compute scores helper ─────────────────────────────────
   const computeScores = useCallback(
     async (coupleId: string) => {
@@ -278,6 +281,48 @@ export default function LogPage() {
       setScores(scoreMap);
     },
     []
+  );
+
+  // ── Close round + fire confetti helper ────────────────────
+  const handleRoundComplete = useCallback(
+    async (roundId: string, roundSolves: Solve[]) => {
+      // Only fire once per round
+      if (confettiFiredRef.current.has(roundId)) return;
+      confettiFiredRef.current.add(roundId);
+
+      try {
+        await rubiksRepo.closeRound(roundId);
+      } catch {
+        // May already be closed by the other player's device
+      }
+
+      if (couple?.id) {
+        await computeScores(couple.id);
+
+        const validSolves = roundSolves.filter((s) => !s.dnf);
+        if (validSolves.length === 2) {
+          const winner = validSolves.reduce((a, b) =>
+            a.timeMs < b.timeMs ? a : b
+          );
+          const winnerIdx = couple.members.findIndex(
+            (m) => m.id === winner.userId
+          );
+          const winnerMember = couple.members[winnerIdx];
+          setConfettiColor(getPlayerColor(winnerIdx));
+          setConfettiTrigger((t) => t + 1);
+          setUndoMessage(`+1 for ${winnerMember?.name || "Player"}`);
+          setUndoVisible(true);
+          setLastClosedRoundId(roundId);
+
+          // Show cat if player B wins
+          if (winnerIdx === 1) {
+            setShowCat(true);
+            setTimeout(() => setShowCat(false), 2600);
+          }
+        }
+      }
+    },
+    [couple?.id, couple?.members, computeScores]
   );
 
   // ── Load active round + scores on mount ───────────────────
@@ -317,6 +362,10 @@ export default function LogPage() {
         if (activeRound) {
           const roundSolves = await rubiksRepo.getSolves(activeRound.id);
           setSolves(roundSolves);
+          // Check if round should be closed (both players submitted)
+          if (activeRound.status === "in_progress" && roundSolves.length >= 2) {
+            await handleRoundComplete(activeRound.id, roundSolves);
+          }
         }
         await computeScores(couple.id);
       } catch (e) {
@@ -325,7 +374,7 @@ export default function LogPage() {
     };
     const interval = setInterval(poll, 3000);
     return () => clearInterval(interval);
-  }, [couple?.id, computeScores]);
+  }, [couple?.id, computeScores, handleRoundComplete]);
 
   // ── Realtime: subscribe to rounds ─────────────────────────
   useEffect(() => {
@@ -347,37 +396,11 @@ export default function LogPage() {
     const unsub = rubiksRepo.subscribeToSolves(round.id, (updatedSolves) => {
       setSolves(updatedSolves);
       if (round.status === "in_progress" && updatedSolves.length >= 2) {
-        rubiksRepo.closeRound(round.id).then(() => {
-          if (couple?.id) {
-            computeScores(couple.id);
-            // Determine winner for confetti
-            const validSolves = updatedSolves.filter((s) => !s.dnf);
-            if (validSolves.length === 2) {
-              const winner = validSolves.reduce((a, b) =>
-                a.timeMs < b.timeMs ? a : b
-              );
-              const winnerIdx = couple.members.findIndex(
-                (m) => m.id === winner.userId
-              );
-              const winnerMember = couple.members[winnerIdx];
-              setConfettiColor(getPlayerColor(winnerIdx));
-              setConfettiTrigger((t) => t + 1);
-              setUndoMessage(`+1 for ${winnerMember?.name || "Player"}`);
-              setUndoVisible(true);
-              setLastClosedRoundId(round.id);
-
-              // Show cat if player B wins
-              if (winnerIdx === 1) {
-                setShowCat(true);
-                setTimeout(() => setShowCat(false), 2600);
-              }
-            }
-          }
-        });
+        handleRoundComplete(round.id, updatedSolves);
       }
     });
     return () => unsub();
-  }, [round?.id, round?.status, couple?.id, couple?.members, computeScores]);
+  }, [round?.id, round?.status, handleRoundComplete]);
 
   // ── Timer logic ───────────────────────────────────────────
   const startTimer = useCallback(() => {
