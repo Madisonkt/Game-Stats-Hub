@@ -3,7 +3,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useSession } from "@/lib/auth-context";
 import { getPartnerUser } from "@/lib/models";
-import { getCoupleForUser } from "@/lib/repos/coupleRepo";
+import { getCoupleForUser, updateMember } from "@/lib/repos/coupleRepo";
 import {
   IoLogOutOutline,
   IoExitOutline,
@@ -108,23 +108,57 @@ export default function GamesPage() {
     setShowPlayerSettings(true);
   };
 
-  const handleSavePlayer = () => {
-    if (currentUser) {
-      setCurrentUser({
-        ...currentUser,
-        name: editName || currentUser.name,
-        avatarUrl: editAvatarUrl,
+  const handleSavePlayer = async () => {
+    if (!currentUser || !couple) return;
+    const newName = editName || currentUser.name;
+    const newAvatar = editAvatarUrl;
+
+    // Update local session immediately
+    setCurrentUser({
+      ...currentUser,
+      name: newName,
+      avatarUrl: newAvatar,
+    });
+
+    // Persist to Supabase so other devices + partner can see it
+    try {
+      await updateMember(couple.id, currentUser.id, {
+        displayName: newName,
+        avatarUrl: newAvatar ?? null,
       });
+      // Refresh couple data to pick up the change everywhere
+      const updated = await getCoupleForUser(currentUser.id);
+      if (updated) setCouple(updated);
+    } catch (e) {
+      console.error("Failed to save profile to Supabase:", e);
     }
+
     setShowPlayerSettings(false);
   };
 
   const handleAvatarPick = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    // Compress image: resize to max 200x200 and convert to JPEG
+    const img = new Image();
     const reader = new FileReader();
     reader.onload = () => {
-      setEditAvatarUrl(reader.result as string);
+      img.src = reader.result as string;
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const maxSize = 200;
+        let w = img.width;
+        let h = img.height;
+        if (w > h) { h = (h / w) * maxSize; w = maxSize; }
+        else { w = (w / h) * maxSize; h = maxSize; }
+        canvas.width = w;
+        canvas.height = h;
+        const ctx = canvas.getContext("2d");
+        ctx?.drawImage(img, 0, 0, w, h);
+        const compressed = canvas.toDataURL("image/jpeg", 0.7);
+        setEditAvatarUrl(compressed);
+      };
     };
     reader.readAsDataURL(file);
   };

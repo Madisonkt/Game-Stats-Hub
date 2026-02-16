@@ -200,6 +200,31 @@ export async function getCoupleForUser(
 }
 
 /**
+ * Update a couple member's display name and/or avatar URL in Supabase.
+ */
+export async function updateMember(
+  coupleId: string,
+  userId: string,
+  updates: { displayName?: string; avatarUrl?: string | null }
+): Promise<void> {
+  const supabase = createSupabaseBrowserClient();
+
+  const updateData: Record<string, unknown> = {};
+  if (updates.displayName !== undefined) updateData.display_name = updates.displayName;
+  if (updates.avatarUrl !== undefined) updateData.avatar_url = updates.avatarUrl;
+
+  if (Object.keys(updateData).length === 0) return;
+
+  const { error } = await supabase
+    .from("couple_members")
+    .update(updateData)
+    .eq("couple_id", coupleId)
+    .eq("user_id", userId);
+
+  if (error) throw new Error(error.message);
+}
+
+/**
  * Exit (leave) a couple room.
  * Deletes the user's couple_members row.
  * If no members remain, the couple row will cascade-delete via FK.
