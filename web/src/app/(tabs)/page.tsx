@@ -319,8 +319,8 @@ export default function LogPage() {
           setUndoVisible(true);
           setLastClosedRoundId(roundId);
 
-          // Cat overlay on BOTH screens when player B (index 1) wins
-          if (winnerIdx === 1) {
+          // Cat overlay on BOTH screens when player A (index 0) wins
+          if (winnerIdx === 0) {
             setShowCat(true);
             setTimeout(() => setShowCat(false), 2600);
           }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function UndoToast({
   message,
@@ -8,7 +8,7 @@ export default function UndoToast({
   color,
   onUndo,
   onDismiss,
-  timeoutMs = 5000,
+  timeoutMs = 3000,
 }: {
   message: string;
   visible: boolean;
@@ -18,6 +18,8 @@ export default function UndoToast({
   timeoutMs?: number;
 }) {
   const [show, setShow] = useState(false);
+  const onDismissRef = useRef(onDismiss);
+  onDismissRef.current = onDismiss;
 
   useEffect(() => {
     if (visible) {
@@ -25,20 +27,21 @@ export default function UndoToast({
       requestAnimationFrame(() => setShow(true));
       const timer = setTimeout(() => {
         setShow(false);
-        setTimeout(onDismiss, 300);
+        setTimeout(() => onDismissRef.current(), 300);
       }, timeoutMs);
       return () => clearTimeout(timer);
     } else {
       setShow(false);
     }
-  }, [visible, timeoutMs, onDismiss]);
+  }, [visible, timeoutMs]);
 
   if (!visible) return null;
 
   return (
     <div
-      className="fixed bottom-24 left-1/2 z-[150] transition-all duration-300 ease-out"
+      className="fixed left-1/2 z-[150] transition-all duration-300 ease-out"
       style={{
+        bottom: 88,
         transform: show
           ? "translateX(-50%) translateY(0)"
           : "translateX(-50%) translateY(40px)",
