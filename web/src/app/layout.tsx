@@ -1,0 +1,48 @@
+import type { Metadata, Viewport } from "next";
+import { Nunito_Sans } from "next/font/google";
+import "./globals.css";
+import { Providers } from "./providers";
+
+const nunitoSans = Nunito_Sans({
+  variable: "--font-nunito",
+  subsets: ["latin"],
+  weight: ["400", "600", "700", "800"],
+});
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  viewportFit: "cover",
+  themeColor: "#3A7BD5",
+};
+
+export const metadata: Metadata = {
+  title: "Cheese Squeeze",
+  description: "Track game stats with your partner",
+  manifest: "/manifest.json",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "default",
+    title: "Cheese Squeeze",
+  },
+  icons: {
+    icon: "/images/favicon.png",
+    apple: "/images/favicon.png",
+  },
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en">
+      <body className={`${nunitoSans.variable} antialiased`}>
+        <Providers>{children}</Providers>
+      </body>
+    </html>
+  );
+}
