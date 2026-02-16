@@ -1,20 +1,46 @@
 "use client";
 
 import { useSession } from "@/lib/auth-context";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { subscribeToMembers } from "@/lib/repos/coupleRepo";
+import { subscribeToMembers, getCoupleForUser } from "@/lib/repos/coupleRepo";
 import { IoCopy, IoCheckmark } from "react-icons/io5";
 
 export default function LobbyPage() {
   const router = useRouter();
   const { session, setCouple } = useSession();
   const [copied, setCopied] = useState(false);
+  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const inviteCode = session.couple?.inviteCode ?? "------";
   const coupleId = session.couple?.id;
+  const userId = session.currentUser?.id;
 
-  // ── Realtime: subscribe to couple_members changes ────────────────────
+  // ── Poll every 3 seconds to check if partner joined ──────────────────
+  const pollForPartner = useCallback(async () => {
+    if (!userId) return;
+    const couple = await getCoupleForUser(userId);
+    if (couple) {
+      setCouple(couple);
+    }
+  }, [userId, setCouple]);
+
+  useEffect(() => {
+    if (!coupleId || !userId) return;
+
+    // Poll immediately, then every 3 seconds
+    pollForPartner();
+    pollRef.current = setInterval(pollForPartner, 3000);
+
+    return () => {
+      if (pollRef.current) {
+        clearInterval(pollRef.current);
+        pollRef.current = null;
+      }
+    };
+  }, [coupleId, userId, pollForPartner]);
+
+  // ── Realtime: subscribe to couple_members changes (backup) ───────────
   useEffect(() => {
     if (!coupleId) return;
 
@@ -28,6 +54,11 @@ export default function LobbyPage() {
   // ── Auto-navigate when couple status becomes "ready" ─────────────────
   useEffect(() => {
     if (session.couple?.status === "ready") {
+      // Stop polling before navigating
+      if (pollRef.current) {
+        clearInterval(pollRef.current);
+        pollRef.current = null;
+      }
       router.push("/");
     }
   }, [session.couple?.status, router]);
