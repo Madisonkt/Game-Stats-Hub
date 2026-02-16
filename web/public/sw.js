@@ -1,10 +1,13 @@
-const CACHE_NAME = "cheese-squeeze-v1";
+const CACHE_NAME = "cheese-squeeze-v2";
 
 // App shell / static assets to pre-cache on install
 const PRECACHE_URLS = [
   "/",
   "/manifest.json",
   "/images/favicon.png",
+  "/images/icon-192.png",
+  "/images/icon-512.png",
+  "/images/apple-touch-icon.png",
 ];
 
 // ── Install: pre-cache app shell ────────────────────────────
