@@ -16,6 +16,7 @@ import {
   IoCamera,
   IoSave,
   IoTimerOutline,
+  IoLockClosedOutline,
 } from "react-icons/io5";
 
 const GRADIENT_A = "linear-gradient(160deg, #F5D5C8, #F0B89E, #E8956E, #E07850, #D4628A)";
@@ -57,6 +58,9 @@ export default function GamesPage() {
   }, [currentUser?.id, setCouple]);
   const [editName, setEditName] = useState("");
   const [editAvatarUrl, setEditAvatarUrl] = useState<string | undefined>();
+  const [newPassword, setNewPassword] = useState("");
+  const [passwordMsg, setPasswordMsg] = useState<{ type: "ok" | "err"; text: string } | null>(null);
+  const [savingPassword, setSavingPassword] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleCopyCode = async () => {
@@ -464,6 +468,60 @@ export default function GamesPage() {
               <IoSave style={{ fontSize: 18 }} />
               Save
             </button>
+
+            {/* ── Set Password ─────────────────────── */}
+            <div className="w-full mt-5 pt-5" style={{ borderTop: "1px solid rgba(150,150,150,0.2)" }}>
+              <p className="text-xs font-semibold uppercase tracking-wider text-[#636366] dark:text-[#98989D] mb-2 font-[family-name:var(--font-nunito)]">
+                Set / Update Password
+              </p>
+              <input
+                type="password"
+                placeholder="New password (6+ chars)"
+                value={newPassword}
+                onChange={(e) => { setNewPassword(e.target.value); setPasswordMsg(null); }}
+                className="w-full px-4 py-3 bg-[#ECE7DE] dark:bg-[#1A1A1C] text-[#0A0A0C] dark:text-[#F3F0EA]
+                  placeholder:text-[#636366] dark:placeholder:text-[#98989D]
+                  font-[family-name:var(--font-nunito)] outline-none mb-2"
+                style={{ borderRadius: 14, fontSize: 15, fontWeight: 600 }}
+              />
+              {passwordMsg && (
+                <p className={`text-sm font-semibold mb-2 font-[family-name:var(--font-nunito)] ${
+                  passwordMsg.type === "ok" ? "text-green-500" : "text-red-500"
+                }`}>
+                  {passwordMsg.text}
+                </p>
+              )}
+              <button
+                onClick={async () => {
+                  if (newPassword.length < 6) {
+                    setPasswordMsg({ type: "err", text: "Password must be at least 6 characters" });
+                    return;
+                  }
+                  setSavingPassword(true);
+                  setPasswordMsg(null);
+                  try {
+                    const supabase = (await import("@/lib/supabase/browser")).createSupabaseBrowserClient();
+                    const { error } = await supabase.auth.updateUser({ password: newPassword });
+                    if (error) throw error;
+                    setNewPassword("");
+                    setPasswordMsg({ type: "ok", text: "Password saved! You can now sign in with email + password." });
+                  } catch (e: unknown) {
+                    setPasswordMsg({ type: "err", text: e instanceof Error ? e.message : "Failed to set password" });
+                  } finally {
+                    setSavingPassword(false);
+                  }
+                }}
+                disabled={savingPassword || !newPassword}
+                className="flex items-center justify-center gap-2 w-full font-[family-name:var(--font-nunito)]
+                  text-[#3A7BD5] dark:text-white border border-[#3A7BD5] dark:border-white
+                  hover:bg-[#3A7BD5]/10 dark:hover:bg-white/10 active:scale-[0.98] transition-all
+                  disabled:opacity-40 disabled:cursor-not-allowed"
+                style={{ borderRadius: 14, padding: 12, fontSize: 15, fontWeight: 700 }}
+              >
+                <IoLockClosedOutline style={{ fontSize: 16 }} />
+                {savingPassword ? "Saving..." : "Set Password"}
+              </button>
+            </div>
 
             {/* Exit Room */}
             {couple && (
