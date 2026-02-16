@@ -271,7 +271,7 @@ export default function LogPage() {
         const rSolves = allSolves.filter(
           (s) => s.roundId === cr.id && !s.dnf
         );
-        if (rSolves.length === 2) {
+        if (rSolves.length >= 1) {
           const winner = rSolves.reduce((a, b) =>
             a.timeMs < b.timeMs ? a : b
           );
@@ -300,7 +300,7 @@ export default function LogPage() {
         await computeScores(couple.id);
 
         const validSolves = roundSolves.filter((s) => !s.dnf);
-        if (validSolves.length === 2) {
+        if (validSolves.length >= 1) {
           const winner = validSolves.reduce((a, b) =>
             a.timeMs < b.timeMs ? a : b
           );
@@ -912,7 +912,7 @@ function RoundResults({
 }) {
   const validSolves = solves.filter((s) => !s.dnf);
   const winner =
-    validSolves.length === 2
+    validSolves.length >= 1
       ? validSolves.reduce((a, b) => (a.timeMs < b.timeMs ? a : b))
       : null;
   const winnerMember = winner

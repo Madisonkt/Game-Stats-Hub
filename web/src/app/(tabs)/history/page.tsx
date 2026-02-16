@@ -283,7 +283,7 @@ function computePlayerStats(
   let wins = 0;
   for (const cr of closedRounds) {
     const rSolves = allSolves.filter((s) => s.roundId === cr.id && !s.dnf);
-    if (rSolves.length === 2) {
+    if (rSolves.length >= 1) {
       const winner = rSolves.reduce((a, b) => (a.timeMs < b.timeMs ? a : b));
       if (winner.userId === userId) wins++;
     }
@@ -316,7 +316,7 @@ function getStreak(
 
   for (const cr of closedRounds) {
     const rSolves = allSolves.filter((s) => s.roundId === cr.id && !s.dnf);
-    if (rSolves.length !== 2) continue;
+    if (rSolves.length < 1) continue;
     const winner = rSolves.reduce((a, b) => (a.timeMs < b.timeMs ? a : b));
     if (!streakPlayer) {
       streakPlayer = winner.userId;
@@ -410,7 +410,7 @@ export default function HistoryPage() {
       const roundSolves = allSolves.filter((s) => s.roundId === round.id);
       const validSolves = roundSolves.filter((s) => !s.dnf);
       const winner =
-        validSolves.length === 2
+        validSolves.length >= 1
           ? validSolves.reduce((a, b) => (a.timeMs < b.timeMs ? a : b))
           : null;
       return { round, roundSolves, winner };
