@@ -366,6 +366,25 @@ export default function HistoryPage() {
     load();
   }, [couple?.id]);
 
+  // ── Poll every 3s for new rounds/solves ───────────────────
+  useEffect(() => {
+    if (!couple?.id) return;
+    const poll = async () => {
+      try {
+        const [rounds, solves] = await Promise.all([
+          rubiksRepo.getAllRounds(couple.id),
+          rubiksRepo.getAllSolves(couple.id),
+        ]);
+        setAllRounds(rounds);
+        setAllSolves(solves);
+      } catch {
+        // Silently ignore polling errors
+      }
+    };
+    const interval = setInterval(poll, 3000);
+    return () => clearInterval(interval);
+  }, [couple?.id]);
+
   const members = couple?.members ?? [];
 
   const playerStatsMap = useMemo(() => {

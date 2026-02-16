@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useSession } from "@/lib/auth-context";
 import { getPartnerUser } from "@/lib/models";
+import { getCoupleForUser } from "@/lib/repos/coupleRepo";
 import {
   IoLogOutOutline,
   IoExitOutline,
@@ -29,7 +30,7 @@ function getPlayerGradient(index: number): string {
 }
 
 export default function GamesPage() {
-  const { session, exitRoom, signOut, setCurrentUser } = useSession();
+  const { session, exitRoom, signOut, setCurrentUser, setCouple } = useSession();
   const couple = session.couple;
   const currentUser = session.currentUser;
 
@@ -38,6 +39,21 @@ export default function GamesPage() {
   const [exitingRoom, setExitingRoom] = useState(false);
   const [showConfirm, setShowConfirm] = useState<"signout" | "exit" | null>(null);
   const [showPlayerSettings, setShowPlayerSettings] = useState(false);
+
+  // ── Poll every 3s to pick up couple/member changes ────────
+  useEffect(() => {
+    if (!currentUser?.id) return;
+    const poll = async () => {
+      try {
+        const updatedCouple = await getCoupleForUser(currentUser.id);
+        if (updatedCouple) setCouple(updatedCouple);
+      } catch {
+        // Silently ignore polling errors
+      }
+    };
+    const interval = setInterval(poll, 3000);
+    return () => clearInterval(interval);
+  }, [currentUser?.id, setCouple]);
   const [editName, setEditName] = useState("");
   const [editAvatarUrl, setEditAvatarUrl] = useState<string | undefined>();
   const fileInputRef = useRef<HTMLInputElement>(null);

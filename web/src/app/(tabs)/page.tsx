@@ -305,6 +305,28 @@ export default function LogPage() {
     load();
   }, [couple?.id, computeScores]);
 
+  // ── Poll every 3s for updates (rounds, solves, scores) ────
+  useEffect(() => {
+    if (!couple?.id) return;
+    const poll = async () => {
+      // Don't poll while timer is running (avoid UI jank)
+      if (timerRef.current) return;
+      try {
+        const activeRound = await rubiksRepo.getActiveRound(couple.id);
+        setRound(activeRound);
+        if (activeRound) {
+          const roundSolves = await rubiksRepo.getSolves(activeRound.id);
+          setSolves(roundSolves);
+        }
+        await computeScores(couple.id);
+      } catch (e) {
+        // Silently ignore polling errors
+      }
+    };
+    const interval = setInterval(poll, 3000);
+    return () => clearInterval(interval);
+  }, [couple?.id, computeScores]);
+
   // ── Realtime: subscribe to rounds ─────────────────────────
   useEffect(() => {
     if (!couple?.id) return;
