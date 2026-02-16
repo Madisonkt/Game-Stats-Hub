@@ -308,13 +308,18 @@ export default function LogPage() {
             (m) => m.id === winner.userId
           );
           const winnerMember = couple.members[winnerIdx];
-          setConfettiColor(getPlayerColor(winnerIdx));
-          setConfettiTrigger((t) => t + 1);
+
+          // Confetti only on the WINNER's screen
+          if (winner.userId === currentUser?.id) {
+            setConfettiColor(getPlayerColor(winnerIdx));
+            setConfettiTrigger((t) => t + 1);
+          }
+
           setUndoMessage(`+1 for ${winnerMember?.name || "Player"}`);
           setUndoVisible(true);
           setLastClosedRoundId(roundId);
 
-          // Show cat if player B wins
+          // Cat overlay on BOTH screens when player B (index 1) wins
           if (winnerIdx === 1) {
             setShowCat(true);
             setTimeout(() => setShowCat(false), 2600);

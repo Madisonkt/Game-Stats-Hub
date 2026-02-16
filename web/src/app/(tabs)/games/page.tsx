@@ -39,6 +39,7 @@ export default function GamesPage() {
   const [exitingRoom, setExitingRoom] = useState(false);
   const [showConfirm, setShowConfirm] = useState<"signout" | "exit" | null>(null);
   const [showPlayerSettings, setShowPlayerSettings] = useState(false);
+  const [showLoveNote, setShowLoveNote] = useState(false);
 
   // ── Poll every 3s to pick up couple/member changes ────────
   useEffect(() => {
@@ -188,6 +189,37 @@ export default function GamesPage() {
           <button onClick={handleOpenPlayerSettings} className="text-[#3A7BD5]"><IoPeople style={{ fontSize: 24 }} /></button>
         </div>
       </div>
+
+      {/* ── Valentine's Day Card ────────────────────── */}
+      <button
+        onClick={() => setShowLoveNote(true)}
+        className="relative w-full overflow-hidden mb-3 active:scale-[0.98] transition-all"
+        style={{ borderRadius: 18, height: 120 }}
+      >
+        <img
+          src="/images/splash-vday.png"
+          alt="Valentine's Day"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+        <div className="relative h-full flex flex-col justify-end p-4">
+          <div className="flex items-center gap-1.5">
+            <IoHeart className="text-white" style={{ fontSize: 18 }} />
+            <span
+              className="text-white font-[family-name:var(--font-nunito)]"
+              style={{ fontSize: 16, fontWeight: 800 }}
+            >
+              Happy Valentine&apos;s Day
+            </span>
+          </div>
+          <span
+            className="text-white/70 font-[family-name:var(--font-nunito)]"
+            style={{ fontSize: 12, fontWeight: 600 }}
+          >
+            Tap to read
+          </span>
+        </div>
+      </button>
 
       {/* ── Game Row: Rubik's Cube ───────────────────── */}
       <div
@@ -456,6 +488,36 @@ export default function GamesPage() {
               <IoLogOutOutline style={{ fontSize: 18 }} />
               Sign Out
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── Valentine's Day Note Modal ──────────────── */}
+      {showLoveNote && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-6 modal-backdrop"
+          onClick={() => setShowLoveNote(false)}
+        >
+          <div
+            className="relative w-full max-w-sm bg-[#F3F0EA] dark:bg-[#0A0A0C] shadow-xl modal-content"
+            style={{ borderRadius: 20, padding: 24, maxHeight: "80vh" }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setShowLoveNote(false)}
+              className="absolute top-4 right-4 text-[#98989D] hover:text-[#636366] transition-colors"
+              style={{ fontSize: 20 }}
+            >
+              &times;
+            </button>
+            <div className="overflow-y-auto" style={{ maxHeight: "70vh" }}>
+              <p
+                className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)] whitespace-pre-line leading-relaxed"
+                style={{ fontSize: 15, fontWeight: 500 }}
+              >
+                hello sir{"\n"}happy valentines day{"\n"}{"\n"}congrats on not being shawty-lesss this year.{"\n"}I feel very lucky to have found someone who makes me smile as much as you do.{"\n"}{"\n"}thank you for opening up to me these past months, I feel like I&apos;ve learned so much about how your mind works, what your goals and fears are and I dont take that for granted. I appreciate you trusting me with this and want you to know that I am your biggest fan. You&apos;re capable of doing amazing things and I hope you can lean on me when you need to. Im consistently inspired by your drive, self conviction and creativity. You push me, challenge me, and support me and Im very grateful to be growing alongside u. Even though we may not always see eye to eye, getting to understand you more deeply has been an infinitely rewarding experience.
+              </p>
+            </div>
           </div>
         </div>
       )}
