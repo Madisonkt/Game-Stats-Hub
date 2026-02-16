@@ -19,7 +19,7 @@ export default function TabLayout({ children }: { children: ReactNode }) {
     <div className="flex flex-col min-h-screen bg-[#F3F0EA] dark:bg-[#0A0A0C]">
       <KawaiiBackground>
         {/* Page content */}
-        <main className="flex-1 overflow-auto pb-24 animate-fade-in">{children}</main>
+        <main className="flex-1 overflow-auto pb-20 animate-fade-in">{children}</main>
       </KawaiiBackground>
 
       {/* Bottom tab bar */}
@@ -29,7 +29,7 @@ export default function TabLayout({ children }: { children: ReactNode }) {
           backdrop-blur-xl border-t border-[#ECE7DE] dark:border-[#1A1A1C]
           safe-area-bottom"
       >
-        <div className="flex items-center justify-around max-w-lg mx-auto pt-2 pb-7">
+        <div className="flex items-center justify-around max-w-lg mx-auto pt-2 pb-2">
           {tabs.map((tab) => {
             const isActive =
               tab.href === "/"
