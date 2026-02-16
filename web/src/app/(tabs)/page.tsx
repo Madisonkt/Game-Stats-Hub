@@ -440,6 +440,19 @@ export default function LogPage() {
     };
   }, []);
 
+  // ── Reset timer when a new round appears ─────────────────
+  const prevRoundIdRef = useRef<string | null>(null);
+  useEffect(() => {
+    if (round?.id && round.id !== prevRoundIdRef.current) {
+      prevRoundIdRef.current = round.id;
+      // Only reset if timer isn't already running (don't interrupt active timer)
+      if (!timerRef.current) {
+        setTimerElapsed(0);
+        setTimerRunning(false);
+      }
+    }
+  }, [round?.id]);
+
   // ── Actions ───────────────────────────────────────────────
   const handleCreateRound = async () => {
     if (!couple?.id || !currentUser?.id) return;
@@ -462,6 +475,9 @@ export default function LogPage() {
     try {
       const updated = await rubiksRepo.joinRound(round.id, currentUser.id);
       if (updated) setRound(updated);
+      setTimerElapsed(0);
+      setTimerRunning(false);
+      if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
     } catch (e) {
       console.error("Failed to join round:", e);
     } finally {
