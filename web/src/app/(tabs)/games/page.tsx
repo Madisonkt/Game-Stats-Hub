@@ -23,7 +23,9 @@ import {
   IoTrashOutline,
   IoArchiveOutline,
   IoRefresh,
+  IoNotificationsOutline,
 } from "react-icons/io5";
+import { isPushSupported, subscribeToPush, getPushPermission } from "@/lib/push";
 
 const GRADIENT_A = "linear-gradient(160deg, #F5D5C8, #F0B89E, #E8956E, #E07850, #D4628A)";
 const GRADIENT_B = "linear-gradient(160deg, #A8C8F0, #88BDE8, #6CB4EE, #7DD4D4, #90DBC8)";
@@ -560,8 +562,26 @@ export default function GamesPage() {
       )}
 
       {/* ── Actions ─────────────────────────────────── */}
-      <div className="flex flex-col gap-3 mt-auto">
-        {couple && (
+      <div className="flex flex-col gap-3 mt-auto">        {isPushSupported() && getPushPermission() !== "granted" && couple && (
+          <button
+            onClick={async () => {
+              if (currentUser && couple) {
+                const ok = await subscribeToPush(currentUser.id, couple.id);
+                if (ok) {
+                  alert("Notifications enabled! You'll be notified when your partner starts a round.");
+                } else {
+                  alert("Couldn't enable notifications. Make sure you tap Allow when prompted.");
+                }
+              }
+            }}
+            className="flex items-center justify-center gap-2 w-full font-[family-name:var(--font-nunito)]
+              active:scale-[0.98] transition-all"
+            style={{ borderRadius: 16, padding: 14, fontSize: 15, fontWeight: 700, color: "#3A7BD5", backgroundColor: "rgba(58,123,213,0.08)" }}
+          >
+            <IoNotificationsOutline style={{ fontSize: 20 }} />
+            Enable Notifications
+          </button>
+        )}        {couple && (
           <button
             onClick={() => setShowConfirm("exit")}
             disabled={exitingRoom}
