@@ -35,6 +35,18 @@ export interface Solve {
   createdAt: number;
 }
 
+export type GameType = "simple" | "timed";
+
+export interface Game {
+  id: string;
+  coupleId: string;
+  name: string;
+  icon: string;
+  type: GameType;
+  isArchived: boolean;
+  createdAt: number;
+}
+
 export interface Session {
   currentUser: User | null;
   couple: Couple | null;

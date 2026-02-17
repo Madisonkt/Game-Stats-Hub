@@ -1,5 +1,17 @@
 /** Supabase row types — mirrors the SQL schema */
 
+export type GameType = "simple" | "timed";
+
+export interface GameRow {
+  id: string;
+  couple_id: string;
+  name: string;
+  icon: string;
+  game_type: GameType;
+  is_archived: boolean;
+  created_at: string;
+}
+
 export interface CoupleRow {
   id: string;
   invite_code: string;

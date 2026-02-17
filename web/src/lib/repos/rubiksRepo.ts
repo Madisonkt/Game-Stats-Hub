@@ -44,7 +44,8 @@ function toDomainSolve(s: SolveRow): Solve {
  * Prefers in_progress, falls back to open.
  */
 export async function getActiveRound(
-  coupleId: string
+  coupleId: string,
+  gameKey: string = "rubiks"
 ): Promise<Round | null> {
   const supabase = createSupabaseBrowserClient();
 
@@ -53,6 +54,7 @@ export async function getActiveRound(
     .from("rounds")
     .select("*")
     .eq("couple_id", coupleId)
+    .eq("game_key", gameKey)
     .eq("status", "in_progress")
     .order("started_at", { ascending: false })
     .limit(1)
@@ -65,6 +67,7 @@ export async function getActiveRound(
     .from("rounds")
     .select("*")
     .eq("couple_id", coupleId)
+    .eq("game_key", gameKey)
     .eq("status", "open")
     .order("started_at", { ascending: false })
     .limit(1)
@@ -81,7 +84,8 @@ export async function getActiveRound(
  */
 export async function createRound(
   coupleId: string,
-  userId: string
+  userId: string,
+  gameKey: string = "rubiks"
 ): Promise<Round> {
   const supabase = createSupabaseBrowserClient();
   const originId = crypto.randomUUID();
@@ -91,6 +95,7 @@ export async function createRound(
     .from("rounds")
     .insert({
       couple_id: coupleId,
+      game_key: gameKey,
       origin_id: originId,
       scramble,
       status: "open",
@@ -205,15 +210,23 @@ export async function getRound(roundId: string): Promise<Round | null> {
 /**
  * Get all rounds for a couple, newest first.
  */
-export async function getAllRounds(coupleId: string): Promise<Round[]> {
+export async function getAllRounds(
+  coupleId: string,
+  gameKey?: string
+): Promise<Round[]> {
   const supabase = createSupabaseBrowserClient();
 
-  const { data } = await supabase
+  let query = supabase
     .from("rounds")
     .select("*")
     .eq("couple_id", coupleId)
     .order("started_at", { ascending: false });
 
+  if (gameKey) {
+    query = query.eq("game_key", gameKey);
+  }
+
+  const { data } = await query;
   return (data ?? []).map((r) => toDomainRound(r as RoundRow));
 }
 
@@ -288,14 +301,23 @@ export async function getSolves(roundId: string): Promise<Solve[]> {
 /**
  * Get all solves across all rounds for a couple (for history/stats).
  */
-export async function getAllSolves(coupleId: string): Promise<Solve[]> {
+export async function getAllSolves(
+  coupleId: string,
+  gameKey?: string
+): Promise<Solve[]> {
   const supabase = createSupabaseBrowserClient();
 
-  // Get round IDs for the couple
-  const { data: rounds } = await supabase
+  // Get round IDs for the couple (optionally filtered by game)
+  let roundQuery = supabase
     .from("rounds")
     .select("id")
     .eq("couple_id", coupleId);
+
+  if (gameKey) {
+    roundQuery = roundQuery.eq("game_key", gameKey);
+  }
+
+  const { data: rounds } = await roundQuery;
 
   if (!rounds || rounds.length === 0) return [];
 

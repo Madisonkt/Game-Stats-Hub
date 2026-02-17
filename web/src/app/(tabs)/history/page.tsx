@@ -10,6 +10,7 @@ import {
   IoEllipsisVertical,
   IoTimeOutline,
 } from "react-icons/io5";
+import { SwipeRow } from "@/components/SwipeRow";
 
 // ── helpers ─────────────────────────────────────────────────
 
@@ -166,7 +167,6 @@ function EventRow({
   winnerInitial,
   timeText,
   elapsedDisplay,
-  onDelete,
 }: {
   winnerName: string;
   winnerColor: string;
@@ -174,12 +174,10 @@ function EventRow({
   winnerInitial: string;
   timeText: string;
   elapsedDisplay?: string;
-  onDelete: () => void;
 }) {
   return (
     <div
-      className="flex items-center gap-2.5 bg-[#ECE7DE] dark:bg-[#1A1A1C] mx-4"
-      style={{ borderRadius: 18, padding: 14 }}
+      className="flex items-center gap-2.5"
     >
       {/* Winner dot */}
       <div
@@ -239,12 +237,6 @@ function EventRow({
             >
               {timeText}
             </span>
-            <button
-              onClick={onDelete}
-              className="text-[#98989D] hover:text-red-500 transition-colors p-1"
-            >
-              <IoEllipsisVertical style={{ fontSize: 16 }} />
-            </button>
           </div>
         </div>
         <span
@@ -342,6 +334,7 @@ export default function HistoryPage() {
   const [allSolves, setAllSolves] = useState<Solve[]>([]);
   const [loading, setLoading] = useState(true);
   const [statSheetPlayer, setStatSheetPlayer] = useState<number | null>(null);
+  const [openSwipeId, setOpenSwipeId] = useState<string | null>(null);
 
   useEffect(() => {
     if (!couple?.id) {
@@ -563,7 +556,7 @@ export default function HistoryPage() {
           </p>
         </div>
       ) : (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2 px-4">
           {timeline.map(({ round, roundSolves, winner }) => {
             const winnerMember = winner
               ? members.find((m) => m.id === winner.userId)
@@ -574,28 +567,33 @@ export default function HistoryPage() {
             const ts = round.closedAt ?? round.startedAt;
 
             return (
-              <EventRow
+              <SwipeRow
                 key={round.id}
-                winnerName={winnerMember?.name ?? "Unknown"}
-                winnerColor={getPlayerColor(winnerIdx >= 0 ? winnerIdx : 0)}
-                winnerAvatarUrl={winnerMember?.avatarUrl}
-                winnerInitial={winnerMember?.name?.charAt(0)?.toUpperCase() ?? "?"}
-                timeText={formatTime(ts)}
-                elapsedDisplay={winner ? formatMs(winner.timeMs) : undefined}
-                onDelete={async () => {
-                  if (confirm(`Remove "${winnerMember?.name ?? "Unknown"} won" from history?`)) {
-                    try {
-                      await rubiksRepo.deleteRound(round.id);
-                      setAllRounds((prev) => prev.filter((r) => r.id !== round.id));
-                      setAllSolves((prev) =>
-                        prev.filter((s) => s.roundId !== round.id)
-                      );
-                    } catch (e) {
-                      console.error("Failed to delete round:", e);
-                    }
+                id={round.id}
+                isOpen={openSwipeId === round.id}
+                setOpenId={setOpenSwipeId}
+                onDelete={async (id) => {
+                  try {
+                    await rubiksRepo.deleteRound(id);
+                    setAllRounds((prev) => prev.filter((r) => r.id !== id));
+                    setAllSolves((prev) =>
+                      prev.filter((s) => s.roundId !== id)
+                    );
+                    setOpenSwipeId(null);
+                  } catch (e) {
+                    console.error("Failed to delete round:", e);
                   }
                 }}
-              />
+              >
+                <EventRow
+                  winnerName={winnerMember?.name ?? "Unknown"}
+                  winnerColor={getPlayerColor(winnerIdx >= 0 ? winnerIdx : 0)}
+                  winnerAvatarUrl={winnerMember?.avatarUrl}
+                  winnerInitial={winnerMember?.name?.charAt(0)?.toUpperCase() ?? "?"}
+                  timeText={formatTime(ts)}
+                  elapsedDisplay={winner ? formatMs(winner.timeMs) : undefined}
+                />
+              </SwipeRow>
             );
           })}
         </div>
