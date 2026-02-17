@@ -505,9 +505,12 @@ export default function GamesPage() {
         className="w-full relative overflow-hidden active:scale-[0.98] transition-all mt-4"
         style={{ borderRadius: 18, height: 140, backgroundColor: "#1A6FA0" }}
       >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/images/splash-vday.png"
+          src="/images/splash-vday-small.jpg"
           alt=""
+          loading="eager"
+          decoding="async"
           className="absolute inset-0 w-full h-full object-cover"
         />
         <div
@@ -523,12 +526,6 @@ export default function GamesPage() {
               Happy Valentine&apos;s Day
             </span>
           </div>
-          <span
-            className="font-[family-name:var(--font-nunito)]"
-            style={{ fontSize: 13, color: "rgba(255,255,255,0.8)", marginTop: 4, marginLeft: 28 }}
-          >
-            Tap to read
-          </span>
         </div>
       </button>
 
