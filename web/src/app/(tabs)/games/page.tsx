@@ -11,7 +11,6 @@ import {
   IoCheckmark,
   IoHeart,
   IoPeople,
-  IoAddCircle,
   IoEllipsisVertical,
   IoCamera,
   IoSave,
@@ -42,20 +41,7 @@ export default function GamesPage() {
   const [showPlayerSettings, setShowPlayerSettings] = useState(false);
   const [showLoveNote, setShowLoveNote] = useState(false);
 
-  // ── Poll every 3s to pick up couple/member changes ────────
-  useEffect(() => {
-    if (!currentUser?.id) return;
-    const poll = async () => {
-      try {
-        const updatedCouple = await getCoupleForUser(currentUser.id);
-        if (updatedCouple) setCouple(updatedCouple);
-      } catch {
-        // Silently ignore polling errors
-      }
-    };
-    const interval = setInterval(poll, 3000);
-    return () => clearInterval(interval);
-  }, [currentUser?.id, setCouple]);
+  // Polling removed — realtime subscriptions in auth-context handle updates
   const [editName, setEditName] = useState("");
   const [editAvatarUrl, setEditAvatarUrl] = useState<string | undefined>();
   const [newPassword, setNewPassword] = useState("");
@@ -201,7 +187,7 @@ export default function GamesPage() {
         style={{ borderRadius: 18, height: 120 }}
       >
         <img
-          src="/images/splash-vday.png"
+          src="/images/splash-vday-small.jpg"
           alt="Valentine's Day"
           className="absolute inset-0 w-full h-full object-cover"
         />

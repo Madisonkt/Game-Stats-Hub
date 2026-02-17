@@ -1,20 +1,19 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import dynamic from "next/dynamic";
 import { useSession } from "@/lib/auth-context";
 import * as rubiksRepo from "@/lib/repos/rubiksRepo";
 import type { Round, Solve, User } from "@/lib/models";
-import { getPartnerUser } from "@/lib/models";
-import { generateScramble } from "@/lib/scramble";
 import {
   IoPlay,
   IoRefresh,
   IoCheckmarkCircle,
   IoCopy,
-  IoCloseCircle,
 } from "react-icons/io5";
-import ConfettiEffect from "@/components/ConfettiEffect";
-import UndoToast from "@/components/UndoToast";
+
+const ConfettiEffect = dynamic(() => import("@/components/ConfettiEffect"), { ssr: false });
+const UndoToast = dynamic(() => import("@/components/UndoToast"), { ssr: false });
 
 // ── helpers ─────────────────────────────────────────────────
 
@@ -237,7 +236,7 @@ export default function LogPage() {
   // Timer state
   const [timerRunning, setTimerRunning] = useState(false);
   const [timerElapsed, setTimerElapsed] = useState(0);
-  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const timerRef = useRef<number | null>(null);
   const timerStartRef = useRef<number>(0);
 
   // Score tracking
@@ -355,31 +354,7 @@ export default function LogPage() {
     load();
   }, [couple?.id, computeScores]);
 
-  // ── Poll every 3s for updates (rounds, solves, scores) ────
-  useEffect(() => {
-    if (!couple?.id) return;
-    const poll = async () => {
-      // Don't poll while timer is running (avoid UI jank)
-      if (timerRef.current) return;
-      try {
-        const activeRound = await rubiksRepo.getActiveRound(couple.id);
-        setRound(activeRound);
-        if (activeRound) {
-          const roundSolves = await rubiksRepo.getSolves(activeRound.id);
-          setSolves(roundSolves);
-          // Check if round should be closed (both players submitted)
-          if (activeRound.status === "in_progress" && roundSolves.length >= 2) {
-            await handleRoundComplete(activeRound.id, roundSolves);
-          }
-        }
-        await computeScores(couple.id);
-      } catch (e) {
-        // Silently ignore polling errors
-      }
-    };
-    const interval = setInterval(poll, 3000);
-    return () => clearInterval(interval);
-  }, [couple?.id, computeScores, handleRoundComplete]);
+  // Polling removed — realtime subscriptions handle updates
 
   // ── Realtime: subscribe to rounds ─────────────────────────
   useEffect(() => {
@@ -412,14 +387,16 @@ export default function LogPage() {
     timerStartRef.current = Date.now();
     setTimerElapsed(0);
     setTimerRunning(true);
-    timerRef.current = setInterval(() => {
+    const tick = () => {
       setTimerElapsed(Date.now() - timerStartRef.current);
-    }, 10);
+      timerRef.current = requestAnimationFrame(tick);
+    };
+    timerRef.current = requestAnimationFrame(tick);
   }, []);
 
   const stopTimer = useCallback(async () => {
     if (timerRef.current) {
-      clearInterval(timerRef.current);
+      cancelAnimationFrame(timerRef.current);
       timerRef.current = null;
     }
     const finalTime = Date.now() - timerStartRef.current;
@@ -436,9 +413,7 @@ export default function LogPage() {
 
   useEffect(() => {
     return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, []);
+      if (timerRef.current) cancelAnimationFrame(timerRef.current);
 
   // ── Reset timer when a new round appears ─────────────────
   const prevRoundIdRef = useRef<string | null>(null);
@@ -447,7 +422,7 @@ export default function LogPage() {
       prevRoundIdRef.current = round.id;
       // Always reset timer for new round (regardless of timer state)
       if (timerRef.current) {
-        clearInterval(timerRef.current);
+        cancelAnimationFrame(timerRef.current);
         timerRef.current = null;
       }
       setTimerElapsed(0);
@@ -456,7 +431,7 @@ export default function LogPage() {
       // Round was cleared (after completion) — reset timer
       prevRoundIdRef.current = null;
       if (timerRef.current) {
-        clearInterval(timerRef.current);
+        cancelAnimationFrame(timerRef.current);
         timerRef.current = null;
       }
       setTimerElapsed(0);
@@ -488,7 +463,7 @@ export default function LogPage() {
       if (updated) setRound(updated);
       setTimerElapsed(0);
       setTimerRunning(false);
-      if (timerRef.current) { clearInterval(timerRef.current); timerRef.current = null; }
+      if (timerRef.current) { cancelAnimationFrame(timerRef.current); timerRef.current = null; }
     } catch (e) {
       console.error("Failed to join round:", e);
     } finally {
@@ -499,7 +474,7 @@ export default function LogPage() {
   const handleCancelRound = async () => {
     if (!round?.id) return;
     try {
-      await rubiksRepo.closeRound(round.id);
+      await rubiksRepo.deleteRound(round.id);
       setRound(null);
       setSolves([]);
     } catch (e) {
@@ -586,7 +561,7 @@ export default function LogPage() {
           style={{ backgroundColor: "#000" }}
         >
           <img
-            src="/images/cat.png"
+            src="/images/cat-small.jpg"
             alt="Cat celebration"
             className="cat-overlay"
             style={{
