@@ -24,40 +24,42 @@ export default function TabLayout({ children }: { children: ReactNode }) {
         <main className="flex-1 overflow-auto pb-20 animate-fade-in">{children}</main>
       </KawaiiBackground>
 
-      {/* Bottom tab bar */}
-      <nav
-        className="fixed bottom-0 inset-x-0 z-50
-          bg-[#F3F0EA]/80 dark:bg-[#0A0A0C]/80
-          backdrop-blur-xl border-t border-[#ECE7DE] dark:border-[#1A1A1C]
-          safe-area-bottom"
-      >
-        <div className="flex items-center justify-around max-w-lg mx-auto pt-2 pb-2">
-          {tabs.map((tab) => {
-            const isActive =
-              tab.href === "/"
-                ? pathname === "/"
-                : pathname.startsWith(tab.href);
-            const Icon = tab.icon;
-            return (
-              <Link
-                key={tab.href}
-                href={tab.href}
-                className={`flex flex-col items-center gap-0.5 px-4 py-1 transition-colors
-                  ${
-                    isActive
-                      ? "text-[#3A7BD5] dark:text-white"
-                      : "text-[#98989D] dark:text-[#636366] hover:text-[#636366] dark:hover:text-[#98989D]"
-                  }`}
-              >
-                <Icon className="text-2xl" />
-                <span className="text-[11px] font-semibold font-[family-name:var(--font-nunito)]">
-                  {tab.label}
-                </span>
-              </Link>
-            );
-          })}
-        </div>
-      </nav>
+      {/* Bottom tab bar — liquid glass */}
+      <div className="fixed bottom-0 inset-x-0 z-50 flex justify-center safe-area-bottom">
+        <nav
+          className="liquid-glass-bar mx-4 mb-2"
+        >
+          <div className="flex items-center justify-around relative">
+            {tabs.map((tab) => {
+              const isActive =
+                tab.href === "/"
+                  ? pathname === "/"
+                  : pathname.startsWith(tab.href);
+              const Icon = tab.icon;
+              return (
+                <Link
+                  key={tab.href}
+                  href={tab.href}
+                  className={`relative flex flex-col items-center gap-0.5 px-6 py-2 transition-all duration-300 z-10
+                    ${
+                      isActive
+                        ? "text-[#0A0A0C] dark:text-white"
+                        : "text-[#98989D]/70 dark:text-[#636366] hover:text-[#636366] dark:hover:text-[#98989D]"
+                    }`}
+                >
+                  {isActive && (
+                    <div className="absolute inset-0 liquid-glass-pill" />
+                  )}
+                  <Icon className="text-[22px] relative z-10" />
+                  <span className="text-[10px] font-bold font-[family-name:var(--font-nunito)] relative z-10 tracking-wide">
+                    {tab.label}
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+        </nav>
+      </div>
     </div>
   );
 }
