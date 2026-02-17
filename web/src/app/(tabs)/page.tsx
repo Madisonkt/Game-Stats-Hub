@@ -750,12 +750,17 @@ export default function LogPage() {
       </div>
 
       {/* ── Status text ─────────────────────────────── */}
-      <p
-        className="text-[#98989D] font-[family-name:var(--font-nunito)] mb-4 text-center"
-        style={{ fontSize: 13, fontWeight: 600 }}
+      <div
+        className="w-full bg-[#ECE7DE] dark:bg-[#1A1A1C] mb-4"
+        style={{ borderRadius: 16, padding: 14 }}
       >
-        {statusText}
-      </p>
+        <p
+          className="text-[#98989D] font-[family-name:var(--font-nunito)] text-left"
+          style={{ fontSize: 13, fontWeight: 600 }}
+        >
+          {statusText}
+        </p>
+      </div>
 
       {/* ── FULLSCREEN TIMER OVERLAY ────────────────── */}
       {timerRunning && (
