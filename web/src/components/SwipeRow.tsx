@@ -28,21 +28,25 @@ export function SwipeRow({
   const clamp = (n: number, min: number, max: number) =>
     Math.min(max, Math.max(min, n));
 
+  // Total slide distance = actionWidth + gap
+  const gap = 2;
+  const totalSlide = actionWidth + gap;
+
   // Compute the actual translateX: use dx while swiping, otherwise snap to open/closed
-  const translateX = swiping ? dx : isOpen ? -actionWidth : 0;
+  const translateX = swiping ? dx : isOpen ? -totalSlide : 0;
 
   const handlers = useSwipeable({
     onSwipeStart: () => {
       setSwiping(true);
-      startDxRef.current = isOpen ? -actionWidth : 0;
+      startDxRef.current = isOpen ? -totalSlide : 0;
       setDx(startDxRef.current);
     },
     onSwiping: (e) => {
-      const next = clamp(startDxRef.current + e.deltaX, -actionWidth, 0);
+      const next = clamp(startDxRef.current + e.deltaX, -totalSlide, 0);
       setDx(next);
     },
     onSwiped: () => {
-      const shouldOpen = dx < -actionWidth * 0.4;
+      const shouldOpen = dx < -totalSlide * 0.4;
       setOpenId(shouldOpen ? id : null);
       setSwiping(false);
       setDx(0);
@@ -54,15 +58,16 @@ export function SwipeRow({
   });
 
   return (
-    <div className="relative overflow-hidden" style={{ borderRadius: 18 }}>
-      {/* Delete action behind the card — fixed in place */}
+    <div className="relative">
+      {/* Delete button — positioned behind the card, fully rounded */}
       <div
-        className="absolute inset-y-0 right-0 flex items-center justify-center bg-rose-600"
-        style={{ width: actionWidth }}
+        className="absolute inset-y-0 flex items-center justify-center"
+        style={{ right: 0, width: actionWidth }}
       >
         <button
           onClick={() => onDelete(id)}
-          className="flex flex-col items-center gap-0.5 active:opacity-70"
+          className="flex flex-col items-center justify-center gap-0.5 active:opacity-70 bg-rose-600 w-full h-full"
+          style={{ borderRadius: 18 }}
         >
           <IoTrashOutline className="text-white" style={{ fontSize: 20 }} />
           <span
@@ -74,7 +79,7 @@ export function SwipeRow({
         </button>
       </div>
 
-      {/* The entire card slides left as one unit */}
+      {/* The entire card slides left — can go off-screen past other cards */}
       <div
         {...handlers}
         className="relative touch-pan-y"
@@ -82,6 +87,7 @@ export function SwipeRow({
           transform: `translateX(${translateX}px)`,
           transition: swiping ? "none" : "transform 0.25s cubic-bezier(0.25, 0.1, 0.25, 1)",
           willChange: "transform",
+          zIndex: 1,
         }}
         onClick={() => {
           if (isOpen) {

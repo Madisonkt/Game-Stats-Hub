@@ -3,6 +3,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import dynamic from "next/dynamic";
 import { useSession } from "@/lib/auth-context";
+import { useGames } from "@/lib/game-context";
 import * as rubiksRepo from "@/lib/repos/rubiksRepo";
 import type { Round, Solve, User } from "@/lib/models";
 import {
@@ -224,8 +225,11 @@ function ScrambleCard({
 
 export default function LogPage() {
   const { session } = useSession();
+  const { activeGame } = useGames();
   const couple = session.couple;
   const currentUser = session.currentUser;
+  const gameKey = activeGame?.id ?? "rubiks";
+  const isTimed = activeGame ? activeGame.type === "timed" : true;
 
   // Round + solve state
   const [round, setRound] = useState<Round | null>(null);
@@ -258,10 +262,10 @@ export default function LogPage() {
 
   // ── Compute scores helper ─────────────────────────────────
   const computeScores = useCallback(
-    async (coupleId: string) => {
+    async (coupleId: string, gk: string) => {
       const [allRounds, allSolves] = await Promise.all([
-        rubiksRepo.getAllRounds(coupleId),
-        rubiksRepo.getAllSolves(coupleId),
+        rubiksRepo.getAllRounds(coupleId, gk),
+        rubiksRepo.getAllSolves(coupleId, gk),
       ]);
       const closed = allRounds.filter((r) => r.status === "closed");
       setTotalRounds(closed.length);
@@ -279,7 +283,7 @@ export default function LogPage() {
       }
       setScores(scoreMap);
     },
-    []
+    [] // eslint-disable-line react-hooks/exhaustive-deps
   );
 
   // ── Close round + fire confetti helper ────────────────────
@@ -296,7 +300,7 @@ export default function LogPage() {
       }
 
       if (couple?.id) {
-        await computeScores(couple.id);
+        await computeScores(couple.id, gameKey);
 
         const validSolves = roundSolves.filter((s) => !s.dnf);
         if (validSolves.length >= 1) {
@@ -326,7 +330,7 @@ export default function LogPage() {
         }
       }
     },
-    [couple?.id, couple?.members, computeScores]
+    [couple?.id, couple?.members, computeScores, gameKey]
   );
 
   // ── Load active round + scores on mount ───────────────────
@@ -338,13 +342,13 @@ export default function LogPage() {
     const load = async () => {
       setLoading(true);
       try {
-        const activeRound = await rubiksRepo.getActiveRound(couple.id);
+        const activeRound = await rubiksRepo.getActiveRound(couple.id, gameKey);
         setRound(activeRound);
         if (activeRound) {
           const roundSolves = await rubiksRepo.getSolves(activeRound.id);
           setSolves(roundSolves);
         }
-        await computeScores(couple.id);
+        await computeScores(couple.id, gameKey);
       } catch (e) {
         console.error("Failed to load round data:", e);
       } finally {
@@ -352,7 +356,7 @@ export default function LogPage() {
       }
     };
     load();
-  }, [couple?.id, computeScores]);
+  }, [couple?.id, computeScores, gameKey]);
 
   // Polling removed — realtime subscriptions handle updates
 
@@ -446,7 +450,7 @@ export default function LogPage() {
     if (!couple?.id || !currentUser?.id) return;
     setActionLoading(true);
     try {
-      const newRound = await rubiksRepo.createRound(couple.id, currentUser.id);
+      const newRound = await rubiksRepo.createRound(couple.id, currentUser.id, gameKey);
       setRound(newRound);
       setSolves([]);
       setTimerElapsed(0);
@@ -544,7 +548,7 @@ export default function LogPage() {
           if (lastClosedRoundId) {
             try {
               await rubiksRepo.undoRound(lastClosedRoundId);
-              if (couple?.id) await computeScores(couple.id);
+              if (couple?.id) await computeScores(couple.id, gameKey);
               setRound(null);
               setSolves([]);
             } catch (e) {
@@ -583,7 +587,7 @@ export default function LogPage() {
         className="text-center text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)] mb-4"
         style={{ fontSize: 22, fontWeight: 800 }}
       >
-        Rubik&apos;s Cube
+        {activeGame?.name ?? "Rubik\u2019s Cube"}
       </h1>
 
       {/* ── Scoreboard ──────────────────────────────── */}
