@@ -12,7 +12,6 @@ import {
   IoRefresh,
   IoCheckmarkCircle,
   IoCopy,
-  IoChevronDown,
 } from "react-icons/io5";
 
 const ConfettiEffect = dynamic(() => import("@/components/ConfettiEffect"), { ssr: false });
@@ -60,9 +59,9 @@ function CrownIcon({ className }: { className?: string }) {
   );
 }
 
-// ── Game Picker Dropdown ────────────────────────────────────
+// ── Game Filter Pills ───────────────────────────────────────
 
-function GamePickerDropdown({
+function GameFilterPills({
   games,
   activeGame,
   setActiveGameId,
@@ -71,23 +70,10 @@ function GamePickerDropdown({
   activeGame: import("@/lib/models").Game | null;
   setActiveGameId: (id: string) => void;
 }) {
-  const [open, setOpen] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-
-  // Close on click outside
-  useEffect(() => {
-    if (!open) return;
-    const handler = (e: MouseEvent) => {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
-    };
-    document.addEventListener("mousedown", handler);
-    return () => document.removeEventListener("mousedown", handler);
-  }, [open]);
-
   const activeGames = games.filter((g) => !g.isArchived);
 
   if (activeGames.length <= 1) {
-    // Single game — just show the name, no dropdown
+    // Single game — just show the name
     return (
       <h1
         className="text-center text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)] mb-4"
@@ -99,61 +85,32 @@ function GamePickerDropdown({
   }
 
   return (
-    <div ref={ref} className="relative flex justify-center mb-4">
-      <button
-        onClick={() => setOpen(!open)}
-        className="flex items-center gap-1.5 text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]
-          active:scale-[0.97] transition-all"
-        style={{ fontSize: 22, fontWeight: 800 }}
-      >
-        {activeGame?.name ?? "Select Game"}
-        <IoChevronDown
-          className="text-[#98989D]"
-          style={{
-            fontSize: 16,
-            transition: "transform 0.2s",
-            transform: open ? "rotate(180deg)" : "rotate(0deg)",
-          }}
-        />
-      </button>
-
-      {open && (
-        <div
-          className="absolute top-full mt-1 z-50 bg-white dark:bg-[#1A1A1C] shadow-lg border border-[#ECE7DE] dark:border-[#2A2A2C] flex flex-col py-1 overflow-hidden"
-          style={{ borderRadius: 14, minWidth: 200 }}
-        >
-          {activeGames.map((game) => (
-            <button
-              key={game.id}
-              onClick={() => {
-                setActiveGameId(game.id);
-                setOpen(false);
-              }}
-              className={`flex items-center gap-2.5 px-4 py-2.5 text-left transition-colors font-[family-name:var(--font-nunito)] ${
-                game.id === activeGame?.id
-                  ? "bg-[#3A7BD5]/10 dark:bg-white/10"
-                  : "hover:bg-[#ECE7DE] dark:hover:bg-[#2A2A2C]"
-              }`}
-            >
-              <span
-                className={`${
-                  game.id === activeGame?.id
-                    ? "text-[#3A7BD5] dark:text-white"
-                    : "text-[#0A0A0C] dark:text-[#F3F0EA]"
-                }`}
-                style={{ fontSize: 15, fontWeight: game.id === activeGame?.id ? 700 : 600 }}
-              >
-                {game.name}
-              </span>
-              {game.id === activeGame?.id && (
-                <span className="ml-auto text-[#3A7BD5] dark:text-white" style={{ fontSize: 12 }}>
-                  ●
-                </span>
-              )}
-            </button>
-          ))}
-        </div>
-      )}
+    <div className="flex gap-2 mb-4 overflow-x-auto no-scrollbar">
+      {activeGames.map((game) => {
+        const isActive = game.id === activeGame?.id;
+        return (
+          <button
+            key={game.id}
+            onClick={() => setActiveGameId(game.id)}
+            className={`whitespace-nowrap font-[family-name:var(--font-nunito)] active:scale-[0.95] transition-all ${
+              isActive
+                ? "bg-[#0A0A0C] dark:bg-[#F3F0EA] text-white dark:text-[#0A0A0C]"
+                : "bg-[#ECE7DE] dark:bg-[#1A1A1C] text-[#0A0A0C] dark:text-[#F3F0EA]"
+            }`}
+            style={{
+              borderRadius: 999,
+              paddingLeft: 20,
+              paddingRight: 20,
+              paddingTop: 10,
+              paddingBottom: 10,
+              fontSize: 15,
+              fontWeight: isActive ? 700 : 600,
+            }}
+          >
+            {game.name}
+          </button>
+        );
+      })}
     </div>
   );
 }
@@ -722,8 +679,8 @@ export default function LogPage() {
         </div>
       )}
 
-      {/* ── Header title — game picker dropdown ───── */}
-      <GamePickerDropdown
+      {/* ── Header title — game filter pills ────── */}
+      <GameFilterPills
         games={games}
         activeGame={activeGame}
         setActiveGameId={setActiveGameId}
