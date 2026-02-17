@@ -489,7 +489,7 @@ export default function HistoryPage() {
               paddingBottom: 8,
               paddingLeft: 12,
               paddingRight: 12,
-              backgroundColor: "rgba(0,0,0,0.08)",
+              backgroundColor: "rgba(0,0,0,0.15)",
             }}
           >
             <div className="flex-1 text-center">
