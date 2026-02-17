@@ -502,28 +502,32 @@ export default function GamesPage() {
       {/* ── Valentine's Day Card ─────────────────────── */}
       <button
         onClick={() => setShowLoveNote(true)}
-        className="w-full flex items-center gap-3 bg-gradient-to-r from-pink-100 to-red-100 dark:from-pink-950/40 dark:to-red-950/40
-          active:scale-[0.98] transition-all mt-4"
-        style={{ borderRadius: 18, padding: 16 }}
+        className="w-full relative overflow-hidden active:scale-[0.98] transition-all mt-4"
+        style={{ borderRadius: 18, height: 140, backgroundColor: "#1A6FA0" }}
       >
+        <img
+          src="/images/splash-vday.png"
+          alt=""
+          className="absolute inset-0 w-full h-full object-cover"
+        />
         <div
-          className="flex items-center justify-center"
-          style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: "rgba(255,107,107,0.15)" }}
+          className="absolute inset-0 flex flex-col justify-end"
+          style={{ padding: 16, backgroundColor: "rgba(0,0,0,0.25)" }}
         >
-          <IoHeart style={{ fontSize: 22, color: "#FF6B6B" }} />
-        </div>
-        <div className="flex flex-col items-start">
+          <div className="flex items-center gap-2">
+            <IoHeart style={{ fontSize: 20, color: "#fff" }} />
+            <span
+              className="text-white font-[family-name:var(--font-nunito)]"
+              style={{ fontSize: 18, fontWeight: 800 }}
+            >
+              Happy Valentine&apos;s Day
+            </span>
+          </div>
           <span
-            className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]"
-            style={{ fontSize: 15, fontWeight: 700 }}
+            className="font-[family-name:var(--font-nunito)]"
+            style={{ fontSize: 13, color: "rgba(255,255,255,0.8)", marginTop: 4, marginLeft: 28 }}
           >
-            Happy Valentine&apos;s Day 💌
-          </span>
-          <span
-            className="text-[#98989D] font-[family-name:var(--font-nunito)]"
-            style={{ fontSize: 12, fontWeight: 500 }}
-          >
-            Tap to read your note
+            Tap to read
           </span>
         </div>
       </button>
