@@ -762,38 +762,42 @@ export default function LogPage() {
         setActiveGameId={setActiveGameId}
       />
 
-      {/* ── Scoreboard ──────────────────────────────── */}
-      <div className="flex w-full gap-2.5 mb-3">
-        {members.map((member, i) => {
-          const score = scores[member.id] || 0;
-          const otherScore = scores[members[1 - i]?.id] || 0;
-          return (
-            <ScoreCard
-              key={member.id}
-              name={member.name || "Player"}
-              score={score}
-              color={getPlayerColor(i)}
-              gradient={getPlayerGradient(i)}
-              avatarUrl={member.avatarUrl}
-              initial={member.name?.charAt(0)?.toUpperCase() || "?"}
-              isLeading={score > 0 && score > otherScore}
-            />
-          );
-        })}
-      </div>
+      {/* ── Scoreboard (only when no active round) ──── */}
+      {!round && (
+        <>
+          <div className="flex w-full gap-2.5 mb-3">
+            {members.map((member, i) => {
+              const score = scores[member.id] || 0;
+              const otherScore = scores[members[1 - i]?.id] || 0;
+              return (
+                <ScoreCard
+                  key={member.id}
+                  name={member.name || "Player"}
+                  score={score}
+                  color={getPlayerColor(i)}
+                  gradient={getPlayerGradient(i)}
+                  avatarUrl={member.avatarUrl}
+                  initial={member.name?.charAt(0)?.toUpperCase() || "?"}
+                  isLeading={score > 0 && score > otherScore}
+                />
+              );
+            })}
+          </div>
 
-      {/* ── Status text ─────────────────────────────── */}
-      <div
-        className="w-full bg-[#ECE7DE] dark:bg-[#1A1A1C] mb-4"
-        style={{ borderRadius: 16, padding: 14 }}
-      >
-        <p
-          className="text-[#98989D] font-[family-name:var(--font-nunito)] text-left"
-          style={{ fontSize: 13, fontWeight: 600 }}
-        >
-          {statusText}
-        </p>
-      </div>
+          {/* ── Status text ─────────────────────────────── */}
+          <div
+            className="w-full bg-[#ECE7DE] dark:bg-[#1A1A1C] mb-4"
+            style={{ borderRadius: 16, padding: 14 }}
+          >
+            <p
+              className="text-[#98989D] font-[family-name:var(--font-nunito)] text-left"
+              style={{ fontSize: 13, fontWeight: 600 }}
+            >
+              {statusText}
+            </p>
+          </div>
+        </>
+      )}
 
       {/* ── FULLSCREEN TIMER OVERLAY ────────────────── */}
       {timerRunning && (
@@ -846,18 +850,27 @@ export default function LogPage() {
       {/* ── ROUND: OPEN (join gate) ─────────────────── */}
       {round && round.status === "open" && (
         <div className="w-full flex flex-col gap-4">
+          {/* Header */}
+          <h2
+            className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]"
+            style={{ fontSize: 20, fontWeight: 800 }}
+          >
+            Game in Progress
+          </h2>
+
           <ScrambleCard scramble={round.scramble} onNewScramble={async () => {
             const updated = await rubiksRepo.refreshScramble(round.id);
             if (updated) setRound(updated);
           }} />
 
           <p
-            className="text-center text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]"
-            style={{ fontSize: 14, fontWeight: 600 }}
+            className="text-[#98989D] font-[family-name:var(--font-nunito)] text-center"
+            style={{ fontSize: 13, fontWeight: 600 }}
           >
             Waiting for both players to join...
           </p>
 
+          {/* Player join cards */}
           <div className="flex gap-3">
             {members.map((member, i) => {
               const joined = round.joinedUserIds.includes(member.id);
@@ -865,49 +878,60 @@ export default function LogPage() {
               return (
                 <div
                   key={member.id}
-                  className="flex-1 flex flex-col items-center gap-2 bg-[#ECE7DE] dark:bg-[#1A1A1C]"
+                  className="flex-1 flex flex-col items-center gap-2"
                   style={{
                     borderRadius: 16,
                     padding: 14,
                     borderWidth: 2,
                     borderStyle: joined ? "solid" : "dashed",
-                    borderColor: joined ? getPlayerColor(i) : "rgba(0,0,0,0.06)",
+                    borderColor: joined ? getPlayerColor(i) : "rgba(150,150,150,0.3)",
+                    background: joined ? getPlayerGradient(i) : "transparent",
                   }}
                 >
                   <div
-                    className="flex items-center justify-center text-white font-bold"
+                    className="flex items-center justify-center font-bold"
                     style={{
-                      width: 40,
-                      height: 40,
-                      borderRadius: 20,
-                      backgroundColor: getPlayerColor(i),
-                      fontSize: 14,
+                      width: 44,
+                      height: 44,
+                      borderRadius: 22,
+                      backgroundColor: joined ? "rgba(255,255,255,0.3)" : "transparent",
+                      borderWidth: joined ? 0 : 2,
+                      borderStyle: "dashed",
+                      borderColor: joined ? "transparent" : "rgba(150,150,150,0.3)",
+                      color: joined ? "#fff" : "#98989D",
+                      fontSize: 16,
                     }}
                   >
-                    {member.avatarUrl ? (
+                    {joined && member.avatarUrl ? (
                       <img
                         src={member.avatarUrl}
                         alt={member.name}
                         className="w-full h-full rounded-full object-cover"
                       />
-                    ) : (
+                    ) : joined ? (
                       member.name?.charAt(0)?.toUpperCase() || "?"
+                    ) : (
+                      <span style={{ fontSize: 20 }}>?</span>
                     )}
                   </div>
                   <span
-                    className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]"
-                    style={{ fontSize: 13, fontWeight: 600 }}
+                    className="font-[family-name:var(--font-nunito)]"
+                    style={{
+                      fontSize: 13,
+                      fontWeight: 700,
+                      color: joined ? "#fff" : "#98989D",
+                    }}
                   >
                     {member.name}
                   </span>
                   {joined ? (
-                    <IoCheckmarkCircle style={{ fontSize: 20, color: getPlayerColor(i) }} />
+                    <IoCheckmarkCircle style={{ fontSize: 20, color: "#fff" }} />
                   ) : isMe ? (
                     <button
                       onClick={handleJoinRound}
                       disabled={actionLoading}
-                      className="font-bold text-[#3A7BD5] dark:text-white hover:underline disabled:opacity-50 font-[family-name:var(--font-nunito)]"
-                      style={{ fontSize: 13 }}
+                      className="font-bold hover:underline disabled:opacity-50 font-[family-name:var(--font-nunito)]"
+                      style={{ fontSize: 13, color: getPlayerColor(i) }}
                     >
                       Tap to Join
                     </button>
