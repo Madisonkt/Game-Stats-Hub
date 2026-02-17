@@ -248,6 +248,16 @@ export default function GamesPage() {
   const [showConfirm, setShowConfirm] = useState<"signout" | "exit" | null>(null);
   const [showPlayerSettings, setShowPlayerSettings] = useState(false);
   const [showLoveNote, setShowLoveNote] = useState(false);
+  const [loveNoteVisible, setLoveNoteVisible] = useState(false);
+
+  const openLoveNote = () => {
+    setShowLoveNote(true);
+    requestAnimationFrame(() => requestAnimationFrame(() => setLoveNoteVisible(true)));
+  };
+  const closeLoveNote = () => {
+    setLoveNoteVisible(false);
+    setTimeout(() => setShowLoveNote(false), 400);
+  };
   const [showAddGame, setShowAddGame] = useState(false);
 
   // Add game state
@@ -428,7 +438,7 @@ export default function GamesPage() {
           <button onClick={() => setShowAddGame(true)} className="text-[#3A7BD5] dark:text-white">
             <IoAddCircle style={{ fontSize: 28 }} />
           </button>
-          <button onClick={() => setShowLoveNote(true)} className="text-[#3A7BD5] dark:text-white">
+          <button onClick={() => openLoveNote()} className="text-[#3A7BD5] dark:text-white">
             <IoHeart style={{ fontSize: 22 }} />
           </button>
           <button onClick={handleOpenPlayerSettings} className="text-[#3A7BD5] dark:text-white">
@@ -503,7 +513,7 @@ export default function GamesPage() {
 
       {/* ── Valentine's Day Card ─────────────────────── */}
       <button
-        onClick={() => setShowLoveNote(true)}
+        onClick={() => openLoveNote()}
         className="w-full relative overflow-hidden active:scale-[0.98] transition-all mt-4"
         style={{ borderRadius: 18, height: 140, backgroundColor: "#1A6FA0" }}
       >
@@ -854,20 +864,40 @@ export default function GamesPage() {
         </div>
       )}
 
-      {/* ── Valentine's Day Note Modal ──────────────── */}
+      {/* ── Valentine's Day Note ─ Full-screen slide-up sheet ── */}
       {showLoveNote && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-6 modal-backdrop"
-          onClick={() => setShowLoveNote(false)}
+          className="fixed inset-0 z-[200] bg-[#F3F0EA] dark:bg-[#0A0A0C]"
+          style={{
+            transform: loveNoteVisible ? "translateY(0)" : "translateY(100%)",
+            transition: "transform 0.4s cubic-bezier(0.32, 0.72, 0, 1)",
+            willChange: "transform",
+          }}
         >
-          <div
-            className="relative w-full max-w-sm bg-[#F3F0EA] dark:bg-[#0A0A0C] shadow-xl modal-content"
-            style={{ borderRadius: 20, padding: 24, maxHeight: "80vh" }}
-            onClick={(e) => e.stopPropagation()}
+          {/* X close button */}
+          <button
+            onClick={closeLoveNote}
+            className="absolute top-4 right-4 z-10 flex items-center justify-center
+              bg-[#ECE7DE] dark:bg-[#1A1A1C] hover:bg-[#D6D1C8] dark:hover:bg-[#2A2A2C]
+              transition-colors active:scale-95"
+            style={{ width: 36, height: 36, borderRadius: 18 }}
           >
-            <button onClick={() => setShowLoveNote(false)} className="absolute top-4 right-4 text-[#98989D] hover:text-[#636366] transition-colors" style={{ fontSize: 20 }}>&times;</button>
-            <div className="overflow-y-auto" style={{ maxHeight: "70vh" }}>
-              <p className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)] whitespace-pre-line leading-relaxed" style={{ fontSize: 15, fontWeight: 500 }}>
+            <span className="text-[#0A0A0C] dark:text-[#F3F0EA]" style={{ fontSize: 18, lineHeight: 1 }}>&times;</span>
+          </button>
+
+          {/* Content */}
+          <div className="flex flex-col items-center justify-center min-h-screen px-8 py-16">
+            <div className="max-w-sm w-full">
+              <h2
+                className="text-[#D4628A] font-[family-name:var(--font-nunito)] mb-6"
+                style={{ fontSize: 24, fontWeight: 800 }}
+              >
+                Happy Valentine&apos;s Day {"\u2764\uFE0F"}
+              </h2>
+              <p
+                className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)] whitespace-pre-line leading-relaxed"
+                style={{ fontSize: 16, fontWeight: 500, lineHeight: 1.8 }}
+              >
                 hello sir{"\n"}happy valentines day{"\n"}{"\n"}congrats on not being shawty-lesss this year.{"\n"}I feel very lucky to have found someone who makes me smile as much as you do.{"\n"}{"\n"}thank you for opening up to me these past months, I feel like I&apos;ve learned so much about how your mind works, what your goals and fears are and I dont take that for granted. I appreciate you trusting me with this and want you to know that I am your biggest fan. You&apos;re capable of doing amazing things and I hope you can lean on me when you need to. Im consistently inspired by your drive, self conviction and creativity. You push me, challenge me, and support me and Im very grateful to be growing alongside u. Even though we may not always see eye to eye, getting to understand you more deeply has been an infinitely rewarding experience. love madison {"<3"}
               </p>
             </div>
