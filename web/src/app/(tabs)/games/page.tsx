@@ -251,19 +251,14 @@ export default function GamesPage() {
   const [playerSettingsVisible, setPlayerSettingsVisible] = useState(false);
   const [showLoveNote, setShowLoveNote] = useState(false);
   const [loveNoteVisible, setLoveNoteVisible] = useState(false);
-  const [loveNoteRect, setLoveNoteRect] = useState<DOMRect | null>(null);
-  const vdayCardRef = useRef<HTMLButtonElement>(null);
 
   const openLoveNote = () => {
-    if (vdayCardRef.current) {
-      setLoveNoteRect(vdayCardRef.current.getBoundingClientRect());
-    }
     setShowLoveNote(true);
     requestAnimationFrame(() => requestAnimationFrame(() => setLoveNoteVisible(true)));
   };
   const closeLoveNote = () => {
     setLoveNoteVisible(false);
-    setTimeout(() => setShowLoveNote(false), 450);
+    setTimeout(() => setShowLoveNote(false), 400);
   };
 
   const openPlayerSettings = () => {
@@ -540,7 +535,6 @@ export default function GamesPage() {
 
       {/* ── Valentine's Day Card ─────────────────────── */}
       <button
-        ref={vdayCardRef}
         onClick={() => openLoveNote()}
         className="w-full relative overflow-hidden card-press mt-4"
         style={{ borderRadius: 18, height: 140, backgroundColor: "#1A6FA0" }}
@@ -904,51 +898,31 @@ export default function GamesPage() {
         document.body
       )}
 
-      {/* ── Valentine's Day Note ─ Expand from card ── */}
+      {/* ── Valentine's Day Note ─ Full-screen slide-up sheet ── */}
       {showLoveNote && createPortal(
         <div
-          className="fixed overflow-y-auto bg-[#F3F0EA] dark:bg-[#0A0A0C]"
+          className="fixed inset-0 bg-[#F3F0EA] dark:bg-[#0A0A0C] overflow-y-auto"
           style={{
             zIndex: 99999,
-            willChange: "top, left, width, height, border-radius",
-            transition: loveNoteVisible
-              ? "top 0.45s cubic-bezier(0.32, 0.72, 0, 1), left 0.45s cubic-bezier(0.32, 0.72, 0, 1), width 0.45s cubic-bezier(0.32, 0.72, 0, 1), height 0.45s cubic-bezier(0.32, 0.72, 0, 1), border-radius 0.45s cubic-bezier(0.32, 0.72, 0, 1)"
-              : "top 0.35s cubic-bezier(0.32, 0.72, 0, 1), left 0.35s cubic-bezier(0.32, 0.72, 0, 1), width 0.35s cubic-bezier(0.32, 0.72, 0, 1), height 0.35s cubic-bezier(0.32, 0.72, 0, 1), border-radius 0.35s cubic-bezier(0.32, 0.72, 0, 1)",
-            ...(loveNoteVisible
-              ? { top: 0, left: 0, width: "100vw", height: "100vh", borderRadius: 0 }
-              : loveNoteRect
-                ? { top: loveNoteRect.top, left: loveNoteRect.left, width: loveNoteRect.width, height: loveNoteRect.height, borderRadius: 18 }
-                : { top: "50%", left: "50%", width: 0, height: 0, borderRadius: 18 }
-            ),
+            transform: loveNoteVisible ? "translateY(0)" : "translateY(100%)",
+            transition: "transform 0.4s cubic-bezier(0.32, 0.72, 0, 1)",
+            willChange: "transform",
           }}
         >
-          {/* X close button — only show when expanded */}
-          <div
-            style={{
-              opacity: loveNoteVisible ? 1 : 0,
-              transition: "opacity 0.3s ease 0.15s",
-            }}
+          {/* X close button */}
+          <button
+            onClick={closeLoveNote}
+            className="fixed top-4 right-4 flex items-center justify-center
+              bg-[#ECE7DE] dark:bg-[#1A1A1C] hover:bg-[#D6D1C8] dark:hover:bg-[#2A2A2C]
+              transition-colors active:scale-95"
+            style={{ zIndex: 100000, width: 36, height: 36, borderRadius: 18 }}
           >
-            <button
-              onClick={closeLoveNote}
-              className="fixed top-4 right-4 flex items-center justify-center
-                bg-[#ECE7DE] dark:bg-[#1A1A1C] hover:bg-[#D6D1C8] dark:hover:bg-[#2A2A2C]
-                transition-colors active:scale-95"
-              style={{ zIndex: 100000, width: 36, height: 36, borderRadius: 18 }}
-            >
-              <span className="text-[#0A0A0C] dark:text-[#F3F0EA]" style={{ fontSize: 18, lineHeight: 1 }}>&times;</span>
-            </button>
-          </div>
+            <span className="text-[#0A0A0C] dark:text-[#F3F0EA]" style={{ fontSize: 18, lineHeight: 1 }}>&times;</span>
+          </button>
 
-          {/* Content — fade in after expand */}
-          <div
-            className="px-8 pt-16 pb-16"
-            style={{
-              opacity: loveNoteVisible ? 1 : 0,
-              transition: "opacity 0.25s ease 0.2s",
-            }}
-          >
-            <div className="max-w-sm mx-auto">
+          {/* Content */}
+          <div className="flex flex-col items-center px-8 pt-16 pb-16 min-h-full justify-center">
+            <div className="max-w-sm w-full">
               <p
                 className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)] whitespace-pre-line leading-relaxed"
                 style={{ fontSize: 16, fontWeight: 500, lineHeight: 1.8 }}
