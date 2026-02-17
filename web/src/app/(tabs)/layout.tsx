@@ -47,9 +47,6 @@ export default function TabLayout({ children }: { children: ReactNode }) {
                         : "text-[#98989D]/70 dark:text-[#636366] hover:text-[#636366] dark:hover:text-[#98989D]"
                     }`}
                 >
-                  {isActive && (
-                    <div className="absolute inset-0 liquid-glass-pill" />
-                  )}
                   <Icon className="text-[22px] relative z-10" />
                   <span className="text-[10px] font-bold font-[family-name:var(--font-nunito)] relative z-10 tracking-wide">
                     {tab.label}

@@ -50,7 +50,7 @@ body {
 .liquid-glass-bar {
   position: relative;
   padding: 6px 4px;
-  border-radius: 28px;
+  border-radius: 100px;
   background: rgba(255, 255, 255, 0.35);
   backdrop-filter: blur(40px) saturate(1.8);
   -webkit-backdrop-filter: blur(40px) saturate(1.8);
