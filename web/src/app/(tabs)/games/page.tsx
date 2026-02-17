@@ -499,6 +499,35 @@ export default function GamesPage() {
         </>
       )}
 
+      {/* ── Valentine's Day Card ─────────────────────── */}
+      <button
+        onClick={() => setShowLoveNote(true)}
+        className="w-full flex items-center gap-3 bg-gradient-to-r from-pink-100 to-red-100 dark:from-pink-950/40 dark:to-red-950/40
+          active:scale-[0.98] transition-all mt-4"
+        style={{ borderRadius: 18, padding: 16 }}
+      >
+        <div
+          className="flex items-center justify-center"
+          style={{ width: 44, height: 44, borderRadius: 22, backgroundColor: "rgba(255,107,107,0.15)" }}
+        >
+          <IoHeart style={{ fontSize: 22, color: "#FF6B6B" }} />
+        </div>
+        <div className="flex flex-col items-start">
+          <span
+            className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]"
+            style={{ fontSize: 15, fontWeight: 700 }}
+          >
+            Happy Valentine&apos;s Day 💌
+          </span>
+          <span
+            className="text-[#98989D] font-[family-name:var(--font-nunito)]"
+            style={{ fontSize: 12, fontWeight: 500 }}
+          >
+            Tap to read your note
+          </span>
+        </div>
+      </button>
+
       {/* ── Invite Code ─────────────────────────────── */}
       {couple && (
         <div
