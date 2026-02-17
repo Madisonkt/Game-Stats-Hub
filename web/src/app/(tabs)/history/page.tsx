@@ -461,70 +461,158 @@ export default function HistoryPage() {
       {/* ── Timed Stats Card ────────────────────────── */}
       {(timedStatsA?.roundCount ?? 0) > 0 || (timedStatsB?.roundCount ?? 0) > 0 ? (
         <div
-          className="mx-4 mb-3 bg-[#ECE7DE] dark:bg-[#1A1A1C] flex flex-col gap-2.5"
-          style={{ borderRadius: 18, padding: 14 }}
+          className="mx-4 mb-3 bg-[#ECE7DE] dark:bg-[#1A1A1C] flex flex-col"
+          style={{ borderRadius: 18, padding: 16 }}
         >
-          <p
-            className="text-center text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]"
-            style={{ fontSize: 15, fontWeight: 700 }}
-          >
-            Round Stats
-          </p>
-
-          {/* Player name header */}
-          <div
-            className="flex rounded-xl dark:bg-[#2A2A2C]"
-            style={{
-              paddingTop: 8,
-              paddingBottom: 8,
-              paddingLeft: 12,
-              paddingRight: 12,
-              backgroundColor: "rgba(0,0,0,0.15)",
-            }}
-          >
-            <div className="flex-1 text-center">
-              <span
-                className="font-[family-name:var(--font-nunito)]"
-                style={{ fontSize: 13, fontWeight: 700, color: getPlayerColor(0) }}
+          {/* Player header row */}
+          <div className="flex items-center mb-4">
+            <div className="flex-1 flex items-center gap-2.5">
+              <div
+                className="flex items-center justify-center overflow-hidden"
+                style={{ width: 36, height: 36, borderRadius: 8, backgroundColor: getPlayerColor(0) }}
               >
-                {members[0]?.name}
-              </span>
+                {members[0]?.avatarUrl ? (
+                  <img src={members[0].avatarUrl} alt="" className="w-full h-full object-cover" />
+                ) : (
+                  <span className="text-white font-bold text-sm">{members[0]?.name?.charAt(0)?.toUpperCase() || "?"}</span>
+                )}
+              </div>
+              <div className="flex flex-col">
+                <span
+                  className="font-[family-name:var(--font-nunito)] uppercase tracking-wide"
+                  style={{ fontSize: 13, fontWeight: 800, color: getPlayerColor(0) }}
+                >
+                  {members[0]?.name || "Player 1"}
+                </span>
+                <span className="text-[#98989D] font-[family-name:var(--font-nunito)]" style={{ fontSize: 10, fontWeight: 600 }}>
+                  Player 01
+                </span>
+              </div>
             </div>
-            <div style={{ width: 1 }} />
-            <div className="flex-1 text-center">
-              <span
-                className="font-[family-name:var(--font-nunito)]"
-                style={{ fontSize: 13, fontWeight: 700, color: getPlayerColor(1) }}
+            <div className="flex-1 flex items-center gap-2.5 justify-end">
+              <div className="flex flex-col items-end">
+                <span
+                  className="font-[family-name:var(--font-nunito)] uppercase tracking-wide"
+                  style={{ fontSize: 13, fontWeight: 800, color: getPlayerColor(1) }}
+                >
+                  {members[1]?.name || "Player 2"}
+                </span>
+                <span className="text-[#98989D] font-[family-name:var(--font-nunito)]" style={{ fontSize: 10, fontWeight: 600 }}>
+                  Player 02
+                </span>
+              </div>
+              <div
+                className="flex items-center justify-center overflow-hidden"
+                style={{ width: 36, height: 36, borderRadius: 8, backgroundColor: getPlayerColor(1) }}
               >
-                {members[1]?.name}
-              </span>
+                {members[1]?.avatarUrl ? (
+                  <img src={members[1].avatarUrl} alt="" className="w-full h-full object-cover" />
+                ) : (
+                  <span className="text-white font-bold text-sm">{members[1]?.name?.charAt(0)?.toUpperCase() || "?"}</span>
+                )}
+              </div>
             </div>
           </div>
 
-          {/* Stats */}
-          <div className="flex">
-            <div className="flex-1 flex flex-col gap-1 items-center">
-              <span className="text-[#98989D] font-[family-name:var(--font-nunito)]" style={{ fontSize: 12 }}>
-                Best: <span style={{ color: getPlayerColor(0), fontWeight: 700 }}>{timedStatsA?.bestTime ? formatMs(timedStatsA.bestTime) : "—"}</span>
+          {/* Divider */}
+          <div className="h-px bg-[#D6D1C8] dark:bg-[#2A2A2C] mb-4" />
+
+          {/* 01/ BEST TIME */}
+          <div className="flex items-start mb-4">
+            <div className="flex flex-col" style={{ width: 110 }}>
+              <span className="text-[#98989D] font-[family-name:var(--font-nunito)]" style={{ fontSize: 11, fontWeight: 600 }}>01/</span>
+              <span className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)] uppercase tracking-wide" style={{ fontSize: 14, fontWeight: 900, lineHeight: "18px" }}>
+                Best Time
               </span>
-              <span className="text-[#98989D] font-[family-name:var(--font-nunito)]" style={{ fontSize: 12 }}>
-                Avg: <span style={{ color: getPlayerColor(0), fontWeight: 700 }}>{timedStatsA?.avgTime ? formatMs(timedStatsA.avgTime) : "—"}</span>
-              </span>
-              <span className="text-[#98989D] font-[family-name:var(--font-nunito)]" style={{ fontSize: 12 }}>
-                Rounds: <span style={{ color: getPlayerColor(0), fontWeight: 700 }}>{timedStatsA?.roundCount ?? 0}</span>
+              <span className="text-[#98989D] font-[family-name:var(--font-nunito)] uppercase tracking-wider" style={{ fontSize: 9, fontWeight: 600, marginTop: 2 }}>
+                Personal Record
               </span>
             </div>
-            <div className="bg-[#ECE7DE] dark:bg-[#2A2A2C]" style={{ width: 1, marginLeft: 8, marginRight: 8 }} />
-            <div className="flex-1 flex flex-col gap-1 items-center">
-              <span className="text-[#98989D] font-[family-name:var(--font-nunito)]" style={{ fontSize: 12 }}>
-                Best: <span style={{ color: getPlayerColor(1), fontWeight: 700 }}>{timedStatsB?.bestTime ? formatMs(timedStatsB.bestTime) : "—"}</span>
+            <div className="flex-1 flex items-center">
+              <div className="flex-1 text-center">
+                <span
+                  className="font-[family-name:var(--font-nunito)] tabular-nums"
+                  style={{ fontSize: 32, fontWeight: 300, color: getPlayerColor(0), lineHeight: "36px" }}
+                >
+                  {timedStatsA?.bestTime ? formatMs(timedStatsA.bestTime) : "—"}
+                </span>
+              </div>
+              <div className="flex-1 text-center">
+                <span
+                  className="font-[family-name:var(--font-nunito)] tabular-nums"
+                  style={{ fontSize: 32, fontWeight: 300, color: getPlayerColor(1), lineHeight: "36px" }}
+                >
+                  {timedStatsB?.bestTime ? formatMs(timedStatsB.bestTime) : "—"}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div className="h-px bg-[#D6D1C8] dark:bg-[#2A2A2C] mb-4" />
+
+          {/* 02/ AVERAGE TIME */}
+          <div className="flex items-start mb-4">
+            <div className="flex flex-col" style={{ width: 110 }}>
+              <span className="text-[#98989D] font-[family-name:var(--font-nunito)]" style={{ fontSize: 11, fontWeight: 600 }}>02/</span>
+              <span className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)] uppercase tracking-wide" style={{ fontSize: 14, fontWeight: 900, lineHeight: "18px" }}>
+                Avg Time
               </span>
-              <span className="text-[#98989D] font-[family-name:var(--font-nunito)]" style={{ fontSize: 12 }}>
-                Avg: <span style={{ color: getPlayerColor(1), fontWeight: 700 }}>{timedStatsB?.avgTime ? formatMs(timedStatsB.avgTime) : "—"}</span>
+              <span className="text-[#98989D] font-[family-name:var(--font-nunito)] uppercase tracking-wider" style={{ fontSize: 9, fontWeight: 600, marginTop: 2 }}>
+                All Rounds
               </span>
-              <span className="text-[#98989D] font-[family-name:var(--font-nunito)]" style={{ fontSize: 12 }}>
-                Rounds: <span style={{ color: getPlayerColor(1), fontWeight: 700 }}>{timedStatsB?.roundCount ?? 0}</span>
+            </div>
+            <div className="flex-1 flex items-center">
+              <div className="flex-1 text-center">
+                <span
+                  className="font-[family-name:var(--font-nunito)] tabular-nums"
+                  style={{ fontSize: 32, fontWeight: 300, color: getPlayerColor(0), lineHeight: "36px" }}
+                >
+                  {timedStatsA?.avgTime ? formatMs(timedStatsA.avgTime) : "—"}
+                </span>
+              </div>
+              <div className="flex-1 text-center">
+                <span
+                  className="font-[family-name:var(--font-nunito)] tabular-nums"
+                  style={{ fontSize: 32, fontWeight: 300, color: getPlayerColor(1), lineHeight: "36px" }}
+                >
+                  {timedStatsB?.avgTime ? formatMs(timedStatsB.avgTime) : "—"}
+                </span>
+              </div>
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div className="h-px bg-[#D6D1C8] dark:bg-[#2A2A2C] mb-4" />
+
+          {/* 03/ WIN RATE */}
+          <div className="flex items-start">
+            <div className="flex flex-col" style={{ width: 110 }}>
+              <span className="text-[#98989D] font-[family-name:var(--font-nunito)]" style={{ fontSize: 11, fontWeight: 600 }}>03/</span>
+              <span className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)] uppercase tracking-wide" style={{ fontSize: 14, fontWeight: 900, lineHeight: "18px" }}>
+                Win Rate
               </span>
+              <span className="text-[#98989D] font-[family-name:var(--font-nunito)] uppercase tracking-wider" style={{ fontSize: 9, fontWeight: 600, marginTop: 2 }}>
+                Overall
+              </span>
+            </div>
+            <div className="flex-1 flex items-center">
+              <div className="flex-1 text-center">
+                <span
+                  className="font-[family-name:var(--font-nunito)] tabular-nums"
+                  style={{ fontSize: 32, fontWeight: 300, color: getPlayerColor(0), lineHeight: "36px" }}
+                >
+                  {timedStatsA?.winRate ?? 0}%
+                </span>
+              </div>
+              <div className="flex-1 text-center">
+                <span
+                  className="font-[family-name:var(--font-nunito)] tabular-nums"
+                  style={{ fontSize: 32, fontWeight: 300, color: getPlayerColor(1), lineHeight: "36px" }}
+                >
+                  {timedStatsB?.winRate ?? 0}%
+                </span>
+              </div>
             </div>
           </div>
         </div>
