@@ -25,7 +25,9 @@ import {
   IoArchiveOutline,
   IoRefresh,
   IoNotificationsOutline,
+  IoLeaf,
 } from "react-icons/io5";
+import { useRouter } from "next/navigation";
 import { isPushSupported, subscribeToPush, getPushPermission } from "@/lib/push";
 
 const GRADIENT_A = "linear-gradient(160deg, #F5D5C8, #F0B89E, #E8956E, #E07850, #D4628A)";
@@ -238,6 +240,7 @@ function GameRow({
 // ── Main Games Page ─────────────────────────────────────────
 
 export default function GamesPage() {
+  const router = useRouter();
   const { session, exitRoom, signOut, setCurrentUser, setCouple } = useSession();
   const { games, activeGame, setActiveGameId, refreshGames } = useGames();
   const couple = session.couple;
