@@ -867,11 +867,15 @@ export default function GamesPage() {
       {/* ── Valentine's Day Note ─ Full-screen slide-up sheet ── */}
       {showLoveNote && (
         <div
-          className="fixed inset-0 z-[200] bg-[#F3F0EA] dark:bg-[#0A0A0C]"
+          className="fixed inset-0 z-[9999] bg-[#F3F0EA] dark:bg-[#0A0A0C]"
           style={{
             transform: loveNoteVisible ? "translateY(0)" : "translateY(100%)",
             transition: "transform 0.4s cubic-bezier(0.32, 0.72, 0, 1)",
             willChange: "transform",
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
           }}
         >
           {/* X close button */}
