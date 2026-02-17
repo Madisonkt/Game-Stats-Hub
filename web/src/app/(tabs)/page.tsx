@@ -755,12 +755,14 @@ export default function LogPage() {
         </div>
       )}
 
-      {/* ── Header title — game filter pills ────── */}
-      <GameFilterPills
-        games={games}
-        activeGame={activeGame}
-        setActiveGameId={setActiveGameId}
-      />
+      {/* ── Header title — game filter pills (hidden during round) ── */}
+      {!round && (
+        <GameFilterPills
+          games={games}
+          activeGame={activeGame}
+          setActiveGameId={setActiveGameId}
+        />
+      )}
 
       {/* ── Scoreboard (only when no active round) ──── */}
       {!round && (
@@ -910,8 +912,15 @@ export default function LogPage() {
                       />
                     ) : joined ? (
                       member.name?.charAt(0)?.toUpperCase() || "?"
+                    ) : member.avatarUrl ? (
+                      <img
+                        src={member.avatarUrl}
+                        alt={member.name}
+                        className="w-full h-full rounded-full object-cover"
+                        style={{ opacity: 0.5 }}
+                      />
                     ) : (
-                      <span style={{ fontSize: 20 }}>?</span>
+                      <span>{member.name?.charAt(0)?.toUpperCase() || "?"}</span>
                     )}
                   </div>
                   <span
