@@ -605,6 +605,10 @@ export default function LogPage() {
       if (otherMember) {
         await rubiksRepo.submitSolve(round.id, otherMember.id, 2);
       }
+      // Directly trigger round completion instead of relying on realtime
+      // (the two rapid-fire inserts can race and miss the subscription)
+      const completedSolves = await rubiksRepo.getSolves(round.id);
+      await handleRoundComplete(round.id, completedSolves);
     } catch (e) {
       console.error("Failed to record win:", e);
     } finally {
@@ -1006,35 +1010,31 @@ export default function LogPage() {
               )}
             </>
           ) : (
-            /* ── Simple game: "Who Won?" buttons ──── */
-            <div className="flex flex-col items-center gap-4">
+            /* ── Simple game: "Who Won?" big avatar circles ──── */
+            <div className="flex flex-col items-center gap-6">
               <p
                 className="text-[#98989D] font-[family-name:var(--font-nunito)] text-center"
                 style={{ fontSize: 15, fontWeight: 600 }}
               >
                 Who won this round?
               </p>
-              <div className="flex gap-3 w-full">
+              <div className="flex gap-8 justify-center">
                 {members.map((member, i) => (
                   <button
                     key={member.id}
                     onClick={() => handleSimpleWin(member.id)}
                     disabled={actionLoading}
-                    className="flex-1 flex flex-col items-center gap-2 bg-[#ECE7DE] dark:bg-[#1A1A1C]
-                      active:scale-[0.96] transition-all disabled:opacity-50"
-                    style={{
-                      borderRadius: 16,
-                      padding: 18,
-                    }}
+                    className="flex flex-col items-center gap-3
+                      active:scale-[0.92] transition-all disabled:opacity-50"
                   >
                     <div
-                      className="flex items-center justify-center text-white font-bold"
+                      className="flex items-center justify-center text-white font-bold shadow-lg"
                       style={{
-                        width: 48,
-                        height: 48,
-                        borderRadius: 24,
+                        width: 96,
+                        height: 96,
+                        borderRadius: 48,
                         backgroundColor: getPlayerColor(i),
-                        fontSize: 16,
+                        fontSize: 28,
                       }}
                     >
                       {member.avatarUrl ? (
@@ -1045,7 +1045,7 @@ export default function LogPage() {
                     </div>
                     <span
                       className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]"
-                      style={{ fontSize: 15, fontWeight: 700 }}
+                      style={{ fontSize: 16, fontWeight: 700 }}
                     >
                       {member.name}
                     </span>

@@ -59,25 +59,27 @@ export function SwipeRow({
 
   return (
     <div className="relative">
-      {/* Delete button — positioned behind the card, fully rounded */}
-      <div
-        className="absolute inset-y-0 flex items-center justify-center"
-        style={{ right: 0, width: actionWidth }}
-      >
-        <button
-          onClick={() => onDelete(id)}
-          className="flex flex-col items-center justify-center gap-0.5 active:opacity-70 bg-rose-600 w-full h-full"
-          style={{ borderRadius: 18 }}
+      {/* Delete button — only visible when swiping or open */}
+      {(swiping || isOpen) && (
+        <div
+          className="absolute inset-y-0 flex items-center justify-center"
+          style={{ right: 0, width: actionWidth }}
         >
-          <IoTrashOutline className="text-white" style={{ fontSize: 20 }} />
-          <span
-            className="text-white font-[family-name:var(--font-nunito)]"
-            style={{ fontSize: 11, fontWeight: 700 }}
+          <button
+            onClick={() => onDelete(id)}
+            className="flex flex-col items-center justify-center gap-0.5 active:opacity-70 bg-rose-600 w-full h-full"
+            style={{ borderRadius: 18 }}
           >
-            Delete
-          </span>
-        </button>
-      </div>
+            <IoTrashOutline className="text-white" style={{ fontSize: 20 }} />
+            <span
+              className="text-white font-[family-name:var(--font-nunito)]"
+              style={{ fontSize: 11, fontWeight: 700 }}
+            >
+              Delete
+            </span>
+          </button>
+        </div>
+      )}
 
       {/* The entire card slides left — can go off-screen past other cards */}
       <div
