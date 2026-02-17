@@ -536,6 +536,39 @@ export default function GamesPage() {
         </>
       )}
 
+      {/* ── Digital Garden Card ───────────────────── */}
+      <button
+        onClick={() => router.push("/garden")}
+        className="w-full flex items-center gap-3 bg-[#ECE7DE] dark:bg-[#1A1A1C] card-press mt-4"
+        style={{ borderRadius: 18, padding: 14 }}
+      >
+        <div
+          className="flex items-center justify-center"
+          style={{
+            width: 44,
+            height: 44,
+            borderRadius: 12,
+            backgroundColor: "rgba(78,107,58,0.15)",
+          }}
+        >
+          <IoLeaf className="text-[#4E6B3A]" style={{ fontSize: 22 }} />
+        </div>
+        <div className="flex flex-col items-start">
+          <span
+            className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]"
+            style={{ fontSize: 16, fontWeight: 700 }}
+          >
+            Digital Garden
+          </span>
+          <span
+            className="text-[#98989D] font-[family-name:var(--font-nunito)]"
+            style={{ fontSize: 12, fontWeight: 500 }}
+          >
+            Doodle + attach a memory
+          </span>
+        </div>
+      </button>
+
       {/* ── Valentine's Day Card ─────────────────────── */}
       <button
         onClick={() => openLoveNote()}
