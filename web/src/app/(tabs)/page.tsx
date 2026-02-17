@@ -4,7 +4,6 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import dynamic from "next/dynamic";
 import { useSession } from "@/lib/auth-context";
 import { useGames } from "@/lib/game-context";
-import CloudLoader from "@/components/CloudLoader";
 import * as rubiksRepo from "@/lib/repos/rubiksRepo";
 import type { Round, Solve, User } from "@/lib/models";
 import {
@@ -625,8 +624,82 @@ export default function LogPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <CloudLoader />
+      <div className="flex flex-col items-center px-5 pt-4 pb-2 max-w-lg mx-auto">
+        {/* Pills still visible while loading */}
+        <GameFilterPills
+          games={games}
+          activeGame={activeGame}
+          setActiveGameId={setActiveGameId}
+        />
+
+        {/* Skeleton score cards */}
+        <div className="flex w-full gap-2.5 mb-3">
+          {[0, 1].map((i) => (
+            <div
+              key={i}
+              className="flex-1 animate-pulse"
+              style={{
+                background: i === 0
+                  ? "linear-gradient(135deg, #C4B5A3, #B0A08E)"
+                  : "linear-gradient(135deg, #B0A08E, #C4B5A3)",
+                borderRadius: 22,
+                padding: 14,
+                paddingTop: 34,
+              }}
+            >
+              <div className="flex flex-row items-center gap-2.5">
+                <div
+                  style={{
+                    width: 60,
+                    height: 82,
+                    borderRadius: 30,
+                    backgroundColor: "rgba(255,255,255,0.2)",
+                  }}
+                />
+                <div className="flex-1 flex flex-col gap-2">
+                  <div
+                    style={{
+                      width: 60,
+                      height: 12,
+                      borderRadius: 6,
+                      backgroundColor: "rgba(255,255,255,0.25)",
+                    }}
+                  />
+                  <div
+                    style={{
+                      width: 36,
+                      height: 36,
+                      borderRadius: 8,
+                      backgroundColor: "rgba(255,255,255,0.2)",
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Skeleton status text */}
+        <div
+          className="w-full bg-[#ECE7DE] dark:bg-[#1A1A1C] mb-4 animate-pulse"
+          style={{ borderRadius: 16, padding: 14 }}
+        >
+          <div
+            style={{
+              width: 120,
+              height: 12,
+              borderRadius: 6,
+              backgroundColor: "rgba(0,0,0,0.08)",
+            }}
+            className="dark:!bg-white/10"
+          />
+        </div>
+
+        {/* Skeleton round area */}
+        <div
+          className="w-full bg-[#ECE7DE] dark:bg-[#1A1A1C] animate-pulse"
+          style={{ borderRadius: 22, padding: 24, height: 120 }}
+        />
       </div>
     );
   }
