@@ -248,6 +248,7 @@ export default function GamesPage() {
   const [exitingRoom, setExitingRoom] = useState(false);
   const [showConfirm, setShowConfirm] = useState<"signout" | "exit" | null>(null);
   const [showPlayerSettings, setShowPlayerSettings] = useState(false);
+  const [playerSettingsVisible, setPlayerSettingsVisible] = useState(false);
   const [showLoveNote, setShowLoveNote] = useState(false);
   const [loveNoteVisible, setLoveNoteVisible] = useState(false);
 
@@ -259,7 +260,27 @@ export default function GamesPage() {
     setLoveNoteVisible(false);
     setTimeout(() => setShowLoveNote(false), 400);
   };
+
+  const openPlayerSettings = () => {
+    setShowPlayerSettings(true);
+    requestAnimationFrame(() => requestAnimationFrame(() => setPlayerSettingsVisible(true)));
+  };
+  const closePlayerSettings = () => {
+    setPlayerSettingsVisible(false);
+    setTimeout(() => setShowPlayerSettings(false), 400);
+  };
+
   const [showAddGame, setShowAddGame] = useState(false);
+  const [addGameVisible, setAddGameVisible] = useState(false);
+
+  const openAddGame = () => {
+    setShowAddGame(true);
+    requestAnimationFrame(() => requestAnimationFrame(() => setAddGameVisible(true)));
+  };
+  const closeAddGame = () => {
+    setAddGameVisible(false);
+    setTimeout(() => setShowAddGame(false), 400);
+  };
 
   // Add game state
   const [newGameName, setNewGameName] = useState("");
@@ -289,7 +310,7 @@ export default function GamesPage() {
       await refreshGames();
       setNewGameName("");
       setSelectedType("simple");
-      setShowAddGame(false);
+      closeAddGame();
     } catch (e) {
       console.error("Failed to create game:", e);
     } finally {
@@ -436,7 +457,7 @@ export default function GamesPage() {
           Games
         </h1>
         <div className="flex items-center gap-4">
-          <button onClick={() => setShowAddGame(true)} className="text-[#3A7BD5] dark:text-white">
+          <button onClick={() => openAddGame()} className="text-[#3A7BD5] dark:text-white">
             <IoAddCircle style={{ fontSize: 28 }} />
           </button>
           <button onClick={() => openLoveNote()} className="text-[#3A7BD5] dark:text-white">
@@ -459,7 +480,7 @@ export default function GamesPage() {
             Add a game to start tracking wins
           </p>
           <button
-            onClick={() => setShowAddGame(true)}
+            onClick={() => openAddGame()}
             className="flex items-center gap-2 bg-[#3A7BD5] dark:bg-white text-white dark:text-[#0A0A0C]
               font-[family-name:var(--font-nunito)] active:scale-[0.98] transition-all"
             style={{ borderRadius: 14, padding: "12px 24px", fontSize: 15, fontWeight: 700 }}
@@ -617,24 +638,34 @@ export default function GamesPage() {
       </div>
 
       {/* ── Add Game Modal ──────────────────────────── */}
-      {showAddGame && (
+      {showAddGame && createPortal(
         <div
-          className="fixed inset-0 z-50 flex items-end justify-center modal-backdrop"
-          onClick={() => setShowAddGame(false)}
+          className="fixed inset-0 bg-[#F3F0EA] dark:bg-[#0A0A0C] overflow-y-auto"
+          style={{
+            zIndex: 99999,
+            transform: addGameVisible ? "translateY(0)" : "translateY(100%)",
+            transition: "transform 0.4s cubic-bezier(0.32, 0.72, 0, 1)",
+            willChange: "transform",
+          }}
         >
-          <div className="absolute inset-0 bg-black/40" />
-          <div
-            className="relative w-full max-w-lg bg-[#F3F0EA] dark:bg-[#0A0A0C] safe-area-bottom modal-content"
-            style={{ borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 24 }}
-            onClick={(e) => e.stopPropagation()}
+          <button
+            onClick={closeAddGame}
+            className="fixed top-4 right-4 flex items-center justify-center
+              bg-[#ECE7DE] dark:bg-[#1A1A1C] hover:bg-[#D6D1C8] dark:hover:bg-[#2A2A2C]
+              transition-colors active:scale-95"
+            style={{ zIndex: 100000, width: 36, height: 36, borderRadius: 18 }}
           >
-            <div className="w-10 h-1 bg-[#98989D]/40 rounded-full mx-auto mb-6" />
-            <h2
-              className="text-center text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)] mb-6"
-              style={{ fontSize: 20, fontWeight: 800 }}
-            >
-              New Game
-            </h2>
+            <span className="text-[#0A0A0C] dark:text-[#F3F0EA]" style={{ fontSize: 18, lineHeight: 1 }}>&times;</span>
+          </button>
+
+          <div className="flex flex-col items-center px-6 pt-16 pb-16 min-h-full">
+            <div className="max-w-sm w-full">
+              <h2
+                className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)] mb-8"
+                style={{ fontSize: 24, fontWeight: 800 }}
+              >
+                New Game
+              </h2>
 
             {/* Name input */}
             <input
@@ -730,29 +761,41 @@ export default function GamesPage() {
             >
               {addingGame ? "Creating..." : "Create Game"}
             </button>
+            </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* ── Player Settings Modal ───────────────────── */}
-      {showPlayerSettings && (
+      {showPlayerSettings && createPortal(
         <div
-          className="fixed inset-0 z-50 flex items-end justify-center modal-backdrop"
-          onClick={() => setShowPlayerSettings(false)}
+          className="fixed inset-0 bg-[#F3F0EA] dark:bg-[#0A0A0C] overflow-y-auto"
+          style={{
+            zIndex: 99999,
+            transform: playerSettingsVisible ? "translateY(0)" : "translateY(100%)",
+            transition: "transform 0.4s cubic-bezier(0.32, 0.72, 0, 1)",
+            willChange: "transform",
+          }}
         >
-          <div className="absolute inset-0 bg-black/40" />
-          <div
-            className="relative w-full max-w-lg bg-[#F3F0EA] dark:bg-[#0A0A0C] safe-area-bottom modal-content"
-            style={{ borderTopLeftRadius: 20, borderTopRightRadius: 20, padding: 24 }}
-            onClick={(e) => e.stopPropagation()}
+          <button
+            onClick={closePlayerSettings}
+            className="fixed top-4 right-4 flex items-center justify-center
+              bg-[#ECE7DE] dark:bg-[#1A1A1C] hover:bg-[#D6D1C8] dark:hover:bg-[#2A2A2C]
+              transition-colors active:scale-95"
+            style={{ zIndex: 100000, width: 36, height: 36, borderRadius: 18 }}
           >
-            <div className="w-10 h-1 bg-[#98989D]/40 rounded-full mx-auto mb-6" />
-            <h2
-              className="text-center text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)] mb-6"
-              style={{ fontSize: 20, fontWeight: 800 }}
-            >
-              Player Settings
-            </h2>
+            <span className="text-[#0A0A0C] dark:text-[#F3F0EA]" style={{ fontSize: 18, lineHeight: 1 }}>&times;</span>
+          </button>
+
+          <div className="flex flex-col items-center px-6 pt-16 pb-16 min-h-full">
+            <div className="max-w-sm w-full">
+              <h2
+                className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)] mb-8"
+                style={{ fontSize: 24, fontWeight: 800 }}
+              >
+                Player Settings
+              </h2>
 
             {/* Avatar picker */}
             <div className="flex justify-center mb-6">
@@ -850,19 +893,10 @@ export default function GamesPage() {
                 {savingPassword ? "Saving..." : "Set Password"}
               </button>
             </div>
-
-            {/* Close */}
-            <button
-              onClick={() => setShowPlayerSettings(false)}
-              className="flex items-center justify-center gap-2 w-full mt-4 font-[family-name:var(--font-nunito)]
-                active:scale-[0.98] transition-all bg-[#ECE7DE] dark:bg-[#1A1A1C]
-                text-[#0A0A0C] dark:text-[#F3F0EA]"
-              style={{ borderRadius: 14, padding: 14, fontSize: 15, fontWeight: 700 }}
-            >
-              Close
-            </button>
+            </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* ── Valentine's Day Note ─ Full-screen slide-up sheet ── */}
