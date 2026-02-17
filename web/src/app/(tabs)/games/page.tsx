@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useRef, useEffect } from "react";
+import { createPortal } from "react-dom";
 import { useSession } from "@/lib/auth-context";
 import { useGames } from "@/lib/game-context";
 import type { Game, GameType } from "@/lib/models";
@@ -865,32 +866,29 @@ export default function GamesPage() {
       )}
 
       {/* ── Valentine's Day Note ─ Full-screen slide-up sheet ── */}
-      {showLoveNote && (
+      {showLoveNote && createPortal(
         <div
-          className="fixed inset-0 z-[9999] bg-[#F3F0EA] dark:bg-[#0A0A0C]"
+          className="fixed inset-0 bg-[#F3F0EA] dark:bg-[#0A0A0C] overflow-y-auto"
           style={{
+            zIndex: 99999,
             transform: loveNoteVisible ? "translateY(0)" : "translateY(100%)",
             transition: "transform 0.4s cubic-bezier(0.32, 0.72, 0, 1)",
             willChange: "transform",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
           }}
         >
           {/* X close button */}
           <button
             onClick={closeLoveNote}
-            className="absolute top-4 right-4 z-10 flex items-center justify-center
+            className="fixed top-4 right-4 flex items-center justify-center
               bg-[#ECE7DE] dark:bg-[#1A1A1C] hover:bg-[#D6D1C8] dark:hover:bg-[#2A2A2C]
               transition-colors active:scale-95"
-            style={{ width: 36, height: 36, borderRadius: 18 }}
+            style={{ zIndex: 100000, width: 36, height: 36, borderRadius: 18 }}
           >
             <span className="text-[#0A0A0C] dark:text-[#F3F0EA]" style={{ fontSize: 18, lineHeight: 1 }}>&times;</span>
           </button>
 
           {/* Content */}
-          <div className="flex flex-col items-center justify-center min-h-screen px-8 py-16">
+          <div className="flex flex-col items-center px-8 pt-16 pb-16 min-h-full justify-center">
             <div className="max-w-sm w-full">
               <h2
                 className="text-[#D4628A] font-[family-name:var(--font-nunito)] mb-6"
@@ -906,7 +904,8 @@ export default function GamesPage() {
               </p>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
 
       {/* ── Confirmation dialog ─────────────────────── */}
