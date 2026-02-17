@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { IoTrophy, IoGameController, IoTime } from "react-icons/io5";
 import type { ReactNode } from "react";
 import KawaiiBackground from "@/components/KawaiiBackground";
+import { usePushSubscription } from "@/lib/usePushSubscription";
 
 const tabs = [
   { href: "/", label: "Log", icon: IoTrophy },
@@ -14,6 +15,7 @@ const tabs = [
 
 export default function TabLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
+  usePushSubscription();
 
   return (
     <div className="flex flex-col min-h-screen bg-[#F3F0EA] dark:bg-[#0A0A0C]">

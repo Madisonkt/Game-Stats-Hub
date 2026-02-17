@@ -85,3 +85,42 @@ self.addEventListener("fetch", (event) => {
       .catch(() => caches.match(request))
   );
 });
+
+// ── Push notification ───────────────────────────────────────
+self.addEventListener("push", (event) => {
+  if (!event.data) return;
+  try {
+    const payload = event.data.json();
+    const title = payload.title || "Cheese Squeeze";
+    const options = {
+      body: payload.body || "",
+      icon: "/images/icon-192.png",
+      badge: "/images/icon-192.png",
+      data: payload.data || {},
+      vibrate: [100, 50, 100],
+    };
+    event.waitUntil(self.registration.showNotification(title, options));
+  } catch (e) {
+    event.waitUntil(
+      self.registration.showNotification("Cheese Squeeze", {
+        body: event.data.text(),
+        icon: "/images/icon-192.png",
+      })
+    );
+  }
+});
+
+// ── Notification click → open app ───────────────────────────
+self.addEventListener("notificationclick", (event) => {
+  event.notification.close();
+  event.waitUntil(
+    self.clients.matchAll({ type: "window", includeUncontrolled: true }).then((clients) => {
+      for (const client of clients) {
+        if (client.url.includes(self.location.origin) && "focus" in client) {
+          return client.focus();
+        }
+      }
+      return self.clients.openWindow("/");
+    })
+  );
+});

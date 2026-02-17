@@ -657,8 +657,8 @@ export default function LogPage() {
               className="flex-1 animate-pulse"
               style={{
                 background: i === 0
-                  ? "linear-gradient(135deg, #C4B5A3, #B0A08E)"
-                  : "linear-gradient(135deg, #B0A08E, #C4B5A3)",
+                  ? "linear-gradient(135deg, #3A3A3C, #2C2C2E)"
+                  : "linear-gradient(135deg, #2C2C2E, #3A3A3C)",
                 borderRadius: 22,
                 padding: 14,
                 paddingTop: 34,
