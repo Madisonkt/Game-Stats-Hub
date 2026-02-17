@@ -248,17 +248,17 @@ function ScrambleCard({
         Scramble
       </p>
 
-      {/* 3D Cube + scramble text */}
+      {/* Scramble text + 3D Cube */}
       <div className="flex items-center gap-3">
-        <div className="shrink-0" style={{ marginLeft: -8, marginTop: -8, marginBottom: -8 }}>
-          <CubePreview scramble={scramble} />
-        </div>
         <p
           className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)] flex-1"
           style={{ fontSize: 15, fontWeight: 700, lineHeight: "22px" }}
         >
           {scramble}
         </p>
+        <div className="shrink-0" style={{ marginRight: -8, marginTop: -8, marginBottom: -8 }}>
+          <CubePreview scramble={scramble} />
+        </div>
       </div>
 
       <div className="flex items-center gap-3 mt-2">
