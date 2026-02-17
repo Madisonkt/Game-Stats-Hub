@@ -389,15 +389,17 @@ export default function HistoryPage() {
       .filter((r) => r.status === "closed")
       .sort((a, b) => (b.closedAt ?? b.startedAt) - (a.closedAt ?? a.startedAt));
 
-    return closedRounds.map((round) => {
-      const roundSolves = allSolves.filter((s) => s.roundId === round.id);
-      const validSolves = roundSolves.filter((s) => !s.dnf);
-      const winner =
-        validSolves.length >= 1
-          ? validSolves.reduce((a, b) => (a.timeMs < b.timeMs ? a : b))
-          : null;
-      return { round, roundSolves, winner };
-    });
+    return closedRounds
+      .map((round) => {
+        const roundSolves = allSolves.filter((s) => s.roundId === round.id);
+        const validSolves = roundSolves.filter((s) => !s.dnf);
+        const winner =
+          validSolves.length >= 1
+            ? validSolves.reduce((a, b) => (a.timeMs < b.timeMs ? a : b))
+            : null;
+        return { round, roundSolves, winner };
+      })
+      .filter(({ winner }) => winner !== null); // Hide rounds with no valid solves
   }, [allRounds, allSolves]);
 
   // Timed stats for stat sheet

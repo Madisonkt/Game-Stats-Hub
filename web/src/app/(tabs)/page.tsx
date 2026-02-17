@@ -414,6 +414,8 @@ export default function LogPage() {
   useEffect(() => {
     return () => {
       if (timerRef.current) cancelAnimationFrame(timerRef.current);
+    };
+  }, []);
 
   // ── Reset timer when a new round appears ─────────────────
   const prevRoundIdRef = useRef<string | null>(null);
