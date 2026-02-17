@@ -527,6 +527,23 @@ export default function LogPage() {
       setRound(newRound);
       setSolves([]);
       setTimerElapsed(0);
+
+      // Send push notification to partner
+      try {
+        const playerName = currentUser.name || "Your partner";
+        await fetch("/api/push", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            coupleId: couple.id,
+            senderUserId: currentUser.id,
+            senderName: playerName,
+            message: `${playerName} wants to rubiks cube pls`,
+          }),
+        });
+      } catch {
+        // Push notification is best-effort, don't block on failure
+      }
     } catch (e) {
       console.error("Failed to create round:", e);
     } finally {
