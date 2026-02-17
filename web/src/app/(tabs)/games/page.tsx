@@ -658,10 +658,10 @@ export default function GamesPage() {
             <span className="text-[#0A0A0C] dark:text-[#F3F0EA]" style={{ fontSize: 18, lineHeight: 1 }}>&times;</span>
           </button>
 
-          <div className="flex flex-col items-center px-6 pt-16 pb-16">
-            <div className="max-w-sm w-full">
+          <div className="px-6 pt-14 pb-8">
+            <div className="max-w-sm mx-auto">
               <h2
-                className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)] mb-8"
+                className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)] mb-6"
                 style={{ fontSize: 24, fontWeight: 800 }}
               >
                 New Game
