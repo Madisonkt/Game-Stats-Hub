@@ -890,12 +890,6 @@ export default function GamesPage() {
           {/* Content */}
           <div className="flex flex-col items-center px-8 pt-16 pb-16 min-h-full justify-center">
             <div className="max-w-sm w-full">
-              <h2
-                className="text-[#D4628A] font-[family-name:var(--font-nunito)] mb-6"
-                style={{ fontSize: 24, fontWeight: 800 }}
-              >
-                Happy Valentine&apos;s Day {"\u2764\uFE0F"}
-              </h2>
               <p
                 className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)] whitespace-pre-line leading-relaxed"
                 style={{ fontSize: 16, fontWeight: 500, lineHeight: 1.8 }}
