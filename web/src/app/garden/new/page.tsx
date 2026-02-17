@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useCallback, useEffect } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/lib/auth-context";
 import { createGardenItem } from "@/lib/repos/gardenRepo";
@@ -22,58 +22,53 @@ export default function NewDoodlePage() {
   const canvasRef = useRef<HTMLDivElement>(null);
   const [strokes, setStrokes] = useState<Stroke[]>([]);
   const currentStroke = useRef<Point[]>([]);
-  const [isDrawing, setIsDrawing] = useState(false);
+  const isDrawingRef = useRef(false);
   const [photo, setPhoto] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [caption, setCaption] = useState("");
   const [saving, setSaving] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Key to force SVG re-render during drawing
-  const [drawKey, setDrawKey] = useState(0);
+  // Force re-render during drawing
+  const [, setTick] = useState(0);
 
-  const getPointerPos = useCallback(
-    (e: React.PointerEvent): Point => {
-      const rect = canvasRef.current!.getBoundingClientRect();
-      return {
-        x: ((e.clientX - rect.left) / rect.width) * CANVAS_SIZE,
-        y: ((e.clientY - rect.top) / rect.height) * CANVAS_SIZE,
-      };
-    },
-    []
-  );
+  const getPointerPos = (e: React.PointerEvent): Point => {
+    const rect = canvasRef.current!.getBoundingClientRect();
+    return {
+      x: ((e.clientX - rect.left) / rect.width) * CANVAS_SIZE,
+      y: ((e.clientY - rect.top) / rect.height) * CANVAS_SIZE,
+    };
+  };
 
-  const handlePointerDown = useCallback(
-    (e: React.PointerEvent) => {
-      e.preventDefault();
-      (e.target as HTMLElement).setPointerCapture(e.pointerId);
-      setIsDrawing(true);
-      const pt = getPointerPos(e);
-      currentStroke.current = [pt];
-      setDrawKey((k) => k + 1);
-    },
-    [getPointerPos]
-  );
+  const handlePointerDown = (e: React.PointerEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const el = e.currentTarget as HTMLElement;
+    el.setPointerCapture(e.pointerId);
+    isDrawingRef.current = true;
+    const pt = getPointerPos(e);
+    currentStroke.current = [pt];
+    setTick((t) => t + 1);
+  };
 
-  const handlePointerMove = useCallback(
-    (e: React.PointerEvent) => {
-      if (!isDrawing) return;
-      e.preventDefault();
-      const pt = getPointerPos(e);
-      currentStroke.current.push(pt);
-      setDrawKey((k) => k + 1);
-    },
-    [isDrawing, getPointerPos]
-  );
+  const handlePointerMove = (e: React.PointerEvent) => {
+    if (!isDrawingRef.current) return;
+    e.preventDefault();
+    const pt = getPointerPos(e);
+    currentStroke.current.push(pt);
+    setTick((t) => t + 1);
+  };
 
-  const handlePointerUp = useCallback(() => {
-    if (!isDrawing) return;
-    setIsDrawing(false);
+  const handlePointerUp = (e: React.PointerEvent) => {
+    if (!isDrawingRef.current) return;
+    e.preventDefault();
+    isDrawingRef.current = false;
     if (currentStroke.current.length > 1) {
       setStrokes((prev) => [...prev, [...currentStroke.current]]);
     }
     currentStroke.current = [];
-  }, [isDrawing]);
+    setTick((t) => t + 1);
+  };
 
   const handleUndo = () => {
     setStrokes((prev) => prev.slice(0, -1));
@@ -109,8 +104,8 @@ export default function NewDoodlePage() {
     []
   );
 
-  // Current SVG including in-progress stroke
-  const currentSvgStrokes = isDrawing
+  // All strokes to render (committed + in-progress)
+  const allStrokes = currentStroke.current.length > 0
     ? [...strokes, currentStroke.current]
     : strokes;
 
@@ -200,10 +195,10 @@ export default function NewDoodlePage() {
               className="w-full h-full"
               style={{ borderRadius: 14 }}
             >
-              {currentSvgStrokes.map((stroke, si) =>
+              {allStrokes.map((stroke, si) =>
                 stroke.length > 1 ? (
                   <path
-                    key={`${si}-${drawKey}`}
+                    key={si}
                     d={stroke
                       .map(
                         (p, i) =>
