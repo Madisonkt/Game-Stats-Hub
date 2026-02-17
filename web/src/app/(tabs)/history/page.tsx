@@ -483,13 +483,13 @@ export default function HistoryPage() {
 
           {/* Player name header */}
           <div
-            className="flex rounded-xl"
+            className="flex rounded-xl dark:bg-[#2A2A2C]"
             style={{
               paddingTop: 8,
               paddingBottom: 8,
               paddingLeft: 12,
               paddingRight: 12,
-              backgroundColor: "rgba(0,0,0,0.03)",
+              backgroundColor: "rgba(0,0,0,0.08)",
             }}
           >
             <div className="flex-1 text-center">
