@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { createSupabaseBrowserClient } from "@/lib/supabase/browser";
 import { IoCheckmarkCircle, IoPhonePortraitOutline } from "react-icons/io5";
+import CloudLoader from "@/components/CloudLoader";
 
 /**
  * Auth callback page (client-side).
@@ -138,15 +139,10 @@ export default function AuthCallbackPage() {
     );
   }
 
-  // ── Default: loading spinner ──────────────────────────────
+  // ── Default: loading ──────────────────────────────
   return (
     <div className="flex min-h-screen items-center justify-center bg-[#F3F0EA] dark:bg-[#0A0A0C]">
-      <div className="flex flex-col items-center gap-4">
-        <div className="h-8 w-8 animate-spin rounded-full border-3 border-[#3A7BD5] dark:border-white border-t-transparent" />
-        <p className="text-sm font-semibold text-[#636366] dark:text-[#98989D] font-[family-name:var(--font-nunito)]">
-          {authed ? "Signed in! Redirecting..." : "Signing you in..."}
-        </p>
-      </div>
+      <CloudLoader message={authed ? "Signed in! Redirecting..." : "Signing you in..."} />
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import { useSession } from "@/lib/auth-context";
 import type { ReactNode } from "react";
+import CloudLoader from "@/components/CloudLoader";
 
 /** Routes that don't require authentication */
 const PUBLIC_ROUTES = ["/login", "/auth/callback"];
@@ -41,11 +42,11 @@ export function AuthGuard({ children }: { children: ReactNode }) {
     }
   }, [isLoading, isAuthenticated, hasCouple, isPublic, isSetup, pathname, router]);
 
-  // While loading, show a minimal spinner
+  // While loading, show cloud loader
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#F3F0EA] dark:bg-[#0A0A0C]">
-        <div className="h-8 w-8 animate-spin rounded-full border-3 border-[#3A7BD5] dark:border-white border-t-transparent" />
+        <CloudLoader />
       </div>
     );
   }

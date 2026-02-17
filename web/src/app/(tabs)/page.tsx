@@ -4,6 +4,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import dynamic from "next/dynamic";
 import { useSession } from "@/lib/auth-context";
 import { useGames } from "@/lib/game-context";
+import CloudLoader from "@/components/CloudLoader";
 import * as rubiksRepo from "@/lib/repos/rubiksRepo";
 import type { Round, Solve, User } from "@/lib/models";
 import {
@@ -668,7 +669,7 @@ export default function LogPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="h-8 w-8 animate-spin rounded-full border-3 border-[#3A7BD5] dark:border-white border-t-transparent" />
+        <CloudLoader />
       </div>
     );
   }
