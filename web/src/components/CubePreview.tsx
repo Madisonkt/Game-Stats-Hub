@@ -9,17 +9,15 @@ import { applyScramble, COLOR_MAP } from "@/lib/cube-state";
  */
 export default function CubePreview({
   scramble,
-  size = 90,
+  size = 54,
 }: {
   scramble: string;
   size?: number;
 }) {
   const state = useMemo(() => applyScramble(scramble), [scramble]);
 
-  // Face indices: U=0, R=1, F=2, D=3, L=4, B=5
-  const cellSize = size / 3;
-  const gap = 1;
   const half = size / 2;
+  const gap = 1;
 
   function renderFace(faceIdx: number) {
     const face = state[faceIdx];
@@ -29,10 +27,11 @@ export default function CubePreview({
           width: size,
           height: size,
           display: "grid",
-          gridTemplateColumns: `repeat(3, ${cellSize}px)`,
-          gridTemplateRows: `repeat(3, ${cellSize}px)`,
-          gap: `${gap}px`,
-          padding: gap,
+          gridTemplateColumns: "1fr 1fr 1fr",
+          gridTemplateRows: "1fr 1fr 1fr",
+          gap,
+          background: "#222",
+          borderRadius: 2,
         }}
       >
         {face.map((color, i) => (
@@ -40,9 +39,7 @@ export default function CubePreview({
             key={i}
             style={{
               backgroundColor: COLOR_MAP[color] || "#333",
-              borderRadius: Math.max(2, cellSize * 0.12),
-              border: "1px solid rgba(0,0,0,0.15)",
-              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.25)",
+              borderRadius: 2,
             }}
           />
         ))}
@@ -53,9 +50,9 @@ export default function CubePreview({
   return (
     <div
       style={{
-        width: size * 1.8,
-        height: size * 1.8,
-        perspective: size * 5,
+        width: size * 1.7,
+        height: size * 1.7,
+        perspective: size * 6,
         perspectiveOrigin: "50% 50%",
       }}
     >
@@ -66,8 +63,8 @@ export default function CubePreview({
           position: "relative",
           transformStyle: "preserve-3d",
           transform: `
-            translateX(${size * 0.35}px)
-            translateY(${size * 0.25}px)
+            translateX(${size * 0.3}px)
+            translateY(${size * 0.2}px)
             rotateX(-30deg)
             rotateY(-35deg)
           `,
@@ -81,9 +78,6 @@ export default function CubePreview({
             height: size,
             transform: `translateZ(${half}px)`,
             backfaceVisibility: "hidden",
-            background: "#111",
-            borderRadius: 4,
-            padding: 1,
           }}
         >
           {renderFace(2)}
@@ -97,9 +91,6 @@ export default function CubePreview({
             height: size,
             transform: `rotateY(90deg) translateZ(${half}px)`,
             backfaceVisibility: "hidden",
-            background: "#111",
-            borderRadius: 4,
-            padding: 1,
           }}
         >
           {renderFace(1)}
@@ -113,52 +104,15 @@ export default function CubePreview({
             height: size,
             transform: `rotateX(90deg) translateZ(${half}px)`,
             backfaceVisibility: "hidden",
-            background: "#111",
-            borderRadius: 4,
-            padding: 1,
           }}
         >
           {renderFace(0)}
         </div>
 
-        {/* Back face — dark to give depth */}
-        <div
-          style={{
-            position: "absolute",
-            width: size,
-            height: size,
-            transform: `translateZ(-${half}px) rotateY(180deg)`,
-            backfaceVisibility: "hidden",
-            background: "#1a1a1a",
-            borderRadius: 4,
-          }}
-        />
-
-        {/* Left face — dark to give depth */}
-        <div
-          style={{
-            position: "absolute",
-            width: size,
-            height: size,
-            transform: `rotateY(-90deg) translateZ(${half}px)`,
-            backfaceVisibility: "hidden",
-            background: "#1a1a1a",
-            borderRadius: 4,
-          }}
-        />
-
-        {/* Bottom face — dark to give depth */}
-        <div
-          style={{
-            position: "absolute",
-            width: size,
-            height: size,
-            transform: `rotateX(-90deg) translateZ(${half}px)`,
-            backfaceVisibility: "hidden",
-            background: "#1a1a1a",
-            borderRadius: 4,
-          }}
-        />
+        {/* Hidden faces for depth */}
+        <div style={{ position: "absolute", width: size, height: size, transform: `translateZ(-${half}px) rotateY(180deg)`, background: "#1a1a1a", borderRadius: 2 }} />
+        <div style={{ position: "absolute", width: size, height: size, transform: `rotateY(-90deg) translateZ(${half}px)`, background: "#1a1a1a", borderRadius: 2 }} />
+        <div style={{ position: "absolute", width: size, height: size, transform: `rotateX(-90deg) translateZ(${half}px)`, background: "#1a1a1a", borderRadius: 2 }} />
       </div>
     </div>
   );
