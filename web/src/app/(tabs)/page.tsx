@@ -957,13 +957,15 @@ export default function LogPage() {
             })}
           </div>
 
-          {/* Cancel round link */}
+          {/* Cancel round */}
           <button
             onClick={handleCancelRound}
-            className="text-[#98989D] hover:text-[#636366] transition-colors font-[family-name:var(--font-nunito)] underline self-center"
-            style={{ fontSize: 13, fontWeight: 600 }}
+            className="w-full flex items-center justify-center font-[family-name:var(--font-nunito)]
+              border border-[#98989D]/40 text-[#98989D] hover:border-[#636366] hover:text-[#636366]
+              active:scale-[0.98] transition-all"
+            style={{ borderRadius: 14, padding: 12, fontSize: 14, fontWeight: 700 }}
           >
-            Cancel round
+            Cancel Round
           </button>
         </div>
       )}
