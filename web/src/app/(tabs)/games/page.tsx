@@ -673,7 +673,6 @@ export default function GamesPage() {
               value={newGameName}
               onChange={(e) => setNewGameName(e.target.value)}
               placeholder="Game name"
-              autoFocus
               className="w-full px-4 py-3 bg-[#ECE7DE] dark:bg-[#1A1A1C] text-[#0A0A0C] dark:text-[#F3F0EA]
                 placeholder:text-[#98989D] font-[family-name:var(--font-nunito)] outline-none mb-4"
               style={{ borderRadius: 14, fontSize: 16, fontWeight: 600 }}
