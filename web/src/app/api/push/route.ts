@@ -2,16 +2,22 @@ import { NextRequest, NextResponse } from "next/server";
 import webPush from "web-push";
 import { createClient } from "@supabase/supabase-js";
 
-const VAPID_PUBLIC_KEY = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY!;
-const VAPID_PRIVATE_KEY = process.env.VAPID_PRIVATE_KEY!;
-const SUPABASE_URL = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+let vapidInitialized = false;
 
-webPush.setVapidDetails(
-  "mailto:cheese-squeeze@example.com",
-  VAPID_PUBLIC_KEY,
-  VAPID_PRIVATE_KEY
-);
+function initVapid() {
+  if (vapidInitialized) return;
+  const publicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
+  const privateKey = process.env.VAPID_PRIVATE_KEY;
+  if (!publicKey || !privateKey) {
+    throw new Error("VAPID keys not configured");
+  }
+  webPush.setVapidDetails(
+    "mailto:cheese-squeeze@example.com",
+    publicKey,
+    privateKey
+  );
+  vapidInitialized = true;
+}
 
 /**
  * POST /api/push
@@ -21,6 +27,7 @@ webPush.setVapidDetails(
  */
 export async function POST(req: NextRequest) {
   try {
+    initVapid();
     const body = await req.json();
     const { coupleId, senderUserId, message } = body;
 
@@ -28,8 +35,11 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }
 
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
+    const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!;
+
     // Use service role to read partner's push subscriptions
-    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
     const { data: subscriptions, error } = await supabase
       .from("push_subscriptions")
