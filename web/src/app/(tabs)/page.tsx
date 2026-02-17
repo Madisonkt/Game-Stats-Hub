@@ -451,6 +451,23 @@ export default function LogPage() {
     setActionLoading(true);
     try {
       const newRound = await rubiksRepo.createRound(couple.id, currentUser.id, gameKey);
+      // For simple games, auto-join both players so we skip the "open" gate
+      if (!isTimed && couple.members.length >= 2) {
+        const otherMember = couple.members.find((m) => m.id !== currentUser.id);
+        if (otherMember) {
+          // Join current user
+          await rubiksRepo.joinRound(newRound.id, currentUser.id);
+          // Join partner
+          const updated = await rubiksRepo.joinRound(newRound.id, otherMember.id);
+          if (updated) {
+            setRound(updated);
+            setSolves([]);
+            setTimerElapsed(0);
+            setActionLoading(false);
+            return;
+          }
+        }
+      }
       setRound(newRound);
       setSolves([]);
       setTimerElapsed(0);
@@ -472,6 +489,25 @@ export default function LogPage() {
       if (timerRef.current) { cancelAnimationFrame(timerRef.current); timerRef.current = null; }
     } catch (e) {
       console.error("Failed to join round:", e);
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  // Simple game: "I Won" immediately submits a fake solve with time=1ms for the winner
+  const handleSimpleWin = async (winnerId: string) => {
+    if (!round?.id || !couple?.id) return;
+    setActionLoading(true);
+    try {
+      // Submit a 1ms solve for the winner (we just need a winner, time doesn't matter)
+      await rubiksRepo.submitSolve(round.id, winnerId, 1);
+      // Submit a 2ms solve for the other player so the round auto-closes
+      const otherMember = couple.members.find((m) => m.id !== winnerId);
+      if (otherMember) {
+        await rubiksRepo.submitSolve(round.id, otherMember.id, 2);
+      }
+    } catch (e) {
+      console.error("Failed to record win:", e);
     } finally {
       setActionLoading(false);
     }
@@ -758,114 +794,166 @@ export default function LogPage() {
       {/* ── ROUND: IN PROGRESS ──────────────────────── */}
       {round && round.status === "in_progress" && (
         <div className="w-full flex flex-col gap-4">
-          <ScrambleCard scramble={round.scramble} />
+          {isTimed && <ScrambleCard scramble={round.scramble} />}
 
-          {/* Solve slots */}
-          <div className="flex gap-3">
-            {members.map((member, i) => {
-              const solve = solves.find((s) => s.userId === member.id);
-              return (
-                <div
-                  key={member.id}
-                  className="flex-1 flex flex-col items-center gap-2 bg-[#ECE7DE] dark:bg-[#1A1A1C]"
+          {isTimed ? (
+            <>
+              {/* Solve slots */}
+              <div className="flex gap-3">
+                {members.map((member, i) => {
+                  const solve = solves.find((s) => s.userId === member.id);
+                  return (
+                    <div
+                      key={member.id}
+                      className="flex-1 flex flex-col items-center gap-2 bg-[#ECE7DE] dark:bg-[#1A1A1C]"
+                      style={{
+                        borderRadius: 16,
+                        padding: 14,
+                        borderWidth: 2,
+                        borderStyle: "solid",
+                        borderColor: solve ? getPlayerColor(i) : "rgba(0,0,0,0.06)",
+                      }}
+                    >
+                      <div
+                        className="flex items-center justify-center text-white font-bold"
+                        style={{
+                          width: 40,
+                          height: 40,
+                          borderRadius: 20,
+                          backgroundColor: getPlayerColor(i),
+                          fontSize: 14,
+                        }}
+                      >
+                        {member.avatarUrl ? (
+                          <img
+                            src={member.avatarUrl}
+                            alt={member.name}
+                            className="w-full h-full rounded-full object-cover"
+                          />
+                        ) : (
+                          member.name?.charAt(0)?.toUpperCase() || "?"
+                        )}
+                      </div>
+                      <span
+                        className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)] uppercase"
+                        style={{ fontSize: 13, fontWeight: 600 }}
+                      >
+                        {member.name}
+                      </span>
+                      {solve ? (
+                        <span
+                          className="tabular-nums font-[family-name:var(--font-nunito)]"
+                          style={{ fontSize: 22, fontWeight: 800, color: getPlayerColor(i) }}
+                        >
+                          {solve.dnf ? "DNF" : formatMs(solve.timeMs)}
+                        </span>
+                      ) : (
+                        <span
+                          className="text-[#98989D] italic font-[family-name:var(--font-nunito)]"
+                          style={{ fontSize: 14 }}
+                        >
+                          Waiting…
+                        </span>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Timer display (inline, not fullscreen) */}
+              {!timerRunning && (
+                <div className="flex flex-col items-center gap-2 mt-2">
+                  <p
+                    className="tabular-nums text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]"
+                    style={{ fontSize: 64, fontWeight: 800 }}
+                  >
+                    {formatMsDisplay(timerElapsed)}
+                  </p>
+                </div>
+              )}
+
+              {/* Timer controls */}
+              {!mySolve && !timerRunning && (
+                <button
+                  onClick={startTimer}
+                  className="flex items-center justify-center gap-2 text-white dark:text-[#0A0A0C] font-[family-name:var(--font-nunito)]
+                    bg-[#3A7BD5] dark:bg-white hover:bg-[#2C5F9E] dark:hover:bg-[#ECE7DE] active:scale-[0.98] transition-all self-center"
                   style={{
-                    borderRadius: 16,
-                    padding: 14,
-                    borderWidth: 2,
-                    borderStyle: "solid",
-                    borderColor: solve ? getPlayerColor(i) : "rgba(0,0,0,0.06)",
+                    borderRadius: 999,
+                    paddingLeft: 56,
+                    paddingRight: 56,
+                    paddingTop: 20,
+                    paddingBottom: 20,
+                    fontSize: 22,
+                    fontWeight: 700,
                   }}
                 >
-                  <div
-                    className="flex items-center justify-center text-white font-bold"
+                  Start Timer
+                </button>
+              )}
+
+              {mySolve && (
+                <div className="flex flex-col items-center gap-2">
+                  <p className="text-sm text-green-600 font-semibold font-[family-name:var(--font-nunito)]">
+                    Your time: {formatMs(mySolve.timeMs)}
+                  </p>
+                  <button
+                    onClick={handleResetSolve}
+                    className="flex items-center gap-1 text-xs text-[#98989D] hover:text-red-500 transition-colors font-[family-name:var(--font-nunito)]"
+                  >
+                    <IoRefresh />
+                    Reset my solve
+                  </button>
+                </div>
+              )}
+            </>
+          ) : (
+            /* ── Simple game: "Who Won?" buttons ──── */
+            <div className="flex flex-col items-center gap-4">
+              <p
+                className="text-[#98989D] font-[family-name:var(--font-nunito)] text-center"
+                style={{ fontSize: 15, fontWeight: 600 }}
+              >
+                Who won this round?
+              </p>
+              <div className="flex gap-3 w-full">
+                {members.map((member, i) => (
+                  <button
+                    key={member.id}
+                    onClick={() => handleSimpleWin(member.id)}
+                    disabled={actionLoading}
+                    className="flex-1 flex flex-col items-center gap-2 bg-[#ECE7DE] dark:bg-[#1A1A1C]
+                      active:scale-[0.96] transition-all disabled:opacity-50"
                     style={{
-                      width: 40,
-                      height: 40,
-                      borderRadius: 20,
-                      backgroundColor: getPlayerColor(i),
-                      fontSize: 14,
+                      borderRadius: 16,
+                      padding: 18,
                     }}
                   >
-                    {member.avatarUrl ? (
-                      <img
-                        src={member.avatarUrl}
-                        alt={member.name}
-                        className="w-full h-full rounded-full object-cover"
-                      />
-                    ) : (
-                      member.name?.charAt(0)?.toUpperCase() || "?"
-                    )}
-                  </div>
-                  <span
-                    className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)] uppercase"
-                    style={{ fontSize: 13, fontWeight: 600 }}
-                  >
-                    {member.name}
-                  </span>
-                  {solve ? (
-                    <span
-                      className="tabular-nums font-[family-name:var(--font-nunito)]"
-                      style={{ fontSize: 22, fontWeight: 800, color: getPlayerColor(i) }}
+                    <div
+                      className="flex items-center justify-center text-white font-bold"
+                      style={{
+                        width: 48,
+                        height: 48,
+                        borderRadius: 24,
+                        backgroundColor: getPlayerColor(i),
+                        fontSize: 16,
+                      }}
                     >
-                      {solve.dnf ? "DNF" : formatMs(solve.timeMs)}
-                    </span>
-                  ) : (
+                      {member.avatarUrl ? (
+                        <img src={member.avatarUrl} alt={member.name} className="w-full h-full rounded-full object-cover" />
+                      ) : (
+                        member.name?.charAt(0)?.toUpperCase() || "?"
+                      )}
+                    </div>
                     <span
-                      className="text-[#98989D] italic font-[family-name:var(--font-nunito)]"
-                      style={{ fontSize: 14 }}
+                      className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]"
+                      style={{ fontSize: 15, fontWeight: 700 }}
                     >
-                      Waiting…
+                      {member.name}
                     </span>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Timer display (inline, not fullscreen) */}
-          {!timerRunning && (
-            <div className="flex flex-col items-center gap-2 mt-2">
-              <p
-                className="tabular-nums text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]"
-                style={{ fontSize: 64, fontWeight: 800 }}
-              >
-                {formatMsDisplay(timerElapsed)}
-              </p>
-            </div>
-          )}
-
-          {/* Timer controls */}
-          {!mySolve && !timerRunning && (
-            <button
-              onClick={startTimer}
-              className="flex items-center justify-center gap-2 text-white dark:text-[#0A0A0C] font-[family-name:var(--font-nunito)]
-                bg-[#3A7BD5] dark:bg-white hover:bg-[#2C5F9E] dark:hover:bg-[#ECE7DE] active:scale-[0.98] transition-all self-center"
-              style={{
-                borderRadius: 999,
-                paddingLeft: 56,
-                paddingRight: 56,
-                paddingTop: 20,
-                paddingBottom: 20,
-                fontSize: 22,
-                fontWeight: 700,
-              }}
-            >
-              Start Timer
-            </button>
-          )}
-
-          {mySolve && (
-            <div className="flex flex-col items-center gap-2">
-              <p className="text-sm text-green-600 font-semibold font-[family-name:var(--font-nunito)]">
-                Your time: {formatMs(mySolve.timeMs)}
-              </p>
-              <button
-                onClick={handleResetSolve}
-                className="flex items-center gap-1 text-xs text-[#98989D] hover:text-red-500 transition-colors font-[family-name:var(--font-nunito)]"
-              >
-                <IoRefresh />
-                Reset my solve
-              </button>
+                  </button>
+                ))}
+              </div>
             </div>
           )}
 

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect, useMemo, useCallback } from "react";
 import { useSession } from "@/lib/auth-context";
+import { useGames } from "@/lib/game-context";
 import * as rubiksRepo from "@/lib/repos/rubiksRepo";
 import type { Round, Solve, User } from "@/lib/models";
 import {
@@ -328,8 +329,10 @@ function getStreak(
 
 export default function HistoryPage() {
   const { session } = useSession();
+  const { activeGame } = useGames();
   const couple = session.couple;
   const currentUser = session.currentUser;
+  const gameKey = activeGame?.id;
 
   const [allRounds, setAllRounds] = useState<Round[]>([]);
   const [allSolves, setAllSolves] = useState<Solve[]>([]);
@@ -346,8 +349,8 @@ export default function HistoryPage() {
       setLoading(true);
       try {
         const [rounds, solves] = await Promise.all([
-          rubiksRepo.getAllRounds(couple.id),
-          rubiksRepo.getAllSolves(couple.id),
+          rubiksRepo.getAllRounds(couple.id, gameKey),
+          rubiksRepo.getAllSolves(couple.id, gameKey),
         ]);
         setAllRounds(rounds);
         setAllSolves(solves);
@@ -358,7 +361,7 @@ export default function HistoryPage() {
       }
     };
     load();
-  }, [couple?.id]);
+  }, [couple?.id, gameKey]);
 
   // Polling removed — realtime subscriptions handle updates
 
@@ -431,6 +434,14 @@ export default function HistoryPage() {
         >
           History
         </h1>
+        {activeGame && (
+          <p
+            className="text-[#98989D] font-[family-name:var(--font-nunito)]"
+            style={{ fontSize: 13, fontWeight: 600 }}
+          >
+            {activeGame.name}
+          </p>
+        )}
       </div>
 
       {/* ── Profile cards ───────────────────────────── */}
