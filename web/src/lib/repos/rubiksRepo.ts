@@ -154,6 +154,22 @@ export async function joinRound(
 }
 
 /**
+ * Regenerate the scramble for a round.
+ */
+export async function refreshScramble(roundId: string): Promise<Round | null> {
+  const supabase = createSupabaseBrowserClient();
+  const newScramble = generateScramble();
+  const { data, error } = await supabase
+    .from("rounds")
+    .update({ scramble: newScramble })
+    .eq("id", roundId)
+    .select()
+    .single();
+  if (error || !data) return null;
+  return toDomainRound(data as RoundRow);
+}
+
+/**
  * Close a round (set status to 'closed', stamp closed_at).
  */
 export async function closeRound(roundId: string): Promise<void> {

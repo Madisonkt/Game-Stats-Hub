@@ -217,25 +217,10 @@ import CubePreview from "@/components/CubePreview";
 function ScrambleCard({
   scramble,
   onNewScramble,
-  onCopy,
 }: {
   scramble: string;
   onNewScramble?: () => void;
-  onCopy?: () => void;
 }) {
-  const [copied, setCopied] = useState(false);
-
-  const handleCopy = async () => {
-    try {
-      await navigator.clipboard.writeText(scramble);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 1500);
-      onCopy?.();
-    } catch {
-      // fallback
-    }
-  };
-
   return (
     <div
       className="w-full bg-[#ECE7DE] dark:bg-[#1A1A1C]"
@@ -261,17 +246,8 @@ function ScrambleCard({
         </div>
       </div>
 
-      <div className="flex items-center gap-3 mt-2">
-        <button
-          onClick={handleCopy}
-          className="flex items-center gap-1 text-[#98989D] hover:text-[#636366] transition-colors"
-        >
-          <IoCopy className="text-sm" />
-          <span className="text-xs font-semibold font-[family-name:var(--font-nunito)]">
-            {copied ? "Copied!" : "Copy"}
-          </span>
-        </button>
-        {onNewScramble && (
+      {onNewScramble && (
+        <div className="flex items-center gap-3 mt-2">
           <button
             onClick={onNewScramble}
             className="flex items-center gap-1 text-[#98989D] hover:text-[#636366] transition-colors"
@@ -281,8 +257,8 @@ function ScrambleCard({
               New Scramble
             </span>
           </button>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 }
@@ -870,7 +846,10 @@ export default function LogPage() {
       {/* ── ROUND: OPEN (join gate) ─────────────────── */}
       {round && round.status === "open" && (
         <div className="w-full flex flex-col gap-4">
-          <ScrambleCard scramble={round.scramble} />
+          <ScrambleCard scramble={round.scramble} onNewScramble={async () => {
+            const updated = await rubiksRepo.refreshScramble(round.id);
+            if (updated) setRound(updated);
+          }} />
 
           <p
             className="text-center text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]"
@@ -959,7 +938,10 @@ export default function LogPage() {
       {/* ── ROUND: IN PROGRESS ──────────────────────── */}
       {round && round.status === "in_progress" && (
         <div className="w-full flex flex-col gap-4">
-          {isTimed && <ScrambleCard scramble={round.scramble} />}
+          {isTimed && <ScrambleCard scramble={round.scramble} onNewScramble={async () => {
+            const updated = await rubiksRepo.refreshScramble(round.id);
+            if (updated) setRound(updated);
+          }} />}
 
           {isTimed ? (
             <>
