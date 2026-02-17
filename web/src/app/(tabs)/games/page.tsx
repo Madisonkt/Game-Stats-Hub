@@ -536,7 +536,7 @@ export default function GamesPage() {
       {/* ── Valentine's Day Card ─────────────────────── */}
       <button
         onClick={() => openLoveNote()}
-        className="w-full relative overflow-hidden active:scale-[0.98] transition-all mt-4"
+        className="w-full relative overflow-hidden card-press mt-4"
         style={{ borderRadius: 18, height: 140, backgroundColor: "#1A6FA0" }}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
