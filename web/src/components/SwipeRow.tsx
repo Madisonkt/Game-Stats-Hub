@@ -2,6 +2,7 @@
 
 import React from "react";
 import { useSwipeable } from "react-swipeable";
+import { IoTrashOutline } from "react-icons/io5";
 
 type SwipeRowProps = {
   id: string;
@@ -18,31 +19,34 @@ export function SwipeRow({
   setOpenId,
   onDelete,
   children,
-  actionWidth = 88,
+  actionWidth = 80,
 }: SwipeRowProps) {
   const [dx, setDx] = React.useState(0);
+  const [swiping, setSwiping] = React.useState(false);
   const startDxRef = React.useRef(0);
 
-  // Clamp drag so we only move left up to actionWidth
-  const clamp = (n: number, min: number, max: number) => Math.min(max, Math.max(min, n));
+  const clamp = (n: number, min: number, max: number) =>
+    Math.min(max, Math.max(min, n));
+
+  // Compute the actual translateX: use dx while swiping, otherwise snap to open/closed
+  const translateX = swiping ? dx : isOpen ? -actionWidth : 0;
 
   const handlers = useSwipeable({
     onSwipeStart: () => {
+      setSwiping(true);
       startDxRef.current = isOpen ? -actionWidth : 0;
       setDx(startDxRef.current);
     },
     onSwiping: (e) => {
-      // negative = left swipe
       const next = clamp(startDxRef.current + e.deltaX, -actionWidth, 0);
       setDx(next);
     },
     onSwiped: () => {
-      // snap based on how far you pulled
-      const shouldOpen = dx < -actionWidth * 0.45;
+      const shouldOpen = dx < -actionWidth * 0.4;
       setOpenId(shouldOpen ? id : null);
-      setDx(0); // reset; we'll use isOpen for final position
+      setSwiping(false);
+      setDx(0);
     },
-    // Important so vertical scroll still works well:
     trackTouch: true,
     trackMouse: false,
     preventScrollOnSwipe: false,
@@ -50,35 +54,42 @@ export function SwipeRow({
   });
 
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-slate-900/10 bg-[#ECE7DE] dark:bg-[#1A1A1C] dark:border-[#2A2A2C]">
-      {/* Back layer (actions) */}
-      <div className="absolute inset-y-0 right-0 flex items-center pr-3">
+    <div className="relative overflow-hidden" style={{ borderRadius: 18 }}>
+      {/* Delete action behind the card — fixed in place */}
+      <div
+        className="absolute inset-y-0 right-0 flex items-center justify-center bg-rose-600"
+        style={{ width: actionWidth }}
+      >
         <button
           onClick={() => onDelete(id)}
-          className="h-10 w-[88px] rounded-xl bg-rose-600 text-sm font-extrabold uppercase tracking-wide text-[#F3F0EA] active:scale-[0.98]"
+          className="flex flex-col items-center gap-0.5 active:opacity-70"
         >
-          Delete
+          <IoTrashOutline className="text-white" style={{ fontSize: 20 }} />
+          <span
+            className="text-white font-[family-name:var(--font-nunito)]"
+            style={{ fontSize: 11, fontWeight: 700 }}
+          >
+            Delete
+          </span>
         </button>
       </div>
 
-      {/* Front layer (content) */}
+      {/* The entire card slides left as one unit */}
       <div
         {...handlers}
-        className={[
-          "relative bg-[#ECE7DE] dark:bg-[#1A1A1C]",
-          "transition-transform duration-200 ease-out",
-          // Helps mobile scroll + swipe coexist:
-          "touch-pan-y",
-        ].join(" ")}
+        className="relative touch-pan-y"
         style={{
-          transform: `translateX(${isOpen ? -actionWidth : 0}px)`,
+          transform: `translateX(${translateX}px)`,
+          transition: swiping ? "none" : "transform 0.25s cubic-bezier(0.25, 0.1, 0.25, 1)",
+          willChange: "transform",
         }}
         onClick={() => {
-          // Tap closes if open
-          if (isOpen) setOpenId(null);
+          if (isOpen) {
+            setOpenId(null);
+          }
         }}
       >
-        <div className="px-4 py-3">{children}</div>
+        {children}
       </div>
     </div>
   );

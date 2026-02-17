@@ -177,7 +177,8 @@ function EventRow({
 }) {
   return (
     <div
-      className="flex items-center gap-2.5"
+      className="flex items-center gap-2.5 bg-[#ECE7DE] dark:bg-[#1A1A1C]"
+      style={{ borderRadius: 18, padding: 14 }}
     >
       {/* Winner dot */}
       <div
