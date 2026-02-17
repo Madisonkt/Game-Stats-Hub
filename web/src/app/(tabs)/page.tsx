@@ -963,7 +963,7 @@ export default function LogPage() {
             className="w-full flex items-center justify-center font-[family-name:var(--font-nunito)]
               border border-[#98989D]/40 text-[#98989D] hover:border-[#636366] hover:text-[#636366]
               active:scale-[0.98] transition-all"
-            style={{ borderRadius: 14, padding: 12, fontSize: 14, fontWeight: 700 }}
+            style={{ borderRadius: 999, padding: 12, fontSize: 14, fontWeight: 700 }}
           >
             Cancel Round
           </button>
