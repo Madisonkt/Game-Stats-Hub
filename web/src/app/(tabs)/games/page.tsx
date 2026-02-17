@@ -394,7 +394,7 @@ export default function GamesPage() {
   const handleOpenPlayerSettings = () => {
     setEditName(currentUser?.name || "");
     setEditAvatarUrl(currentUser?.avatarUrl);
-    setShowPlayerSettings(true);
+    openPlayerSettings();
   };
 
   const handleSavePlayer = async () => {
@@ -409,7 +409,7 @@ export default function GamesPage() {
     } catch (e) {
       console.error("Failed to save profile:", e);
     }
-    setShowPlayerSettings(false);
+    closePlayerSettings();
   };
 
   const handleAvatarPick = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -658,7 +658,7 @@ export default function GamesPage() {
             <span className="text-[#0A0A0C] dark:text-[#F3F0EA]" style={{ fontSize: 18, lineHeight: 1 }}>&times;</span>
           </button>
 
-          <div className="flex flex-col items-center px-6 pt-16 pb-16 min-h-full">
+          <div className="flex flex-col items-center px-6 pt-16 pb-16">
             <div className="max-w-sm w-full">
               <h2
                 className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)] mb-8"
@@ -788,7 +788,7 @@ export default function GamesPage() {
             <span className="text-[#0A0A0C] dark:text-[#F3F0EA]" style={{ fontSize: 18, lineHeight: 1 }}>&times;</span>
           </button>
 
-          <div className="flex flex-col items-center px-6 pt-16 pb-16 min-h-full">
+          <div className="flex flex-col items-center px-6 pt-16 pb-16">
             <div className="max-w-sm w-full">
               <h2
                 className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)] mb-8"
