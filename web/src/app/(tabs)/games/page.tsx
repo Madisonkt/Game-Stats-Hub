@@ -840,24 +840,15 @@ export default function GamesPage() {
               </button>
             </div>
 
-            {/* Exit Room */}
-            {couple && (
-              <button
-                onClick={() => { setShowPlayerSettings(false); setShowConfirm("exit"); }}
-                className="flex items-center justify-center gap-2 w-full mt-4 font-[family-name:var(--font-nunito)] active:scale-[0.98] transition-all"
-                style={{ borderRadius: 14, padding: 14, fontSize: 15, fontWeight: 700, color: "#FF6B6B" }}
-              >
-                <IoExitOutline style={{ fontSize: 18 }} />
-                Exit Room
-              </button>
-            )}
+            {/* Close */}
             <button
-              onClick={() => { setShowPlayerSettings(false); setShowConfirm("signout"); }}
-              className="flex items-center justify-center gap-2 w-full mt-2 font-[family-name:var(--font-nunito)] active:scale-[0.98] transition-all"
-              style={{ borderRadius: 14, padding: 14, fontSize: 15, fontWeight: 600, color: "#999" }}
+              onClick={() => setShowPlayerSettings(false)}
+              className="flex items-center justify-center gap-2 w-full mt-4 font-[family-name:var(--font-nunito)]
+                active:scale-[0.98] transition-all bg-[#ECE7DE] dark:bg-[#1A1A1C]
+                text-[#0A0A0C] dark:text-[#F3F0EA]"
+              style={{ borderRadius: 14, padding: 14, fontSize: 15, fontWeight: 700 }}
             >
-              <IoLogOutOutline style={{ fontSize: 18 }} />
-              Sign Out
+              Close
             </button>
           </div>
         </div>
