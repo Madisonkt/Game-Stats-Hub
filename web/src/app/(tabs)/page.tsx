@@ -38,7 +38,7 @@ const GRADIENT_A = "linear-gradient(160deg, #F5D5C8, #F0B89E, #E8956E, #E07850, 
 const GRADIENT_B = "linear-gradient(160deg, #A8C8F0, #88BDE8, #6CB4EE, #7DD4D4, #90DBC8)";
 
 function getPlayerColor(index: number): string {
-  return index === 0 ? "#D4628A" : "#3A7BD5";
+  return index === 0 ? "#E07850" : "#3A7BD5";
 }
 
 function getPlayerGradient(index: number): string {
