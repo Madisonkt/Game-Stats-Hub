@@ -158,14 +158,14 @@ function GridView({
           {/* Grid of doodles */}
           <div
             className="grid"
-            style={{ gridTemplateColumns: "repeat(6, 1fr)", gap: 6 }}
+            style={{ gridTemplateColumns: "repeat(6, 1fr)", gap: 2 }}
           >
             {group.items.map((item) => (
               <button
                 key={item.id}
                 onClick={() => onSelect(item)}
                 className="active:scale-[0.9] transition-transform"
-                style={{ aspectRatio: "1", padding: 4 }}
+                style={{ aspectRatio: "1", padding: 1 }}
               >
                 <div
                   className="w-full h-full"
