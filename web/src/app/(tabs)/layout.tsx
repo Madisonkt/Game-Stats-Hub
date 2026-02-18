@@ -21,7 +21,7 @@ export default function TabLayout({ children }: { children: ReactNode }) {
     <div className="flex flex-col h-screen overflow-hidden bg-[#F3F0EA] dark:bg-[#0A0A0C]">
       <KawaiiBackground>
         {/* Page content */}
-        <main className="flex-1 overflow-auto pb-20 animate-fade-in">{children}</main>
+        <main className="relative flex-1 overflow-auto pb-20 animate-fade-in">{children}</main>
       </KawaiiBackground>
 
       {/* Bottom tab bar — liquid glass */}

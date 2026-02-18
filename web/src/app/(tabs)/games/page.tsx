@@ -449,9 +449,9 @@ export default function GamesPage() {
   }
 
   return (
-    <div className="flex flex-col max-w-lg mx-auto h-full">
+    <div className="absolute inset-0 flex flex-col">
       {/* ── Header (non-scrolling) ──────────────────── */}
-      <div className="shrink-0 z-40 bg-[#F3F0EA] dark:bg-[#0A0A0C] px-5 pt-4 pb-3">
+      <div className="shrink-0 z-40 bg-[#F3F0EA] dark:bg-[#0A0A0C] max-w-lg mx-auto w-full px-5 pt-4 pb-3">
         <div className="flex items-center justify-between">
           <h1
             className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]"
@@ -474,9 +474,9 @@ export default function GamesPage() {
       </div>
 
       {/* ── Scrollable content ──────────────────────── */}
-      <div className="flex-1 min-h-0 overflow-y-auto px-5 pb-24">
+      <div className="flex-1 min-h-0 overflow-y-auto">
 
-      <div className="flex flex-col pb-4">
+      <div className="flex flex-col max-w-lg mx-auto px-5 pt-2 pb-24">
 
       {/* ── Game List ───────────────────────────────── */}
       {games.length === 0 ? (
