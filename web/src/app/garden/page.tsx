@@ -294,7 +294,7 @@ export default function GardenPage() {
           </div>
         ) : (
           <div
-            className="relative w-full garden-grid"
+            className="relative w-full"
             style={{
               minHeight: Math.ceil(items.length / 3) * 130 + 100,
               borderRadius: 16,
