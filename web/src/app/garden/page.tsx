@@ -23,22 +23,21 @@ function seedFromId(id: string): number {
 
 function placement(id: string, index: number, total: number) {
   const s = seedFromId(id);
-  // Doodles sprout upward from the moss — spread across its width
   const cols = Math.min(total, 4);
   const col = index % cols;
   const row = Math.floor(index / cols);
-  // Horizontal: spread across the moss width (10%-90%)
-  const baseX = cols === 1 ? 40 : (col / (cols - 1)) * 60 + 10;
-  // Vertical: grow upward from the moss (bottom = 0, higher rows go up)
-  const baseY = row * 90 + 10;
+  // Horizontal: spread across the moss width
+  const baseX = cols === 1 ? 35 : (col / (cols - 1)) * 65 + 8;
+  // Vertical: distance upward from moss surface (row 0 = closest to moss)
+  const bottomOffset = row * 80 + 20;
   const jitterX = ((s % 14) - 7);
-  const jitterY = ((s >> 4) % 20) - 10;
-  const rotation = ((s >> 8) % 12) - 6; // -6 to +6 deg
-  const scale = 0.9 + ((s >> 12) % 15) / 100; // 0.9 - 1.04
+  const jitterY = ((s >> 4) % 16) - 8;
+  const rotation = ((s >> 8) % 12) - 6;
+  const scale = 0.9 + ((s >> 12) % 15) / 100;
 
   return {
-    x: Math.max(5, Math.min(75, baseX + jitterX)),
-    y: baseY + jitterY,
+    x: Math.max(3, Math.min(72, baseX + jitterX)),
+    bottomOffset: bottomOffset + jitterY,
     rotation,
     scale,
   };
@@ -67,7 +66,7 @@ function DoodleSprite({
   total: number;
   onClick: () => void;
 }) {
-  const { x, y, rotation, scale } = placement(item.id, index, total);
+  const { x, bottomOffset, rotation, scale } = placement(item.id, index, total);
   const [popped, setPopped] = useState(false);
 
   useEffect(() => {
@@ -81,15 +80,15 @@ function DoodleSprite({
       className="absolute"
       style={{
         left: `${x}%`,
-        top: y,
-        width: 100,
-        height: 100,
+        bottom: bottomOffset,
+        width: 90,
+        height: 90,
         transform: popped
           ? `rotate(${rotation}deg) scale(${scale})`
           : `rotate(${rotation + 10}deg) scale(0)`,
         opacity: popped ? 1 : 0,
         transition: "transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease-out",
-        transformOrigin: "center center",
+        transformOrigin: "bottom center",
       }}
     >
       <div
@@ -350,31 +349,38 @@ export default function GardenPage() {
           </div>
         ) : (
           <div className="relative w-full flex flex-col items-center">
-            {/* Doodles sprouting above the moss */}
+            {/* Combined: doodles + moss in one container */}
             <div
               className="relative w-full"
               style={{
-                minHeight: Math.ceil(items.length / 4) * 90 + 60,
+                paddingTop: Math.ceil(items.length / 4) * 80 + 40,
               }}
             >
-              {items.map((item, i) => (
-                <DoodleSprite
-                  key={item.id}
-                  item={item}
-                  index={i}
-                  total={items.length}
-                  onClick={() => setSelected(item)}
+              {/* Moss base — doodles are positioned from its top edge upward */}
+              <div className="relative">
+                <img
+                  src="/images/moss-garden.png"
+                  alt=""
+                  className="w-full max-w-md mx-auto block"
                 />
-              ))}
+                {/* Doodles anchored to bottom of this container (moss top) */}
+                <div
+                  className="absolute inset-x-0"
+                  style={{ bottom: "60%" }}
+                >
+                  {items.map((item, i) => (
+                    <DoodleSprite
+                      key={item.id}
+                      item={item}
+                      index={i}
+                      total={items.length}
+                      onClick={() => setSelected(item)}
+                    />
+                  ))}
+                </div>
+              </div>
             </div>
-
-            {/* Moss base image */}
-            <img
-              src="/images/moss-garden.png"
-              alt=""
-              className="w-full max-w-md -mt-4"
-              style={{ position: "relative", zIndex: 2 }}
-            />
+          </div>
           </div>
         )}
       </div>
