@@ -145,23 +145,33 @@ function GridView({
   const groups = groupByYearMonth(items);
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-5">
       {groups.map((group) => (
         <div key={`${group.year}-${group.month}`}>
           {/* Month/Year header */}
           <p
-            className="font-[family-name:var(--font-nunito)] mb-3 px-1"
-            style={{ fontSize: 14, fontWeight: 700, color: "#1C1C1E" }}
+            className="font-[family-name:var(--font-nunito)] mb-2 px-1"
+            style={{ fontSize: 13, fontWeight: 700, color: "#8E8E93" }}
           >
             {group.label}
           </p>
-          {/* Grid */}
+          {/* Grid of doodles */}
           <div
-            className="grid gap-2"
-            style={{ gridTemplateColumns: "repeat(auto-fill, minmax(80px, 1fr))" }}
+            className="grid"
+            style={{ gridTemplateColumns: "repeat(auto-fill, minmax(64px, 1fr))", gap: 6 }}
           >
             {group.items.map((item) => (
-              <GridDoodle key={item.id} item={item} onClick={() => onSelect(item)} />
+              <button
+                key={item.id}
+                onClick={() => onSelect(item)}
+                className="active:scale-[0.9] transition-transform"
+                style={{ aspectRatio: "1", padding: 4 }}
+              >
+                <div
+                  className="w-full h-full"
+                  dangerouslySetInnerHTML={{ __html: item.doodleSvg }}
+                />
+              </button>
             ))}
           </div>
         </div>
