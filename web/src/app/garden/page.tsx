@@ -10,7 +10,7 @@ import {
   deleteGardenItem,
   type GardenItem,
 } from "@/lib/repos/gardenRepo";
-import { IoAdd, IoClose, IoArrowBack } from "react-icons/io5";
+import { IoAdd, IoClose, IoArrowBack, IoGrid, IoLeaf } from "react-icons/io5";
 
 // ── Deterministic position from id ──────────────────────────
 function seedFromId(id: string): number {
@@ -97,6 +97,126 @@ function DoodleSprite({
         dangerouslySetInnerHTML={{ __html: item.doodleSvg }}
         className="w-full h-full"
       />
+    </button>
+  );
+}
+
+// ── Grid View ───────────────────────────────────────────────
+
+const MONTH_NAMES = [
+  "January", "February", "March", "April", "May", "June",
+  "July", "August", "September", "October", "November", "December",
+];
+
+function groupByYearMonth(items: GardenItem[]): { label: string; year: number; month: number; items: GardenItem[] }[] {
+  // Sort items newest first by createdAt
+  const sorted = [...items].sort((a, b) => b.createdAt - a.createdAt);
+
+  const groups = new Map<string, { year: number; month: number; items: GardenItem[] }>();
+
+  for (const item of sorted) {
+    const d = new Date(item.createdAt);
+    const year = d.getFullYear();
+    const month = d.getMonth();
+    const key = `${year}-${month}`;
+    if (!groups.has(key)) {
+      groups.set(key, { year, month, items: [] });
+    }
+    groups.get(key)!.items.push(item);
+  }
+
+  // Already in order since we iterate sorted items
+  return Array.from(groups.entries()).map(([, g]) => ({
+    label: `${MONTH_NAMES[g.month]} ${g.year}`,
+    year: g.year,
+    month: g.month,
+    items: g.items,
+  }));
+}
+
+function GridView({
+  items,
+  onSelect,
+}: {
+  items: GardenItem[];
+  onSelect: (item: GardenItem) => void;
+}) {
+  const groups = groupByYearMonth(items);
+
+  return (
+    <div className="flex flex-col gap-6">
+      {groups.map((group) => (
+        <div key={`${group.year}-${group.month}`}>
+          {/* Month/Year header */}
+          <p
+            className="font-[family-name:var(--font-nunito)] mb-3 px-1"
+            style={{ fontSize: 14, fontWeight: 700, color: "#1C1C1E" }}
+          >
+            {group.label}
+          </p>
+          {/* Grid */}
+          <div
+            className="grid gap-2"
+            style={{ gridTemplateColumns: "repeat(auto-fill, minmax(80px, 1fr))" }}
+          >
+            {group.items.map((item) => (
+              <GridDoodle key={item.id} item={item} onClick={() => onSelect(item)} />
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function GridDoodle({
+  item,
+  onClick,
+}: {
+  item: GardenItem;
+  onClick: () => void;
+}) {
+  const photoUrl = item.photoPath ? getGardenPhotoUrl(item.photoPath) : null;
+
+  return (
+    <button
+      onClick={onClick}
+      className="relative overflow-hidden active:scale-[0.95] transition-transform"
+      style={{
+        aspectRatio: "1",
+        borderRadius: 12,
+        backgroundColor: "#FBF9F4",
+        border: "1.5px solid rgba(0,0,0,0.04)",
+      }}
+    >
+      {photoUrl ? (
+        <img
+          src={photoUrl}
+          alt=""
+          className="w-full h-full object-cover"
+          loading="lazy"
+        />
+      ) : (
+        <div
+          className="w-full h-full p-2"
+          dangerouslySetInnerHTML={{ __html: item.doodleSvg }}
+        />
+      )}
+      {/* Link indicator */}
+      {item.linkUrl && (
+        <div
+          className="absolute bottom-1 right-1 flex items-center justify-center"
+          style={{
+            width: 18,
+            height: 18,
+            borderRadius: 9,
+            backgroundColor: "rgba(58,123,213,0.85)",
+            fontSize: 9,
+          }}
+        >
+          <span>🔗</span>
+        </div>
+      )}
     </button>
   );
 }
@@ -229,6 +349,7 @@ export default function GardenPage() {
   const [items, setItems] = useState<GardenItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<GardenItem | null>(null);
+  const [view, setView] = useState<"moss" | "grid">("moss");
 
   const coupleId = couple?.id;
   const members = couple?.members ?? [];
@@ -298,15 +419,47 @@ export default function GardenPage() {
             </h1>
           </div>
         </div>
-        <button
-          onClick={() => router.push("/garden/new")}
-          className="flex items-center gap-1 bg-[#E8A0BF] text-white font-[family-name:var(--font-nunito)]
-            active:scale-[0.95] transition-all"
-          style={{ borderRadius: 999, padding: "8px 16px", fontSize: 13, fontWeight: 700 }}
-        >
-          <IoAdd style={{ fontSize: 16 }} />
-          New
-        </button>
+        <div className="flex items-center gap-2">
+          {/* View toggle */}
+          <div
+            className="flex items-center overflow-hidden"
+            style={{ borderRadius: 10, backgroundColor: "rgba(0,0,0,0.06)" }}
+          >
+            <button
+              onClick={() => setView("moss")}
+              className="flex items-center justify-center transition-all"
+              style={{
+                width: 34, height: 30,
+                borderRadius: 10,
+                backgroundColor: view === "moss" ? "#fff" : "transparent",
+                boxShadow: view === "moss" ? "0 1px 3px rgba(0,0,0,0.1)" : "none",
+              }}
+            >
+              <IoLeaf style={{ fontSize: 15, color: view === "moss" ? "#4CAF50" : "#98989D" }} />
+            </button>
+            <button
+              onClick={() => setView("grid")}
+              className="flex items-center justify-center transition-all"
+              style={{
+                width: 34, height: 30,
+                borderRadius: 10,
+                backgroundColor: view === "grid" ? "#fff" : "transparent",
+                boxShadow: view === "grid" ? "0 1px 3px rgba(0,0,0,0.1)" : "none",
+              }}
+            >
+              <IoGrid style={{ fontSize: 14, color: view === "grid" ? "#3A7BD5" : "#98989D" }} />
+            </button>
+          </div>
+          <button
+            onClick={() => router.push("/garden/new")}
+            className="flex items-center gap-1 bg-[#E8A0BF] text-white font-[family-name:var(--font-nunito)]
+              active:scale-[0.95] transition-all"
+            style={{ borderRadius: 999, padding: "8px 16px", fontSize: 13, fontWeight: 700 }}
+          >
+            <IoAdd style={{ fontSize: 16 }} />
+            New
+          </button>
+        </div>
       </div>
       </div>
 
@@ -341,7 +494,7 @@ export default function GardenPage() {
               Tap &quot;New&quot; to plant your first doodle
             </p>
           </div>
-        ) : (
+        ) : view === "moss" ? (
           // Doodles overlaid ON the moss image
           <div
             style={{
@@ -368,6 +521,9 @@ export default function GardenPage() {
               />
             ))}
           </div>
+        ) : (
+          // Grid view — doodles organized by date
+          <GridView items={items} onSelect={setSelected} />
         )}
       </div>
 
