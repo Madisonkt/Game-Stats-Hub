@@ -12,21 +12,35 @@ import {
 } from "@/lib/repos/gardenRepo";
 import { IoAdd, IoClose, IoLeaf, IoArrowBack } from "react-icons/io5";
 
-// ── Deterministic jitter from id ────────────────────────────
+// ── Deterministic position from id ──────────────────────────
 function seedFromId(id: string): number {
   let h = 0;
   for (let i = 0; i < id.length; i++) {
     h = (h * 31 + id.charCodeAt(i)) | 0;
   }
-  return h;
+  return Math.abs(h);
 }
 
-function jitter(id: string) {
+function placement(id: string, index: number, total: number) {
   const s = seedFromId(id);
-  const rotation = ((s % 9) - 4); // -4 to +4 deg
-  const scale = 0.94 + ((Math.abs(s >> 4) % 12) / 100); // 0.94 - 1.05
-  const ty = ((s >> 8) % 7) - 3; // -3 to +3 px
-  return { rotation, scale, ty };
+  // Spread items across a grid-like pattern but with randomness
+  const cols = 3;
+  const col = index % cols;
+  const row = Math.floor(index / cols);
+  // Base position from grid, then add jitter
+  const baseX = (col / cols) * 70 + 5; // 5-75% range
+  const baseY = row * 130 + 20; // vertical spacing
+  const jitterX = ((s % 20) - 10); // ±10%
+  const jitterY = ((s >> 4) % 30) - 15; // ±15px
+  const rotation = ((s >> 8) % 16) - 8; // -8 to +8 deg
+  const scale = 0.85 + ((s >> 12) % 20) / 100; // 0.85 - 1.04
+
+  return {
+    x: Math.max(2, Math.min(68, baseX + jitterX)),
+    y: baseY + jitterY,
+    rotation,
+    scale,
+  };
 }
 
 function formatDate(ts: number): string {
@@ -39,54 +53,45 @@ function formatDate(ts: number): string {
   });
 }
 
-// ── Tile ────────────────────────────────────────────────────
+// ── Doodle on the canvas ────────────────────────────────────
 
-function GardenTile({
+function DoodleSprite({
   item,
+  index,
+  total,
   onClick,
 }: {
   item: GardenItem;
+  index: number;
+  total: number;
   onClick: () => void;
 }) {
-  const { rotation, scale, ty } = jitter(item.id);
-  const photoUrl = getGardenPhotoUrl(item.photoPath);
+  const { x, y, rotation, scale } = placement(item.id, index, total);
 
   return (
     <button
       onClick={onClick}
-      className="relative overflow-hidden card-press bg-[#ECE7DE] dark:bg-[#1A1A1C]"
+      className="absolute card-press"
       style={{
-        borderRadius: 16,
-        aspectRatio: "1",
-        transform: `rotate(${rotation}deg) scale(${scale}) translateY(${ty}px)`,
+        left: `${x}%`,
+        top: y,
+        width: 100,
+        height: 100,
+        transform: `rotate(${rotation}deg) scale(${scale})`,
+        transformOrigin: "center center",
       }}
     >
-      {/* Photo background */}
-      <img
-        src={photoUrl}
-        alt=""
-        loading="lazy"
-        className="absolute inset-0 w-full h-full object-cover"
-      />
-
-      {/* Doodle overlay */}
       <div
-        className="absolute inset-0 pointer-events-none"
         dangerouslySetInnerHTML={{ __html: item.doodleSvg }}
-        style={{ opacity: 0.85 }}
+        className="w-full h-full"
       />
-
-      {/* Bottom gradient + caption */}
       {item.caption && (
-        <>
-          <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-black/50 to-transparent" />
-          <p
-            className="absolute bottom-2 left-2 right-2 text-white font-[family-name:var(--font-nunito)] truncate"
-            style={{ fontSize: 11, fontWeight: 600 }}
-          >
-            {item.caption}
-          </p>
-        </>
+        <p
+          className="text-[#98989D] font-[family-name:var(--font-nunito)] text-center truncate mt-0.5"
+          style={{ fontSize: 9, fontWeight: 600 }}
+        >
+          {item.caption}
+        </p>
       )}
     </button>
   );
@@ -260,8 +265,8 @@ export default function GardenPage() {
         </button>
       </div>
 
-      {/* Garden grid */}
-      <div className="px-4 pb-8 max-w-lg mx-auto">
+      {/* Garden canvas — grid paper with scattered doodles */}
+      <div className="px-2 pb-8 max-w-lg mx-auto">
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <div className="h-8 w-8 animate-spin rounded-full border-3 border-[#E8A0BF] border-t-transparent" />
@@ -279,15 +284,26 @@ export default function GardenPage() {
               className="text-[#98989D] font-[family-name:var(--font-nunito)] text-center px-8"
               style={{ fontSize: 13 }}
             >
-              Tap &quot;New&quot; to plant your first memory
+              Tap &quot;New&quot; to plant your first doodle
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-2 gap-3">
-            {items.map((item) => (
-              <GardenTile
+          <div
+            className="relative w-full"
+            style={{
+              minHeight: Math.ceil(items.length / 3) * 130 + 100,
+              backgroundImage:
+                "linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px)",
+              backgroundSize: "24px 24px",
+              borderRadius: 16,
+            }}
+          >
+            {items.map((item, i) => (
+              <DoodleSprite
                 key={item.id}
                 item={item}
+                index={i}
+                total={items.length}
                 onClick={() => setSelected(item)}
               />
             ))}
