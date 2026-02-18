@@ -348,38 +348,32 @@ export default function GardenPage() {
             </p>
           </div>
         ) : (
-          <div className="relative w-full flex flex-col items-center">
-            {/* Combined: doodles + moss in one container */}
+          <div className="w-full max-w-md mx-auto flex flex-col items-stretch">
+            {/* Doodle layer — sits above moss, overlaps its top edge */}
             <div
               className="relative w-full"
               style={{
-                paddingTop: Math.ceil(items.length / 4) * 80 + 40,
+                height: Math.ceil(items.length / 4) * 90 + 30,
+                marginBottom: -50,
+                zIndex: 1,
               }}
             >
-              {/* Moss base — doodles are positioned from its top edge upward */}
-              <div className="relative">
-                <img
-                  src="/images/moss-garden.png"
-                  alt=""
-                  className="w-full max-w-md mx-auto block"
+              {items.map((item, i) => (
+                <DoodleSprite
+                  key={item.id}
+                  item={item}
+                  index={i}
+                  total={items.length}
+                  onClick={() => setSelected(item)}
                 />
-                {/* Doodles anchored right at the top of the moss */}
-                <div
-                  className="absolute inset-x-0"
-                  style={{ bottom: "75%" }}
-                >
-                  {items.map((item, i) => (
-                    <DoodleSprite
-                      key={item.id}
-                      item={item}
-                      index={i}
-                      total={items.length}
-                      onClick={() => setSelected(item)}
-                    />
-                  ))}
-                </div>
-              </div>
+              ))}
             </div>
+            {/* Moss image — doodles sprout from its top surface */}
+            <img
+              src="/images/moss-garden.png"
+              alt=""
+              className="w-full block"
+            />
           </div>
         )}
       </div>
