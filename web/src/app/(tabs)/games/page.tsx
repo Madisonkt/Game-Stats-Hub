@@ -640,11 +640,18 @@ export default function GamesPage() {
           <button
             onClick={async () => {
               if (currentUser && couple) {
+                // iOS: must be installed to Home Screen for push to work
+                const isStandalone = window.matchMedia("(display-mode: standalone)").matches
+                  || (window.navigator as { standalone?: boolean }).standalone === true;
+                if (!isStandalone) {
+                  alert("To enable notifications on iPhone:\n\n1. Tap the Share button in Safari\n2. Tap \"Add to Home Screen\"\n3. Open the app from your home screen\n4. Tap Enable Notifications again");
+                  return;
+                }
                 const ok = await subscribeToPush(currentUser.id, couple.id);
                 if (ok) {
-                  alert("Notifications enabled! You'll be notified when your partner starts a round.");
+                  alert("Notifications enabled! 🔔 You'll get a notification when your partner adds something.");
                 } else {
-                  alert("Couldn't enable notifications. Make sure you tap Allow when prompted.");
+                  alert("Couldn't enable notifications.\n\niPhone: Make sure the app is added to your Home Screen and you tapped Allow when prompted.\n\nIf you tapped Don't Allow before, go to Settings → Cheese Squeeze → Notifications and enable them.");
                 }
               }
             }}

@@ -6,7 +6,11 @@ import { subscribeToPush, isPushSupported, getPushPermission } from "@/lib/push"
 
 /**
  * Auto-subscribes the user to push notifications when they have a couple.
- * Asks permission once, then silently re-subscribes on future visits.
+ * 
+ * iOS IMPORTANT: Notification.requestPermission() MUST be called from a direct
+ * user gesture (button tap). This hook only silently re-subscribes when
+ * permission is already "granted". The first-time permission prompt must come
+ * from the "Enable Notifications" button in the games page.
  */
 export function usePushSubscription() {
   const { session } = useSession();
@@ -19,19 +23,13 @@ export function usePushSubscription() {
 
     const permission = getPushPermission();
 
-    // If already granted, silently re-subscribe (ensures subscription stays fresh)
+    // Only silently re-subscribe if permission is already granted.
+    // Never call requestPermission() here — iOS blocks it outside user gestures.
     if (permission === "granted") {
       subscribedRef.current = true;
       subscribeToPush(session.currentUser.id, session.couple.id).catch(() => {});
-      return;
     }
 
-    // If not yet asked, subscribe (will prompt)
-    if (permission === "default") {
-      subscribedRef.current = true;
-      subscribeToPush(session.currentUser.id, session.couple.id).catch(() => {});
-    }
-
-    // If "denied", do nothing
+    // "default" or "denied": do nothing — user must tap the Enable button
   }, [session.currentUser?.id, session.couple?.id]);
 }
