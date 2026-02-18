@@ -137,11 +137,6 @@ function DetailModal({
         {/* Photo */}
         <div className="relative" style={{ aspectRatio: "1" }}>
           <img src={photoUrl} alt="" className="w-full h-full object-cover" />
-          <div
-            className="absolute inset-0 pointer-events-none"
-            dangerouslySetInnerHTML={{ __html: item.doodleSvg }}
-            style={{ opacity: 0.8 }}
-          />
         </div>
 
         {/* Info */}
