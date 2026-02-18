@@ -194,13 +194,15 @@ function DetailModal({
             <button
               onClick={() => {
                 if (confirm("Open this link in a new tab?")) {
-                  window.open(item.linkUrl!, "_blank", "noopener,noreferrer");
+                  let url = item.linkUrl!;
+                  if (!/^https?:\/\//i.test(url)) url = "https://" + url;
+                  window.open(url, "_blank", "noopener,noreferrer");
                 }
               }}
               className="flex items-center gap-1.5 text-[#3A7BD5] font-[family-name:var(--font-nunito)] mb-2 hover:underline"
               style={{ fontSize: 13, fontWeight: 600 }}
             >
-              🔗 {(() => { try { return new URL(item.linkUrl).hostname; } catch { return item.linkUrl; } })()}
+              🔗 {(() => { try { return new URL(item.linkUrl.startsWith("http") ? item.linkUrl : "https://" + item.linkUrl).hostname; } catch { return item.linkUrl; } })()}
             </button>
           )}
 
