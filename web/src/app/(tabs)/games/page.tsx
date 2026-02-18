@@ -545,7 +545,7 @@ export default function GamesPage() {
       {/* ── Digital Garden Card ───────────────────── */}
       <button
         onClick={() => router.push("/garden")}
-        className="w-full flex items-center gap-3 bg-[#ECE7DE] dark:bg-[#1A1A1C] card-press mt-4"
+        className="w-full flex items-center gap-3 bg-[#ECE7DE] dark:bg-[#1A1A1C] card-press mb-2"
         style={{ borderRadius: 18, padding: 14 }}
       >
         <div
