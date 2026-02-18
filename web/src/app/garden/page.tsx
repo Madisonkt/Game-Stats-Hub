@@ -28,10 +28,10 @@ function placement(id: string, index: number, total: number) {
   const row = Math.floor(index / cols);
   // Horizontal: spread across the moss width
   const baseX = cols === 1 ? 35 : (col / (cols - 1)) * 65 + 8;
-  // Vertical: distance upward from moss surface (row 0 = closest to moss)
-  const bottomOffset = row * 80 + 20;
+  // Vertical: distance upward from moss surface (row 0 = touching moss)
+  const bottomOffset = row * 80;
   const jitterX = ((s % 14) - 7);
-  const jitterY = ((s >> 4) % 16) - 8;
+  const jitterY = ((s >> 4) % 10) - 5;
   const rotation = ((s >> 8) % 12) - 6;
   const scale = 0.9 + ((s >> 12) % 15) / 100;
 
@@ -363,10 +363,10 @@ export default function GardenPage() {
                   alt=""
                   className="w-full max-w-md mx-auto block"
                 />
-                {/* Doodles anchored to bottom of this container (moss top) */}
+                {/* Doodles anchored right at the top of the moss */}
                 <div
                   className="absolute inset-x-0"
-                  style={{ bottom: "60%" }}
+                  style={{ bottom: "75%" }}
                 >
                   {items.map((item, i) => (
                     <DoodleSprite
