@@ -126,6 +126,23 @@ export default function NewDoodlePage() {
         photoFile: photo,
         caption: caption.trim() || undefined,
       });
+
+      // Send push notification to partner
+      try {
+        await fetch("/api/push", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            coupleId: couple.id,
+            senderUserId: currentUser.id,
+            senderName: currentUser.name || "Your partner",
+            message: "new plant alert 🌱",
+          }),
+        });
+      } catch {
+        // Push is best-effort
+      }
+
       router.push("/garden");
     } catch (e) {
       console.error("Failed to save:", e);
