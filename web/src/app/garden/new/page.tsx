@@ -6,12 +6,12 @@ import { useSession } from "@/lib/auth-context";
 import { createGardenItem } from "@/lib/repos/gardenRepo";
 import { IoArrowBack, IoArrowUndo, IoTrash, IoImage } from "react-icons/io5";
 
-const INK_COLOR = "#E8A0BF";
+const COLORS = ["#E8A0BF", "#F5C842", "#F4724A", "#B57BCC"];
 const CANVAS_SIZE = 300;
 const STROKE_WIDTH = 6;
 
 type Point = { x: number; y: number };
-type Stroke = Point[];
+type Stroke = { points: Point[]; color: string };
 
 export default function NewDoodlePage() {
   const router = useRouter();
@@ -23,7 +23,9 @@ export default function NewDoodlePage() {
   // Use a ref to hold ALL stroke data (committed + in-progress) to avoid async state issues
   const committedStrokes = useRef<Stroke[]>([]);
   const activeStroke = useRef<Point[]>([]);
+  const activeColor = useRef(COLORS[0]);
   const isDrawingRef = useRef(false);
+  const [inkColor, setInkColor] = useState(COLORS[0]);
   const [renderKey, setRenderKey] = useState(0); // bump to re-render
   const [photo, setPhoto] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
@@ -47,6 +49,7 @@ export default function NewDoodlePage() {
     e.stopPropagation();
     (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     isDrawingRef.current = true;
+    activeColor.current = inkColor;
     activeStroke.current = [getPointerPos(e)];
     forceRender();
   };
@@ -63,7 +66,7 @@ export default function NewDoodlePage() {
     e.preventDefault();
     isDrawingRef.current = false;
     if (activeStroke.current.length > 1) {
-      committedStrokes.current = [...committedStrokes.current, [...activeStroke.current]];
+      committedStrokes.current = [...committedStrokes.current, { points: [...activeStroke.current], color: activeColor.current }];
     }
     activeStroke.current = [];
     forceRender();
@@ -90,14 +93,14 @@ export default function NewDoodlePage() {
 
   // Build SVG string from strokes
   const buildSvg = useCallback(
-    (allStrokes: Stroke[]): string => {
-      const paths = allStrokes
-        .filter((s) => s.length > 1)
+    (strokes: Stroke[]): string => {
+      const paths = strokes
+        .filter((s) => s.points.length > 1)
         .map((stroke) => {
-          const d = stroke
+          const d = stroke.points
             .map((p, i) => `${i === 0 ? "M" : "L"} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`)
             .join(" ");
-          return `<path d="${d}" stroke="${INK_COLOR}" stroke-width="${STROKE_WIDTH}" stroke-linecap="round" stroke-linejoin="round" fill="none"/>`;
+          return `<path d="${d}" stroke="${stroke.color}" stroke-width="${STROKE_WIDTH}" stroke-linecap="round" stroke-linejoin="round" fill="none"/>`;
         })
         .join("");
       return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${CANVAS_SIZE} ${CANVAS_SIZE}" width="100%" height="100%">${paths}</svg>`;
@@ -106,8 +109,8 @@ export default function NewDoodlePage() {
   );
 
   // All strokes to render (committed + in-progress)
-  const allStrokes = activeStroke.current.length > 0
-    ? [...committedStrokes.current, activeStroke.current]
+  const allStrokes: Stroke[] = activeStroke.current.length > 0
+    ? [...committedStrokes.current, { points: activeStroke.current, color: activeColor.current }]
     : committedStrokes.current;
 
   const handleSave = async () => {
@@ -219,16 +222,16 @@ export default function NewDoodlePage() {
               style={{ borderRadius: 14 }}
             >
               {allStrokes.map((stroke, si) =>
-                stroke.length > 1 ? (
+                stroke.points.length > 1 ? (
                   <path
                     key={si}
-                    d={stroke
+                    d={stroke.points
                       .map(
                         (p, i) =>
                           `${i === 0 ? "M" : "L"} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`
                       )
                       .join(" ")}
-                    stroke={INK_COLOR}
+                    stroke={stroke.color}
                     strokeWidth={STROKE_WIDTH}
                     strokeLinecap="round"
                     strokeLinejoin="round"
@@ -265,16 +268,23 @@ export default function NewDoodlePage() {
             Clear
           </button>
           <div className="flex-1" />
-          <div
-            className="flex items-center justify-center"
-            style={{
-              width: 28,
-              height: 28,
-              borderRadius: 14,
-              backgroundColor: INK_COLOR,
-              border: "2px solid rgba(255,255,255,0.5)",
-            }}
-          />
+          {/* Color swatches */}
+          {COLORS.map((c) => (
+            <button
+              key={c}
+              onClick={() => setInkColor(c)}
+              style={{
+                width: 28,
+                height: 28,
+                borderRadius: 14,
+                backgroundColor: c,
+                border: inkColor === c ? "3px solid #0A0A0C" : "2px solid rgba(255,255,255,0.6)",
+                transform: inkColor === c ? "scale(1.2)" : "scale(1)",
+                transition: "transform 0.15s, border 0.15s",
+                flexShrink: 0,
+              }}
+            />
+          ))}
         </div>
 
         {/* Photo attachment */}
