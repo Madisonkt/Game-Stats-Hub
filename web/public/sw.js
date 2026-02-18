@@ -1,4 +1,4 @@
-const CACHE_NAME = "cheese-squeeze-v3";
+const CACHE_NAME = "cheese-squeeze-v4";
 
 // App shell / static assets to pre-cache on install
 const PRECACHE_URLS = [
