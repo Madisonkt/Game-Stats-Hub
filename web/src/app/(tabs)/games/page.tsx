@@ -557,7 +557,7 @@ export default function GamesPage() {
             className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]"
             style={{ fontSize: 16, fontWeight: 700 }}
           >
-            Plant
+            Garden
           </span>
           <span
             className="text-[#98989D] font-[family-name:var(--font-nunito)]"
