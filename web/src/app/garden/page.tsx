@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useRef } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/lib/auth-context";
 import {
@@ -218,184 +218,6 @@ function DetailModal({
   );
 }
 
-// ── Pinch-to-zoom hook ──────────────────────────────────────
-// Safari GestureEvent type
-interface GestureEvent extends UIEvent {
-  scale: number;
-  rotation: number;
-  clientX: number;
-  clientY: number;
-}
-
-function usePinchZoom() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const scaleRef = useRef(1);
-  const txRef = useRef({ x: 0, y: 0 });
-  const [, bump] = useState(0);
-  const rerender = useCallback(() => bump((n) => n + 1), []);
-
-  const gRef = useRef({
-    active: false,
-    startDist: 0,
-    startScale: 1,
-    startMid: { x: 0, y: 0 },
-    startTx: { x: 0, y: 0 },
-    panning: false,
-    last: { x: 0, y: 0 },
-    gestureActive: false,
-    gestureStartScale: 1,
-  });
-
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-
-    const dist = (a: Touch, b: Touch) =>
-      Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
-    const mid = (a: Touch, b: Touch) => ({
-      x: (a.clientX + b.clientX) / 2,
-      y: (a.clientY + b.clientY) / 2,
-    });
-
-    const snapBack = () => {
-      if (scaleRef.current < 1.15) {
-        scaleRef.current = 1;
-        txRef.current = { x: 0, y: 0 };
-        rerender();
-      }
-    };
-
-    // ── Safari GestureEvent (primary for iOS pinch) ──
-    const supportsGesture = "GestureEvent" in window;
-
-    const onGestureStart = (e: Event) => {
-      e.preventDefault();
-      const g = gRef.current;
-      g.gestureActive = true;
-      g.gestureStartScale = scaleRef.current;
-    };
-    const onGestureChange = (e: Event) => {
-      e.preventDefault();
-      const g = gRef.current;
-      if (!g.gestureActive) return;
-      scaleRef.current = Math.max(1, Math.min(4, g.gestureStartScale * (e as GestureEvent).scale));
-      rerender();
-    };
-    const onGestureEnd = (e: Event) => {
-      e.preventDefault();
-      gRef.current.gestureActive = false;
-      snapBack();
-    };
-
-    // ── Touch events (pinch fallback for non-Safari + pan) ──
-    const onTouchStart = (e: TouchEvent) => {
-      const g = gRef.current;
-      if (e.touches.length === 2) {
-        e.preventDefault();
-        g.active = true;
-        g.panning = false;
-        const [t0, t1] = [e.touches[0], e.touches[1]];
-        g.startDist = dist(t0, t1);
-        g.startScale = scaleRef.current;
-        g.startMid = mid(t0, t1);
-        g.startTx = { ...txRef.current };
-      } else if (e.touches.length === 1 && scaleRef.current > 1) {
-        e.preventDefault();
-        g.panning = true;
-        g.active = false;
-        g.last = { x: e.touches[0].clientX, y: e.touches[0].clientY };
-      }
-    };
-
-    const onTouchMove = (e: TouchEvent) => {
-      const g = gRef.current;
-      if (g.active && e.touches.length === 2) {
-        e.preventDefault();
-        const [t0, t1] = [e.touches[0], e.touches[1]];
-        const m = mid(t0, t1);
-        // Scale via touch events only when GestureEvent is unavailable
-        if (!supportsGesture) {
-          const d = dist(t0, t1);
-          scaleRef.current = Math.max(1, Math.min(4, g.startScale * (d / g.startDist)));
-        }
-        // Always handle translate
-        const s = scaleRef.current;
-        txRef.current = {
-          x: g.startTx.x + (m.x - g.startMid.x) / s,
-          y: g.startTx.y + (m.y - g.startMid.y) / s,
-        };
-        rerender();
-      } else if (g.panning && e.touches.length === 1 && scaleRef.current > 1) {
-        e.preventDefault();
-        const t = e.touches[0];
-        const s = scaleRef.current;
-        txRef.current = {
-          x: txRef.current.x + (t.clientX - g.last.x) / s,
-          y: txRef.current.y + (t.clientY - g.last.y) / s,
-        };
-        g.last = { x: t.clientX, y: t.clientY };
-        rerender();
-      }
-    };
-
-    const onTouchEnd = (e: TouchEvent) => {
-      const g = gRef.current;
-      if (e.touches.length < 2) g.active = false;
-      if (e.touches.length === 0) {
-        g.panning = false;
-        snapBack();
-      }
-    };
-
-    // Attach ALL listeners to the element (not document).
-    // Combined with touch-action:none on the element, the browser
-    // won't claim these touches for scroll/zoom.
-    el.addEventListener("touchstart", onTouchStart, { passive: false });
-    el.addEventListener("touchmove", onTouchMove, { passive: false });
-    el.addEventListener("touchend", onTouchEnd);
-
-    if (supportsGesture) {
-      el.addEventListener("gesturestart", onGestureStart, { passive: false } as EventListenerOptions);
-      el.addEventListener("gesturechange", onGestureChange, { passive: false } as EventListenerOptions);
-      el.addEventListener("gestureend", onGestureEnd);
-    }
-
-    return () => {
-      el.removeEventListener("touchstart", onTouchStart);
-      el.removeEventListener("touchmove", onTouchMove);
-      el.removeEventListener("touchend", onTouchEnd);
-      if (supportsGesture) {
-        el.removeEventListener("gesturestart", onGestureStart);
-        el.removeEventListener("gesturechange", onGestureChange);
-        el.removeEventListener("gestureend", onGestureEnd);
-      }
-    };
-  }, [rerender]);
-
-  // Double-tap to toggle zoom
-  const lastTapRef = useRef(0);
-  const onDoubleTap = useCallback(() => {
-    const now = Date.now();
-    if (now - lastTapRef.current < 300) {
-      if (scaleRef.current > 1) {
-        scaleRef.current = 1;
-        txRef.current = { x: 0, y: 0 };
-      } else {
-        scaleRef.current = 2.5;
-      }
-      rerender();
-    }
-    lastTapRef.current = now;
-  }, [rerender]);
-
-  return {
-    containerRef,
-    scale: scaleRef.current,
-    translate: txRef.current,
-    onDoubleTap,
-  };
-}
-
 // ── Main Garden Page ────────────────────────────────────────
 
 export default function GardenPage() {
@@ -407,7 +229,6 @@ export default function GardenPage() {
   const [items, setItems] = useState<GardenItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<GardenItem | null>(null);
-  const { containerRef, scale, translate, onDoubleTap } = usePinchZoom();
 
   const coupleId = couple?.id;
   const members = couple?.members ?? [];
@@ -456,9 +277,9 @@ export default function GardenPage() {
   }
 
   return (
-    <div className="h-screen flex flex-col overflow-hidden" style={{ backgroundColor: "#FAFAF7" }}>
-      {/* Header — shrink-0 flex child (page doesn't scroll) */}
-      <div className="shrink-0" style={{ backgroundColor: "rgba(250,250,247,0.95)" }}>
+    <div className="min-h-screen" style={{ backgroundColor: "#FAFAF7" }}>
+      {/* Header — fixed */}
+      <div className="fixed top-0 inset-x-0 z-40" style={{ backgroundColor: "rgba(250,250,247,0.8)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)" }}>
       <div className="flex items-center justify-between px-5 pt-4 pb-3 max-w-lg mx-auto">
         <div className="flex items-center gap-3">
           <button
@@ -489,8 +310,11 @@ export default function GardenPage() {
       </div>
       </div>
 
+      {/* Spacer for fixed header */}
+      <div style={{ height: 64 }} />
+
       {/* Garden — moss with sprouting doodles */}
-      <div className="flex-1 min-h-0 px-2 pb-2 max-w-lg mx-auto w-full flex items-center justify-center">
+      <div className="px-2 pb-8 max-w-lg mx-auto">
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <div className="h-8 w-8 animate-spin rounded-full border-3 border-[#E8A0BF] border-t-transparent" />
@@ -518,20 +342,15 @@ export default function GardenPage() {
             </p>
           </div>
         ) : (
-          // Doodles overlaid ON the moss image — pinch to zoom
-          <div style={{ overflow: "hidden", borderRadius: 16 }}>
+          // Doodles overlaid ON the moss image
           <div
-            ref={containerRef}
-            onClick={onDoubleTap}
             style={{
               position: "relative",
               width: "100%",
               maxWidth: 448,
               margin: "0 auto",
-              transform: `scale(${scale}) translate(${translate.x}px, ${translate.y}px)`,
-              transformOrigin: "center center",
-              transition: scale === 1 ? "transform 0.25s ease-out" : "none",
-              touchAction: "none",
+              borderRadius: 16,
+              overflow: "hidden",
             }}
           >
             <img
@@ -548,7 +367,6 @@ export default function GardenPage() {
                 onClick={() => setSelected(item)}
               />
             ))}
-          </div>
           </div>
         )}
       </div>
