@@ -23,20 +23,21 @@ function seedFromId(id: string): number {
 
 function placement(id: string, index: number, total: number) {
   const s = seedFromId(id);
-  // Spread items across a grid-like pattern but with randomness
-  const cols = 3;
+  // Doodles sprout upward from the moss — spread across its width
+  const cols = Math.min(total, 4);
   const col = index % cols;
   const row = Math.floor(index / cols);
-  // Base position from grid, then add jitter
-  const baseX = (col / cols) * 70 + 5; // 5-75% range
-  const baseY = row * 130 + 20; // vertical spacing
-  const jitterX = ((s % 20) - 10); // ±10%
-  const jitterY = ((s >> 4) % 30) - 15; // ±15px
-  const rotation = ((s >> 8) % 16) - 8; // -8 to +8 deg
-  const scale = 0.85 + ((s >> 12) % 20) / 100; // 0.85 - 1.04
+  // Horizontal: spread across the moss width (10%-90%)
+  const baseX = cols === 1 ? 40 : (col / (cols - 1)) * 60 + 10;
+  // Vertical: grow upward from the moss (bottom = 0, higher rows go up)
+  const baseY = row * 90 + 10;
+  const jitterX = ((s % 14) - 7);
+  const jitterY = ((s >> 4) % 20) - 10;
+  const rotation = ((s >> 8) % 12) - 6; // -6 to +6 deg
+  const scale = 0.9 + ((s >> 12) % 15) / 100; // 0.9 - 1.04
 
   return {
-    x: Math.max(2, Math.min(68, baseX + jitterX)),
+    x: Math.max(5, Math.min(75, baseX + jitterX)),
     y: baseY + jitterY,
     rotation,
     scale,
@@ -283,9 +284,9 @@ export default function GardenPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F3F0EA] dark:bg-[#0A0A0C]">
+    <div className="min-h-screen" style={{ backgroundColor: "#FAFAF7" }}>
       {/* Header — fixed */}
-      <div className="fixed top-0 inset-x-0 z-40 bg-[#F3F0EA]/80 dark:bg-[#0A0A0C]/80 backdrop-blur-lg">
+      <div className="fixed top-0 inset-x-0 z-40" style={{ backgroundColor: "rgba(250,250,247,0.8)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)" }}>
       <div className="flex items-center justify-between px-5 pt-4 pb-3 max-w-lg mx-auto">
         <div className="flex items-center gap-3">
           <button
@@ -319,17 +320,23 @@ export default function GardenPage() {
       {/* Spacer for fixed header */}
       <div style={{ height: 64 }} />
 
-      {/* Garden canvas — grid paper with scattered doodles */}
+      {/* Garden — moss with sprouting doodles */}
       <div className="px-2 pb-8 max-w-lg mx-auto">
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <div className="h-8 w-8 animate-spin rounded-full border-3 border-[#E8A0BF] border-t-transparent" />
           </div>
         ) : items.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-20 gap-3">
-            <span style={{ fontSize: 48, opacity: 0.3 }}>🌱</span>
+          <div className="flex flex-col items-center justify-center py-12 gap-3">
+            {/* Moss base — empty state */}
+            <img
+              src="/images/moss-garden.png"
+              alt=""
+              className="w-3/4 max-w-xs"
+              style={{ opacity: 0.7 }}
+            />
             <p
-              className="text-[#98989D] font-[family-name:var(--font-nunito)] text-center"
+              className="text-[#98989D] font-[family-name:var(--font-nunito)] text-center -mt-2"
               style={{ fontSize: 15, fontWeight: 600 }}
             >
               Your garden is empty
@@ -342,22 +349,32 @@ export default function GardenPage() {
             </p>
           </div>
         ) : (
-          <div
-            className="relative w-full"
-            style={{
-              minHeight: Math.ceil(items.length / 3) * 130 + 100,
-              borderRadius: 16,
-            }}
-          >
-            {items.map((item, i) => (
-              <DoodleSprite
-                key={item.id}
-                item={item}
-                index={i}
-                total={items.length}
-                onClick={() => setSelected(item)}
-              />
-            ))}
+          <div className="relative w-full flex flex-col items-center">
+            {/* Doodles sprouting above the moss */}
+            <div
+              className="relative w-full"
+              style={{
+                minHeight: Math.ceil(items.length / 4) * 90 + 60,
+              }}
+            >
+              {items.map((item, i) => (
+                <DoodleSprite
+                  key={item.id}
+                  item={item}
+                  index={i}
+                  total={items.length}
+                  onClick={() => setSelected(item)}
+                />
+              ))}
+            </div>
+
+            {/* Moss base image */}
+            <img
+              src="/images/moss-garden.png"
+              alt=""
+              className="w-full max-w-md -mt-4"
+              style={{ position: "relative", zIndex: 2 }}
+            />
           </div>
         )}
       </div>
