@@ -158,7 +158,7 @@ function GridView({
           {/* Grid of doodles */}
           <div
             className="grid"
-            style={{ gridTemplateColumns: "repeat(auto-fill, minmax(64px, 1fr))", gap: 6 }}
+            style={{ gridTemplateColumns: "repeat(6, 1fr)", gap: 6 }}
           >
             {group.items.map((item) => (
               <button
