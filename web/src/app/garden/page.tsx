@@ -103,9 +103,6 @@ function DoodleSprite({
           {item.caption}
         </p>
       )}
-      {item.linkUrl && (
-        <span style={{ fontSize: 10, position: "absolute", top: 2, right: 2 }}>🔗</span>
-      )}
     </button>
   );
 }
