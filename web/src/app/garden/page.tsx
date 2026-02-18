@@ -104,14 +104,6 @@ function DoodleSprite({
         dangerouslySetInnerHTML={{ __html: item.doodleSvg }}
         className="w-full h-full"
       />
-      {item.caption && (
-        <p
-          className="text-[#98989D] font-[family-name:var(--font-nunito)] text-center truncate mt-0.5"
-          style={{ fontSize: 9, fontWeight: 600 }}
-        >
-          {item.caption}
-        </p>
-      )}
     </button>
   );
 }
