@@ -18,7 +18,7 @@ export default function TabLayout({ children }: { children: ReactNode }) {
   usePushSubscription();
 
   return (
-    <div className="flex flex-col min-h-screen bg-[#F3F0EA] dark:bg-[#0A0A0C]">
+    <div className="flex flex-col h-screen overflow-hidden bg-[#F3F0EA] dark:bg-[#0A0A0C]">
       <KawaiiBackground>
         {/* Page content */}
         <main className="flex-1 overflow-auto pb-20 animate-fade-in">{children}</main>
