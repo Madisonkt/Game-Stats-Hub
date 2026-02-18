@@ -27,23 +27,23 @@ function placement(id: string, index: number, total: number) {
   const col = index % cols;
   const row = Math.floor(index / cols);
 
-  // Moss surface is at ~57% from the top of the 800×1280 image.
-  // A doodle is 70px tall. At ~390px rendered width, image height ≈ 624px.
-  // 70/624 ≈ 11% — so row 0 tops sit at 57% - 11% = 46%, growing upward.
-  const MOSS_TOP_PCT = 46;          // top of row-0 doodle (bottom lands on moss)
-  const ROW_STEP_PCT = 11;          // each row steps up another doodle-height
-  const topPct = MOSS_TOP_PCT - row * ROW_STEP_PCT;
+  // SVG is 800×1280. Moss surface is at y≈730 → that is (1280-730)/1280 ≈ 43% from the BOTTOM.
+  // We use CSS `bottom` so the doodle's base is anchored TO the moss surface.
+  // Row 0 base = 43% from bottom. Each extra row adds ~12% (≈ one doodle height).
+  const MOSS_BOTTOM_PCT = 43;
+  const ROW_STEP_PCT = 12;
+  const bottomPct = MOSS_BOTTOM_PCT + row * ROW_STEP_PCT;
 
-  // Horizontal spread across moss width, roughly 10%–80%
-  const baseLeft = cols === 1 ? 38 : 10 + (col / Math.max(cols - 1, 1)) * 68;
-  const jitterX = ((s % 14) - 7);
+  // Center-based horizontal spread (left% refers to the doodle center via translateX(-50%))
+  const baseLeft = cols === 1 ? 50 : 15 + (col / Math.max(cols - 1, 1)) * 68;
+  const jitterX = ((s % 16) - 8);
   const jitterY = ((s >> 4) % 6) - 3;
   const rotation = ((s >> 8) % 16) - 8;
   const scale = 0.85 + ((s >> 12) % 20) / 100;
 
   return {
-    leftPercent: Math.max(3, Math.min(78, baseLeft + jitterX)),
-    topPercent: Math.max(2, topPct + jitterY),
+    leftPercent: Math.max(8, Math.min(88, baseLeft + jitterX)),
+    bottomPercent: bottomPct + jitterY,
     rotation,
     scale,
   };
@@ -72,7 +72,7 @@ function DoodleSprite({
   total: number;
   onClick: () => void;
 }) {
-  const { leftPercent, topPercent, rotation, scale } = placement(item.id, index, total);
+  const { leftPercent, bottomPercent, rotation, scale } = placement(item.id, index, total);
   const [popped, setPopped] = useState(false);
 
   useEffect(() => {
@@ -86,15 +86,16 @@ function DoodleSprite({
       style={{
         position: "absolute",
         left: `${leftPercent}%`,
-        top: `${topPercent}%`,
+        bottom: `${bottomPercent}%`,
         width: 70,
         height: 70,
+        // translateX(-50%) so leftPercent is the doodle's CENTER, not its left edge
         transform: popped
-          ? `rotate(${rotation}deg) scale(${scale})`
-          : `rotate(${rotation + 10}deg) scale(0)`,
+          ? `translateX(-50%) rotate(${rotation}deg) scale(${scale})`
+          : `translateX(-50%) rotate(${rotation + 10}deg) scale(0)`,
         opacity: popped ? 1 : 0,
         transition: "transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease-out",
-        transformOrigin: "center bottom",
+        transformOrigin: "bottom center",
       }}
     >
       <div
