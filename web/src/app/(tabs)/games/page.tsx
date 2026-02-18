@@ -449,27 +449,32 @@ export default function GamesPage() {
   }
 
   return (
-    <div className="flex flex-col px-5 pt-4 pb-4 max-w-lg mx-auto">
-      {/* ── Header ──────────────────────────────────── */}
-      <div className="flex items-center justify-between mb-4">
-        <h1
-          className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]"
-          style={{ fontSize: 28, fontWeight: 800 }}
-        >
-          Games
-        </h1>
-        <div className="flex items-center gap-4">
-          <button onClick={() => openAddGame()} className="text-[#3A7BD5] dark:text-white">
-            <IoAddCircle style={{ fontSize: 28 }} />
-          </button>
-          <button onClick={() => openLoveNote()} className="text-[#3A7BD5] dark:text-white">
-            <IoHeart style={{ fontSize: 22 }} />
-          </button>
-          <button onClick={handleOpenPlayerSettings} className="text-[#3A7BD5] dark:text-white">
-            <IoPeople style={{ fontSize: 24 }} />
-          </button>
+    <div className="flex flex-col px-5 pb-4 max-w-lg mx-auto">
+      {/* ── Header (fixed) ──────────────────────────── */}
+      <div className="fixed top-0 inset-x-0 z-40 bg-[#F3F0EA]/80 dark:bg-[#0A0A0C]/80 backdrop-blur-lg">
+        <div className="flex items-center justify-between px-5 pt-4 pb-3 max-w-lg mx-auto">
+          <h1
+            className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]"
+            style={{ fontSize: 28, fontWeight: 800 }}
+          >
+            Games
+          </h1>
+          <div className="flex items-center gap-4">
+            <button onClick={() => openAddGame()} className="text-[#3A7BD5] dark:text-white">
+              <IoAddCircle style={{ fontSize: 28 }} />
+            </button>
+            <button onClick={() => openLoveNote()} className="text-[#3A7BD5] dark:text-white">
+              <IoHeart style={{ fontSize: 22 }} />
+            </button>
+            <button onClick={handleOpenPlayerSettings} className="text-[#3A7BD5] dark:text-white">
+              <IoPeople style={{ fontSize: 24 }} />
+            </button>
+          </div>
         </div>
       </div>
+
+      {/* Spacer for fixed header */}
+      <div style={{ height: 60 }} />
 
       {/* ── Game List ───────────────────────────────── */}
       {games.length === 0 ? (
