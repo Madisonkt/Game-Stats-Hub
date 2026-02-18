@@ -548,10 +548,10 @@ export default function GamesPage() {
             width: 44,
             height: 44,
             borderRadius: 12,
-            backgroundColor: "rgba(78,107,58,0.15)",
+            backgroundColor: "rgba(232,160,191,0.15)",
           }}
         >
-          <IoLeaf className="text-[#4E6B3A]" style={{ fontSize: 22 }} />
+          <IoLeaf className="text-[#E8A0BF]" style={{ fontSize: 22 }} />
         </div>
         <div className="flex flex-col items-start">
           <span

@@ -6,7 +6,7 @@ import { useSession } from "@/lib/auth-context";
 import { createGardenItem } from "@/lib/repos/gardenRepo";
 import { IoArrowBack, IoArrowUndo, IoTrash, IoImage } from "react-icons/io5";
 
-const INK_COLOR = "#4E6B3A";
+const INK_COLOR = "#E8A0BF";
 const CANVAS_SIZE = 300;
 const STROKE_WIDTH = 4;
 
@@ -20,17 +20,18 @@ export default function NewDoodlePage() {
   const currentUser = session.currentUser;
 
   const canvasRef = useRef<HTMLDivElement>(null);
-  const [strokes, setStrokes] = useState<Stroke[]>([]);
-  const currentStroke = useRef<Point[]>([]);
+  // Use a ref to hold ALL stroke data (committed + in-progress) to avoid async state issues
+  const committedStrokes = useRef<Stroke[]>([]);
+  const activeStroke = useRef<Point[]>([]);
   const isDrawingRef = useRef(false);
+  const [renderKey, setRenderKey] = useState(0); // bump to re-render
   const [photo, setPhoto] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [caption, setCaption] = useState("");
   const [saving, setSaving] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Force re-render during drawing
-  const [, setTick] = useState(0);
+  const forceRender = () => setRenderKey((k) => k + 1);
 
   const getPointerPos = (e: React.PointerEvent): Point => {
     const rect = canvasRef.current!.getBoundingClientRect();
@@ -43,39 +44,38 @@ export default function NewDoodlePage() {
   const handlePointerDown = (e: React.PointerEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    const el = e.currentTarget as HTMLElement;
-    el.setPointerCapture(e.pointerId);
+    (e.currentTarget as HTMLElement).setPointerCapture(e.pointerId);
     isDrawingRef.current = true;
-    const pt = getPointerPos(e);
-    currentStroke.current = [pt];
-    setTick((t) => t + 1);
+    activeStroke.current = [getPointerPos(e)];
+    forceRender();
   };
 
   const handlePointerMove = (e: React.PointerEvent) => {
     if (!isDrawingRef.current) return;
     e.preventDefault();
-    const pt = getPointerPos(e);
-    currentStroke.current.push(pt);
-    setTick((t) => t + 1);
+    activeStroke.current.push(getPointerPos(e));
+    forceRender();
   };
 
   const handlePointerUp = (e: React.PointerEvent) => {
     if (!isDrawingRef.current) return;
     e.preventDefault();
     isDrawingRef.current = false;
-    if (currentStroke.current.length > 1) {
-      setStrokes((prev) => [...prev, [...currentStroke.current]]);
+    if (activeStroke.current.length > 1) {
+      committedStrokes.current = [...committedStrokes.current, [...activeStroke.current]];
     }
-    currentStroke.current = [];
-    setTick((t) => t + 1);
+    activeStroke.current = [];
+    forceRender();
   };
 
   const handleUndo = () => {
-    setStrokes((prev) => prev.slice(0, -1));
+    committedStrokes.current = committedStrokes.current.slice(0, -1);
+    forceRender();
   };
 
   const handleClear = () => {
-    setStrokes([]);
+    committedStrokes.current = [];
+    forceRender();
   };
 
   const handlePhotoPick = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -105,20 +105,20 @@ export default function NewDoodlePage() {
   );
 
   // All strokes to render (committed + in-progress)
-  const allStrokes = currentStroke.current.length > 0
-    ? [...strokes, currentStroke.current]
-    : strokes;
+  const allStrokes = activeStroke.current.length > 0
+    ? [...committedStrokes.current, activeStroke.current]
+    : committedStrokes.current;
 
   const handleSave = async () => {
     if (!couple?.id || !currentUser?.id || !photo) return;
-    if (strokes.length === 0) {
+    if (committedStrokes.current.length === 0) {
       alert("Draw something first!");
       return;
     }
 
     setSaving(true);
     try {
-      const svgString = buildSvg(strokes);
+      const svgString = buildSvg(committedStrokes.current);
       await createGardenItem({
         coupleId: couple.id,
         createdBy: currentUser.id,
@@ -187,7 +187,7 @@ export default function NewDoodlePage() {
               borderRadius: 16,
               aspectRatio: "1",
               cursor: "crosshair",
-              border: "2px solid rgba(78,107,58,0.2)",
+              border: "2px solid rgba(232,160,191,0.3)",
             }}
           >
             <svg
@@ -221,7 +221,7 @@ export default function NewDoodlePage() {
         <div className="flex items-center gap-3">
           <button
             onClick={handleUndo}
-            disabled={strokes.length === 0}
+            disabled={committedStrokes.current.length === 0}
             className="flex items-center gap-1 px-4 py-2 bg-[#ECE7DE] dark:bg-[#1A1A1C]
               text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]
               active:scale-[0.95] transition-all disabled:opacity-30"
@@ -232,7 +232,7 @@ export default function NewDoodlePage() {
           </button>
           <button
             onClick={handleClear}
-            disabled={strokes.length === 0}
+            disabled={committedStrokes.current.length === 0}
             className="flex items-center gap-1 px-4 py-2 bg-[#ECE7DE] dark:bg-[#1A1A1C]
               text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]
               active:scale-[0.95] transition-all disabled:opacity-30"
@@ -262,7 +262,7 @@ export default function NewDoodlePage() {
             active:scale-[0.98] transition-all"
           style={{ borderRadius: 14, fontSize: 14, fontWeight: 600 }}
         >
-          <IoImage style={{ fontSize: 18, color: "#4E6B3A" }} />
+          <IoImage style={{ fontSize: 18, color: "#E8A0BF" }} />
           {photo ? `📷 ${photo.name}` : "Attach a photo"}
         </button>
         <input
@@ -287,7 +287,7 @@ export default function NewDoodlePage() {
         {/* Save */}
         <button
           onClick={handleSave}
-          disabled={saving || !photo || strokes.length === 0}
+          disabled={saving || !photo || committedStrokes.current.length === 0}
           className="flex items-center justify-center gap-2 w-full text-white font-[family-name:var(--font-nunito)]
             active:scale-[0.98] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
           style={{
@@ -295,7 +295,7 @@ export default function NewDoodlePage() {
             padding: 16,
             fontSize: 16,
             fontWeight: 800,
-            backgroundColor: "#4E6B3A",
+            backgroundColor: "#E8A0BF",
           }}
         >
           {saving ? "Planting..." : "Plant in Garden 🌱"}

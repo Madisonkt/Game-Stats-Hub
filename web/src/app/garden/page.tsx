@@ -240,7 +240,7 @@ export default function GardenPage() {
             <IoArrowBack style={{ fontSize: 22 }} />
           </button>
           <div className="flex items-center gap-2">
-            <IoLeaf className="text-[#4E6B3A]" style={{ fontSize: 22 }} />
+            <IoLeaf className="text-[#E8A0BF]" style={{ fontSize: 22 }} />
             <h1
               className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]"
               style={{ fontSize: 24, fontWeight: 800 }}
@@ -251,7 +251,7 @@ export default function GardenPage() {
         </div>
         <button
           onClick={() => router.push("/garden/new")}
-          className="flex items-center gap-1 bg-[#4E6B3A] text-white font-[family-name:var(--font-nunito)]
+          className="flex items-center gap-1 bg-[#E8A0BF] text-white font-[family-name:var(--font-nunito)]
             active:scale-[0.95] transition-all"
           style={{ borderRadius: 999, padding: "8px 16px", fontSize: 13, fontWeight: 700 }}
         >
@@ -264,11 +264,11 @@ export default function GardenPage() {
       <div className="px-4 pb-8 max-w-lg mx-auto">
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <div className="h-8 w-8 animate-spin rounded-full border-3 border-[#4E6B3A] border-t-transparent" />
+            <div className="h-8 w-8 animate-spin rounded-full border-3 border-[#E8A0BF] border-t-transparent" />
           </div>
         ) : items.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 gap-3">
-            <IoLeaf className="text-[#4E6B3A]/30" style={{ fontSize: 48 }} />
+            <IoLeaf className="text-[#E8A0BF]/30" style={{ fontSize: 48 }} />
             <p
               className="text-[#98989D] font-[family-name:var(--font-nunito)] text-center"
               style={{ fontSize: 15, fontWeight: 600 }}
