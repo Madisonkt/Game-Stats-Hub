@@ -2,12 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import webPush from "web-push";
 import { createClient } from "@supabase/supabase-js";
 
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
 let vapidInitialized = false;
 
 function initVapid() {
   if (vapidInitialized) return;
-  const publicKey = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
-  const privateKey = process.env.VAPID_PRIVATE_KEY;
+  const publicKey = (process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY ?? "").trim().replace(/=+$/, "");
+  const privateKey = (process.env.VAPID_PRIVATE_KEY ?? "").trim().replace(/=+$/, "");
   if (!publicKey || !privateKey) {
     throw new Error("VAPID keys not configured");
   }
@@ -94,7 +97,8 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ sent, failed: failed.length });
   } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
     console.error("Push API error:", e);
-    return NextResponse.json({ error: "Internal error" }, { status: 500 });
+    return NextResponse.json({ error: "Internal error", detail: msg }, { status: 500 });
   }
 }
