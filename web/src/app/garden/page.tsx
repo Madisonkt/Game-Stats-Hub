@@ -113,20 +113,35 @@ function DetailModal({
   canDelete: boolean;
 }) {
   const photoUrl = getGardenPhotoUrl(item.photoPath);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    requestAnimationFrame(() => setVisible(true));
+  }, []);
+
+  const handleClose = () => {
+    setVisible(false);
+    setTimeout(onClose, 250);
+  };
 
   return (
     <div
-      className="fixed inset-0 z-[9999] bg-black/70 flex items-center justify-center px-4"
-      onClick={onClose}
+      className="fixed inset-0 z-[9999] flex items-center justify-center px-4 transition-colors duration-250"
+      style={{ backgroundColor: visible ? "rgba(0,0,0,0.7)" : "rgba(0,0,0,0)" }}
+      onClick={handleClose}
     >
       <div
-        className="relative w-full max-w-sm bg-[#F3F0EA] dark:bg-[#0A0A0C] overflow-hidden"
-        style={{ borderRadius: 20 }}
+        className="relative w-full max-w-sm bg-[#F3F0EA] dark:bg-[#0A0A0C] overflow-hidden transition-all duration-250"
+        style={{
+          borderRadius: 20,
+          transform: visible ? "scale(1) translateY(0)" : "scale(0.9) translateY(20px)",
+          opacity: visible ? 1 : 0,
+        }}
         onClick={(e) => e.stopPropagation()}
       >
         {/* Close */}
         <button
-          onClick={onClose}
+          onClick={handleClose}
           className="absolute top-3 right-3 z-10 flex items-center justify-center
             bg-black/30 backdrop-blur-sm text-white active:scale-95"
           style={{ width: 32, height: 32, borderRadius: 16 }}
