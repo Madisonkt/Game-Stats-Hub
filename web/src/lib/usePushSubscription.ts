@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useSession } from "@/lib/auth-context";
-import { subscribeToPush, isPushSupported, getPushPermission } from "@/lib/push";
+import { resyncPushSubscription, isPushSupported, getPushPermission } from "@/lib/push";
 
 /**
  * Auto-subscribes the user to push notifications when they have a couple.
@@ -27,7 +27,15 @@ export function usePushSubscription() {
     // Never call requestPermission() here — iOS blocks it outside user gestures.
     if (permission === "granted") {
       subscribedRef.current = true;
-      subscribeToPush(session.currentUser.id, session.couple.id).catch(() => {});
+      resyncPushSubscription(session.currentUser.id, session.couple.id)
+        .then((result) => {
+          if (!result.ok) {
+            console.warn("[push] Auto-resync failed:", result.error);
+          } else {
+            console.log("[push] Auto-resync OK");
+          }
+        })
+        .catch((e) => console.error("[push] Auto-resync error:", e));
     }
 
     // "default" or "denied": do nothing — user must tap the Enable button

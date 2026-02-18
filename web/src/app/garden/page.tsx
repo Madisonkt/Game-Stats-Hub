@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/lib/auth-context";
 import {
@@ -218,6 +218,133 @@ function DetailModal({
   );
 }
 
+// ── Pinch-to-zoom hook ──────────────────────────────────────
+function usePinchZoom() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [scale, setScale] = useState(1);
+  const [translate, setTranslate] = useState({ x: 0, y: 0 });
+
+  // Refs for gesture tracking
+  const gestureRef = useRef({
+    startDist: 0,
+    startScale: 1,
+    startMid: { x: 0, y: 0 },
+    startTranslate: { x: 0, y: 0 },
+    isPinching: false,
+    // Single-finger pan (only when zoomed in)
+    lastTouch: { x: 0, y: 0 },
+    isPanning: false,
+  });
+
+  const clampTranslate = useCallback((tx: number, ty: number, s: number) => {
+    if (s <= 1) return { x: 0, y: 0 };
+    const el = containerRef.current;
+    if (!el) return { x: tx, y: ty };
+    const rect = el.getBoundingClientRect();
+    const maxX = (rect.width * (s - 1)) / 2;
+    const maxY = (rect.height * (s - 1)) / 2;
+    return {
+      x: Math.max(-maxX, Math.min(maxX, tx)),
+      y: Math.max(-maxY, Math.min(maxY, ty)),
+    };
+  }, []);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+
+    const dist = (a: Touch, b: Touch) =>
+      Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY);
+    const mid = (a: Touch, b: Touch) => ({
+      x: (a.clientX + b.clientX) / 2,
+      y: (a.clientY + b.clientY) / 2,
+    });
+
+    const onTouchStart = (e: TouchEvent) => {
+      const g = gestureRef.current;
+      if (e.touches.length === 2) {
+        e.preventDefault();
+        g.isPinching = true;
+        g.isPanning = false;
+        g.startDist = dist(e.touches[0], e.touches[1]);
+        g.startScale = scale;
+        g.startMid = mid(e.touches[0], e.touches[1]);
+        g.startTranslate = { ...translate };
+      } else if (e.touches.length === 1 && scale > 1) {
+        g.isPanning = true;
+        g.isPinching = false;
+        g.lastTouch = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        g.startTranslate = { ...translate };
+      }
+    };
+
+    const onTouchMove = (e: TouchEvent) => {
+      const g = gestureRef.current;
+      if (g.isPinching && e.touches.length === 2) {
+        e.preventDefault();
+        const d = dist(e.touches[0], e.touches[1]);
+        const newScale = Math.max(1, Math.min(4, g.startScale * (d / g.startDist)));
+        const m = mid(e.touches[0], e.touches[1]);
+        const dx = m.x - g.startMid.x;
+        const dy = m.y - g.startMid.y;
+        const newT = clampTranslate(
+          g.startTranslate.x + dx,
+          g.startTranslate.y + dy,
+          newScale
+        );
+        setScale(newScale);
+        setTranslate(newT);
+      } else if (g.isPanning && e.touches.length === 1 && scale > 1) {
+        e.preventDefault();
+        const dx = e.touches[0].clientX - g.lastTouch.x;
+        const dy = e.touches[0].clientY - g.lastTouch.y;
+        g.lastTouch = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        setTranslate((prev) => clampTranslate(prev.x + dx, prev.y + dy, scale));
+      }
+    };
+
+    const onTouchEnd = (e: TouchEvent) => {
+      const g = gestureRef.current;
+      if (e.touches.length < 2) g.isPinching = false;
+      if (e.touches.length === 0) {
+        g.isPanning = false;
+        // Snap back to 1x if close
+        if (scale < 1.15) {
+          setScale(1);
+          setTranslate({ x: 0, y: 0 });
+        }
+      }
+    };
+
+    el.addEventListener("touchstart", onTouchStart, { passive: false });
+    el.addEventListener("touchmove", onTouchMove, { passive: false });
+    el.addEventListener("touchend", onTouchEnd);
+
+    return () => {
+      el.removeEventListener("touchstart", onTouchStart);
+      el.removeEventListener("touchmove", onTouchMove);
+      el.removeEventListener("touchend", onTouchEnd);
+    };
+  }, [scale, translate, clampTranslate]);
+
+  // Double-tap to reset
+  const lastTapRef = useRef(0);
+  const onDoubleTap = useCallback(() => {
+    const now = Date.now();
+    if (now - lastTapRef.current < 300) {
+      if (scale > 1) {
+        setScale(1);
+        setTranslate({ x: 0, y: 0 });
+      } else {
+        setScale(2);
+      }
+    }
+    lastTapRef.current = now;
+  }, [scale]);
+
+  return { containerRef, scale, translate, onDoubleTap };
+}
+
 // ── Main Garden Page ────────────────────────────────────────
 
 export default function GardenPage() {
@@ -229,6 +356,7 @@ export default function GardenPage() {
   const [items, setItems] = useState<GardenItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<GardenItem | null>(null);
+  const { containerRef, scale, translate, onDoubleTap } = usePinchZoom();
 
   const coupleId = couple?.id;
   const members = couple?.members ?? [];
@@ -343,7 +471,20 @@ export default function GardenPage() {
           </div>
         ) : (
           // Doodles overlaid ON the moss image via absolute positioning inside a relative container
-          <div style={{ position: "relative", width: "100%", maxWidth: 448, margin: "0 auto" }}>
+          <div
+            ref={containerRef}
+            onClick={onDoubleTap}
+            style={{
+              position: "relative",
+              width: "100%",
+              maxWidth: 448,
+              margin: "0 auto",
+              transform: `scale(${scale}) translate(${translate.x / scale}px, ${translate.y / scale}px)`,
+              transformOrigin: "center center",
+              transition: scale === 1 ? "transform 0.25s ease-out" : undefined,
+              touchAction: "pan-y",
+            }}
+          >
             <img
               src="/images/garden-moss-vector.svg"
               alt=""

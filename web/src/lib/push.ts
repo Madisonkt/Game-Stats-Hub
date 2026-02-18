@@ -37,12 +37,12 @@ export function getPushPermission(): NotificationPermission | "unsupported" {
 export async function subscribeToPush(
   userId: string,
   coupleId: string
-): Promise<boolean> {
-  if (!isPushSupported()) return false;
+): Promise<{ ok: boolean; error?: string }> {
+  if (!isPushSupported()) return { ok: false, error: "Push not supported" };
 
   try {
     const permission = await Notification.requestPermission();
-    if (permission !== "granted") return false;
+    if (permission !== "granted") return { ok: false, error: "Permission denied" };
 
     const registration = await navigator.serviceWorker.ready;
 
@@ -72,13 +72,55 @@ export async function subscribeToPush(
 
     if (error) {
       console.error("Failed to save push subscription:", error);
-      return false;
+      return { ok: false, error: `DB error: ${error.message}` };
     }
 
-    return true;
+    return { ok: true };
   } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
     console.error("Push subscription failed:", e);
-    return false;
+    return { ok: false, error: msg };
+  }
+}
+
+/** Re-save an existing granted subscription to DB (no permission prompt) */
+export async function resyncPushSubscription(
+  userId: string,
+  coupleId: string
+): Promise<{ ok: boolean; error?: string }> {
+  if (!isPushSupported()) return { ok: false, error: "Push not supported" };
+  if (Notification.permission !== "granted") return { ok: false, error: "No permission" };
+
+  try {
+    const registration = await navigator.serviceWorker.ready;
+    const subscription = await registration.pushManager.getSubscription();
+    if (!subscription) {
+      // No existing subscription — create one
+      return subscribeToPush(userId, coupleId);
+    }
+
+    const subJson = subscription.toJSON();
+    const endpoint = subJson.endpoint!;
+    const p256dh = subJson.keys!.p256dh!;
+    const auth = subJson.keys!.auth!;
+
+    const supabase = createSupabaseBrowserClient();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { error } = await (supabase.from("push_subscriptions") as any).upsert(
+      { user_id: userId, couple_id: coupleId, endpoint, p256dh, auth },
+      { onConflict: "user_id,endpoint" }
+    );
+
+    if (error) {
+      console.error("Failed to resync push subscription:", error);
+      return { ok: false, error: `DB error: ${error.message}` };
+    }
+
+    return { ok: true };
+  } catch (e) {
+    const msg = e instanceof Error ? e.message : String(e);
+    console.error("Push resync failed:", e);
+    return { ok: false, error: msg };
   }
 }
 
