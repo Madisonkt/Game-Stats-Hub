@@ -67,17 +67,27 @@ function DoodleSprite({
   onClick: () => void;
 }) {
   const { x, y, rotation, scale } = placement(item.id, index, total);
+  const [popped, setPopped] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setPopped(true), 60 * index);
+    return () => clearTimeout(timer);
+  }, [index]);
 
   return (
     <button
       onClick={onClick}
-      className="absolute card-press"
+      className="absolute"
       style={{
         left: `${x}%`,
         top: y,
         width: 100,
         height: 100,
-        transform: `rotate(${rotation}deg) scale(${scale})`,
+        transform: popped
+          ? `rotate(${rotation}deg) scale(${scale})`
+          : `rotate(${rotation + 10}deg) scale(0)`,
+        opacity: popped ? 1 : 0,
+        transition: "transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease-out",
         transformOrigin: "center center",
       }}
     >
