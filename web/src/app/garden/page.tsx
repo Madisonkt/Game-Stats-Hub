@@ -26,18 +26,24 @@ function placement(id: string, index: number, total: number) {
   const cols = Math.min(total, 4);
   const col = index % cols;
   const row = Math.floor(index / cols);
-  // Scatter across the visible moss surface using % of image size
-  // left: 5%–78%, top: 5%–65% (stays within mossy area)
-  const baseLeft = cols === 1 ? 38 : 5 + (col / Math.max(cols - 1, 1)) * 70;
-  const baseTop = 5 + row * 18;
+
+  // Moss surface is at ~57% from the top of the 800×1280 image.
+  // A doodle is 70px tall. At ~390px rendered width, image height ≈ 624px.
+  // 70/624 ≈ 11% — so row 0 tops sit at 57% - 11% = 46%, growing upward.
+  const MOSS_TOP_PCT = 46;          // top of row-0 doodle (bottom lands on moss)
+  const ROW_STEP_PCT = 11;          // each row steps up another doodle-height
+  const topPct = MOSS_TOP_PCT - row * ROW_STEP_PCT;
+
+  // Horizontal spread across moss width, roughly 10%–80%
+  const baseLeft = cols === 1 ? 38 : 10 + (col / Math.max(cols - 1, 1)) * 68;
   const jitterX = ((s % 14) - 7);
-  const jitterY = ((s >> 4) % 10) - 5;
+  const jitterY = ((s >> 4) % 6) - 3;
   const rotation = ((s >> 8) % 16) - 8;
   const scale = 0.85 + ((s >> 12) % 20) / 100;
 
   return {
     leftPercent: Math.max(3, Math.min(78, baseLeft + jitterX)),
-    topPercent: Math.max(3, Math.min(68, baseTop + jitterY)),
+    topPercent: Math.max(2, topPct + jitterY),
     rotation,
     scale,
   };
@@ -351,7 +357,7 @@ export default function GardenPage() {
           // Doodles overlaid ON the moss image via absolute positioning inside a relative container
           <div style={{ position: "relative", width: "100%", maxWidth: 448, margin: "0 auto" }}>
             <img
-              src="/images/moss-garden.png"
+              src="/images/garden-moss-vector.svg"
               alt=""
               style={{ width: "100%", display: "block" }}
             />
