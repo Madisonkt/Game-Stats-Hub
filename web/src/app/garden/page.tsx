@@ -29,15 +29,17 @@ function placement(id: string, index: number, total: number) {
 
   // SVG is 800×1280. Moss surface is at y≈730 → that is (1280-730)/1280 ≈ 43% from the BOTTOM.
   // We use CSS `bottom` so the doodle's base is anchored TO the moss surface.
-  // Row 0 base = 43% from bottom. Each extra row adds ~12% (≈ one doodle height).
-  const MOSS_BOTTOM_PCT = 43;
+  // Row 0 base = 40% from bottom (slightly embedded so it looks planted, not floating).
+  // Each extra row adds ~12% (≈ one doodle height).
+  const MOSS_BOTTOM_PCT = 40;
   const ROW_STEP_PCT = 12;
   const bottomPct = MOSS_BOTTOM_PCT + row * ROW_STEP_PCT;
 
   // Center-based horizontal spread (left% refers to the doodle center via translateX(-50%))
   const baseLeft = cols === 1 ? 50 : 15 + (col / Math.max(cols - 1, 1)) * 68;
   const jitterX = ((s % 16) - 8);
-  const jitterY = ((s >> 4) % 6) - 3;
+  // Only jitter downward (0 to -4%) so doodles never float above the moss
+  const jitterY = -((s >> 4) % 5);
   const rotation = ((s >> 8) % 16) - 8;
   const scale = 0.85 + ((s >> 12) % 20) / 100;
 
@@ -304,8 +306,8 @@ export default function GardenPage() {
           <div className="flex items-center gap-2">
             <span style={{ fontSize: 22 }}>🌱</span>
             <h1
-              className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]"
-              style={{ fontSize: 24, fontWeight: 800 }}
+              className="font-[family-name:var(--font-nunito)]"
+              style={{ fontSize: 24, fontWeight: 800, color: "#1C1C1E" }}
             >
               Garden
             </h1>
