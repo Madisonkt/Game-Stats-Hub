@@ -28,6 +28,7 @@ export default function NewDoodlePage() {
   const [photo, setPhoto] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   const [caption, setCaption] = useState("");
+  const [linkUrl, setLinkUrl] = useState("");
   const [saving, setSaving] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -110,9 +111,13 @@ export default function NewDoodlePage() {
     : committedStrokes.current;
 
   const handleSave = async () => {
-    if (!couple?.id || !currentUser?.id || !photo) return;
+    if (!couple?.id || !currentUser?.id) return;
     if (committedStrokes.current.length === 0) {
       alert("Draw something first!");
+      return;
+    }
+    if (!photo && !linkUrl.trim()) {
+      alert("Attach a photo or a link!");
       return;
     }
 
@@ -123,8 +128,9 @@ export default function NewDoodlePage() {
         coupleId: couple.id,
         createdBy: currentUser.id,
         doodleSvg: svgString,
-        photoFile: photo,
+        photoFile: photo || undefined,
         caption: caption.trim() || undefined,
+        linkUrl: linkUrl.trim() || undefined,
       });
 
       // Send push notification to partner
@@ -301,10 +307,21 @@ export default function NewDoodlePage() {
           style={{ borderRadius: 14, fontSize: 14, fontWeight: 600 }}
         />
 
+        {/* Link URL */}
+        <input
+          type="url"
+          value={linkUrl}
+          onChange={(e) => setLinkUrl(e.target.value)}
+          placeholder="Attach a link (optional)"
+          className="w-full px-4 py-3 bg-[#ECE7DE] dark:bg-[#1A1A1C] text-[#0A0A0C] dark:text-[#F3F0EA]
+            placeholder:text-[#98989D] font-[family-name:var(--font-nunito)] outline-none"
+          style={{ borderRadius: 14, fontSize: 14, fontWeight: 600 }}
+        />
+
         {/* Save */}
         <button
           onClick={handleSave}
-          disabled={saving || !photo || committedStrokes.current.length === 0}
+          disabled={saving || committedStrokes.current.length === 0 || (!photo && !linkUrl.trim())}
           className="flex items-center justify-center gap-2 w-full text-white font-[family-name:var(--font-nunito)]
             active:scale-[0.98] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
           style={{

@@ -103,6 +103,9 @@ function DoodleSprite({
           {item.caption}
         </p>
       )}
+      {item.linkUrl && (
+        <span style={{ fontSize: 10, position: "absolute", top: 2, right: 2 }}>🔗</span>
+      )}
     </button>
   );
 }
@@ -122,7 +125,7 @@ function DetailModal({
   onDelete: () => void;
   canDelete: boolean;
 }) {
-  const photoUrl = getGardenPhotoUrl(item.photoPath);
+  const photoUrl = item.photoPath ? getGardenPhotoUrl(item.photoPath) : null;
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -159,10 +162,21 @@ function DetailModal({
           <IoClose style={{ fontSize: 18 }} />
         </button>
 
-        {/* Photo */}
-        <div className="relative" style={{ aspectRatio: "1" }}>
-          <img src={photoUrl} alt="" className="w-full h-full object-cover" />
-        </div>
+        {/* Photo (if exists) */}
+        {photoUrl && (
+          <div className="relative" style={{ aspectRatio: "1" }}>
+            <img src={photoUrl} alt="" className="w-full h-full object-cover" />
+          </div>
+        )}
+
+        {/* Doodle preview (if no photo) */}
+        {!photoUrl && (
+          <div
+            className="bg-white dark:bg-[#1A1A1C]"
+            style={{ aspectRatio: "1", padding: 16 }}
+            dangerouslySetInnerHTML={{ __html: item.doodleSvg }}
+          />
+        )}
 
         {/* Info */}
         <div className="p-4">
@@ -174,6 +188,22 @@ function DetailModal({
               {item.caption}
             </p>
           )}
+
+          {/* Link */}
+          {item.linkUrl && (
+            <button
+              onClick={() => {
+                if (confirm("Open this link in a new tab?")) {
+                  window.open(item.linkUrl!, "_blank", "noopener,noreferrer");
+                }
+              }}
+              className="flex items-center gap-1.5 text-[#3A7BD5] font-[family-name:var(--font-nunito)] mb-2 hover:underline"
+              style={{ fontSize: 13, fontWeight: 600 }}
+            >
+              🔗 {(() => { try { return new URL(item.linkUrl).hostname; } catch { return item.linkUrl; } })()}
+            </button>
+          )}
+
           <p
             className="text-[#98989D] font-[family-name:var(--font-nunito)]"
             style={{ fontSize: 12, fontWeight: 500 }}

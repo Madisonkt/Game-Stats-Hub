@@ -14,6 +14,7 @@ export interface GardenItem {
   doodleSvg: string;
   photoPath: string;
   caption: string | null;
+  linkUrl: string | null;
   createdAt: number; // epoch ms
 }
 
@@ -25,6 +26,7 @@ interface GardenRow {
   doodle_svg: string;
   photo_path: string;
   caption: string | null;
+  link_url: string | null;
   created_at: string;
 }
 
@@ -37,6 +39,7 @@ function toDomain(row: GardenRow): GardenItem {
     doodleSvg: row.doodle_svg,
     photoPath: row.photo_path,
     caption: row.caption,
+    linkUrl: row.link_url,
     createdAt: new Date(row.created_at).getTime(),
   };
 }
@@ -67,31 +70,35 @@ export async function createGardenItem({
   doodleSvg,
   photoFile,
   caption,
+  linkUrl,
 }: {
   coupleId: string;
   createdBy: string;
   doodleSvg: string;
-  photoFile: File;
+  photoFile?: File;
   caption?: string;
+  linkUrl?: string;
 }): Promise<GardenItem> {
   const supabase = createSupabaseBrowserClient();
   const itemId = crypto.randomUUID();
   const originId = crypto.randomUUID();
-  const photoPath = `couples/${coupleId}/${itemId}.jpg`;
+  let photoPath = "";
 
-  // 1) Upload photo to Storage
-  const { error: uploadError } = await supabase.storage
-    .from("garden-photos")
-    .upload(photoPath, photoFile, {
-      contentType: photoFile.type || "image/jpeg",
-      upsert: true,
-    });
-
-  if (uploadError) {
-    throw new Error(`Photo upload failed: ${uploadError.message}`);
+  // Upload photo if provided
+  if (photoFile) {
+    photoPath = `couples/${coupleId}/${itemId}.jpg`;
+    const { error: uploadError } = await supabase.storage
+      .from("garden-photos")
+      .upload(photoPath, photoFile, {
+        contentType: photoFile.type || "image/jpeg",
+        upsert: true,
+      });
+    if (uploadError) {
+      throw new Error(`Photo upload failed: ${uploadError.message}`);
+    }
   }
 
-  // 2) Insert garden_items row
+  // Insert garden_items row
   const { data, error } = await (supabase.from("garden_items") as any)
     .insert({
       id: itemId,
@@ -101,6 +108,7 @@ export async function createGardenItem({
       doodle_svg: doodleSvg,
       photo_path: photoPath,
       caption: caption || null,
+      link_url: linkUrl || null,
     })
     .select()
     .single();
