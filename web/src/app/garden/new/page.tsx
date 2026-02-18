@@ -8,7 +8,7 @@ import { IoArrowBack, IoArrowUndo, IoTrash, IoImage } from "react-icons/io5";
 
 const INK_COLOR = "#E8A0BF";
 const CANVAS_SIZE = 300;
-const STROKE_WIDTH = 4;
+const STROKE_WIDTH = 6;
 
 type Point = { x: number; y: number };
 type Stroke = Point[];
