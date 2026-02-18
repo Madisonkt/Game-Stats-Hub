@@ -10,7 +10,7 @@ import {
   deleteGardenItem,
   type GardenItem,
 } from "@/lib/repos/gardenRepo";
-import { IoAdd, IoClose, IoLeaf, IoArrowBack } from "react-icons/io5";
+import { IoAdd, IoClose, IoArrowBack } from "react-icons/io5";
 
 // ── Deterministic position from id ──────────────────────────
 function seedFromId(id: string): number {
@@ -235,7 +235,8 @@ export default function GardenPage() {
 
   return (
     <div className="min-h-screen bg-[#F3F0EA] dark:bg-[#0A0A0C]">
-      {/* Header */}
+      {/* Header — fixed */}
+      <div className="fixed top-0 inset-x-0 z-40 bg-[#F3F0EA]/80 dark:bg-[#0A0A0C]/80 backdrop-blur-lg">
       <div className="flex items-center justify-between px-5 pt-4 pb-3 max-w-lg mx-auto">
         <div className="flex items-center gap-3">
           <button
@@ -245,7 +246,7 @@ export default function GardenPage() {
             <IoArrowBack style={{ fontSize: 22 }} />
           </button>
           <div className="flex items-center gap-2">
-            <IoLeaf className="text-[#E8A0BF]" style={{ fontSize: 22 }} />
+            <span style={{ fontSize: 22 }}>🌱</span>
             <h1
               className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]"
               style={{ fontSize: 24, fontWeight: 800 }}
@@ -264,6 +265,10 @@ export default function GardenPage() {
           New
         </button>
       </div>
+      </div>
+
+      {/* Spacer for fixed header */}
+      <div style={{ height: 64 }} />
 
       {/* Garden canvas — grid paper with scattered doodles */}
       <div className="px-2 pb-8 max-w-lg mx-auto">
@@ -273,7 +278,7 @@ export default function GardenPage() {
           </div>
         ) : items.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-20 gap-3">
-            <IoLeaf className="text-[#E8A0BF]/30" style={{ fontSize: 48 }} />
+            <span style={{ fontSize: 48, opacity: 0.3 }}>🌱</span>
             <p
               className="text-[#98989D] font-[family-name:var(--font-nunito)] text-center"
               style={{ fontSize: 15, fontWeight: 600 }}
