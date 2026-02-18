@@ -25,7 +25,6 @@ import {
   IoArchiveOutline,
   IoRefresh,
   IoNotificationsOutline,
-  IoLeaf,
 } from "react-icons/io5";
 import { useRouter } from "next/navigation";
 import { isPushSupported, subscribeToPush, getPushPermission } from "@/lib/push";
@@ -551,7 +550,7 @@ export default function GamesPage() {
             backgroundColor: "rgba(232,160,191,0.15)",
           }}
         >
-          <IoLeaf className="text-[#E8A0BF]" style={{ fontSize: 22 }} />
+          <span style={{ fontSize: 22 }}>🌱</span>
         </div>
         <div className="flex flex-col items-start">
           <span
