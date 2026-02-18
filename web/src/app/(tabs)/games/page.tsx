@@ -449,10 +449,10 @@ export default function GamesPage() {
   }
 
   return (
-    <div className="flex flex-col px-5 pb-4 max-w-lg mx-auto">
-      {/* ── Header (fixed) ──────────────────────────── */}
-      <div className="fixed top-0 inset-x-0 z-40 bg-[#F3F0EA]/80 dark:bg-[#0A0A0C]/80 backdrop-blur-lg">
-        <div className="flex items-center justify-between px-5 pt-4 pb-3 max-w-lg mx-auto">
+    <div className="flex flex-col max-w-lg mx-auto">
+      {/* ── Header (sticky) ─────────────────────────── */}
+      <div className="sticky top-0 z-40 bg-[#F3F0EA]/80 dark:bg-[#0A0A0C]/80 backdrop-blur-lg px-5 pt-4 pb-3">
+        <div className="flex items-center justify-between">
           <h1
             className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]"
             style={{ fontSize: 28, fontWeight: 800 }}
@@ -473,8 +473,7 @@ export default function GamesPage() {
         </div>
       </div>
 
-      {/* Spacer for fixed header */}
-      <div style={{ height: 60 }} />
+      <div className="flex flex-col px-5 pb-4">
 
       {/* ── Game List ───────────────────────────────── */}
       {games.length === 0 ? (
@@ -1001,6 +1000,7 @@ export default function GamesPage() {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }
