@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 
 export default function KawaiiBackground({ children }: { children: ReactNode }) {
   return (
-    <div className="relative flex-1 min-h-0">
+    <div className="relative flex-1 min-h-0 flex flex-col">
       {/* Grain texture overlay */}
       <div
         className="pointer-events-none absolute inset-0 z-0"
@@ -12,7 +12,7 @@ export default function KawaiiBackground({ children }: { children: ReactNode }) 
           opacity: 0.15,
         }}
       />
-      <div className="relative z-10 flex-1 min-h-0">{children}</div>
+      <div className="relative z-10 flex-1 min-h-0 flex flex-col">{children}</div>
     </div>
   );
 }

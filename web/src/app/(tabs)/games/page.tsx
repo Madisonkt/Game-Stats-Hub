@@ -449,9 +449,9 @@ export default function GamesPage() {
   }
 
   return (
-    <div className="flex flex-col max-w-lg mx-auto">
+    <div className="flex flex-col max-w-lg mx-auto min-h-full">
       {/* ── Header (sticky) ─────────────────────────── */}
-      <div className="sticky top-0 z-40 bg-[#F3F0EA]/80 dark:bg-[#0A0A0C]/80 backdrop-blur-lg px-5 pt-4 pb-3">
+      <div className="sticky top-0 z-40 bg-[#F3F0EA] dark:bg-[#0A0A0C] px-5 pt-4 pb-3">
         <div className="flex items-center justify-between">
           <h1
             className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]"
