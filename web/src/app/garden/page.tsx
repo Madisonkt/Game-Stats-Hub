@@ -26,18 +26,18 @@ function placement(id: string, index: number, total: number) {
   const cols = Math.min(total, 4);
   const col = index % cols;
   const row = Math.floor(index / cols);
-  // Horizontal: spread across the moss width
-  const baseX = cols === 1 ? 35 : (col / (cols - 1)) * 65 + 8;
-  // Vertical: distance upward from moss surface (row 0 = touching moss)
-  const bottomOffset = row * 80;
+  // Scatter across the visible moss surface using % of image size
+  // left: 5%–78%, top: 5%–65% (stays within mossy area)
+  const baseLeft = cols === 1 ? 38 : 5 + (col / Math.max(cols - 1, 1)) * 70;
+  const baseTop = 5 + row * 18;
   const jitterX = ((s % 14) - 7);
   const jitterY = ((s >> 4) % 10) - 5;
-  const rotation = ((s >> 8) % 12) - 6;
-  const scale = 0.9 + ((s >> 12) % 15) / 100;
+  const rotation = ((s >> 8) % 16) - 8;
+  const scale = 0.85 + ((s >> 12) % 20) / 100;
 
   return {
-    x: Math.max(3, Math.min(72, baseX + jitterX)),
-    bottomOffset: bottomOffset + jitterY,
+    leftPercent: Math.max(3, Math.min(78, baseLeft + jitterX)),
+    topPercent: Math.max(3, Math.min(68, baseTop + jitterY)),
     rotation,
     scale,
   };
@@ -66,7 +66,7 @@ function DoodleSprite({
   total: number;
   onClick: () => void;
 }) {
-  const { x, bottomOffset, rotation, scale } = placement(item.id, index, total);
+  const { leftPercent, topPercent, rotation, scale } = placement(item.id, index, total);
   const [popped, setPopped] = useState(false);
 
   useEffect(() => {
@@ -79,16 +79,16 @@ function DoodleSprite({
       onClick={onClick}
       className="absolute"
       style={{
-        left: `${x}%`,
-        bottom: bottomOffset,
-        width: 90,
-        height: 90,
+        left: `${leftPercent}%`,
+        top: `${topPercent}%`,
+        width: 70,
+        height: 70,
         transform: popped
           ? `rotate(${rotation}deg) scale(${scale})`
           : `rotate(${rotation + 10}deg) scale(0)`,
         opacity: popped ? 1 : 0,
         transition: "transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease-out",
-        transformOrigin: "bottom center",
+        transformOrigin: "center bottom",
       }}
     >
       <div
@@ -348,32 +348,22 @@ export default function GardenPage() {
             </p>
           </div>
         ) : (
-          <div className="w-full max-w-md mx-auto flex flex-col items-stretch">
-            {/* Doodle layer — sits above moss, overlaps its top edge */}
-            <div
-              className="relative w-full"
-              style={{
-                height: Math.ceil(items.length / 4) * 90 + 30,
-                marginBottom: -50,
-                zIndex: 1,
-              }}
-            >
-              {items.map((item, i) => (
-                <DoodleSprite
-                  key={item.id}
-                  item={item}
-                  index={i}
-                  total={items.length}
-                  onClick={() => setSelected(item)}
-                />
-              ))}
-            </div>
-            {/* Moss image — doodles sprout from its top surface */}
+          // Doodles positioned as overlays directly ON the moss image
+          <div className="relative w-full max-w-md mx-auto">
             <img
               src="/images/moss-garden.png"
               alt=""
               className="w-full block"
             />
+            {items.map((item, i) => (
+              <DoodleSprite
+                key={item.id}
+                item={item}
+                index={i}
+                total={items.length}
+                onClick={() => setSelected(item)}
+              />
+            ))}
           </div>
         )}
       </div>
