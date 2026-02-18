@@ -77,8 +77,8 @@ function DoodleSprite({
   return (
     <button
       onClick={onClick}
-      className="absolute"
       style={{
+        position: "absolute",
         left: `${leftPercent}%`,
         top: `${topPercent}%`,
         width: 70,
@@ -348,12 +348,12 @@ export default function GardenPage() {
             </p>
           </div>
         ) : (
-          // Doodles positioned as overlays directly ON the moss image
-          <div className="relative w-full max-w-md mx-auto">
+          // Doodles overlaid ON the moss image via absolute positioning inside a relative container
+          <div style={{ position: "relative", width: "100%", maxWidth: 448, margin: "0 auto" }}>
             <img
               src="/images/moss-garden.png"
               alt=""
-              className="w-full block"
+              style={{ width: "100%", display: "block" }}
             />
             {items.map((item, i) => (
               <DoodleSprite
