@@ -289,12 +289,9 @@ export default function GardenPage() {
           </div>
         ) : (
           <div
-            className="relative w-full"
+            className="relative w-full garden-grid"
             style={{
               minHeight: Math.ceil(items.length / 3) * 130 + 100,
-              backgroundImage:
-                "linear-gradient(rgba(0,0,0,0.04) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.04) 1px, transparent 1px)",
-              backgroundSize: "24px 24px",
               borderRadius: 16,
             }}
           >
