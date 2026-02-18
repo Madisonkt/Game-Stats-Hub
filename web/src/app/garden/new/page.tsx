@@ -4,6 +4,7 @@ import React, { useState, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/lib/auth-context";
 import { createGardenItem } from "@/lib/repos/gardenRepo";
+import { extractPhotoDate } from "@/lib/exif-date";
 import { IoArrowBack, IoArrowUndo, IoTrash, IoImage } from "react-icons/io5";
 
 const COLORS = ["#E8A0BF", "#F5C842", "#F4724A", "#B57BCC"];
@@ -127,6 +128,13 @@ export default function NewDoodlePage() {
     setSaving(true);
     try {
       const svgString = buildSvg(committedStrokes.current);
+
+      // Extract EXIF date from the photo (if any)
+      let photoTakenAt: Date | null = null;
+      if (photo) {
+        photoTakenAt = await extractPhotoDate(photo);
+      }
+
       await createGardenItem({
         coupleId: couple.id,
         createdBy: currentUser.id,
@@ -134,6 +142,7 @@ export default function NewDoodlePage() {
         photoFile: photo || undefined,
         caption: caption.trim() || undefined,
         linkUrl: linkUrl.trim() || undefined,
+        photoTakenAt,
       });
 
       // Send push notification to partner

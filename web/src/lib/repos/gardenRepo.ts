@@ -15,6 +15,7 @@ export interface GardenItem {
   photoPath: string;
   caption: string | null;
   linkUrl: string | null;
+  photoTakenAt: number | null; // epoch ms – EXIF date photo was taken
   createdAt: number; // epoch ms
 }
 
@@ -27,6 +28,7 @@ interface GardenRow {
   photo_path: string;
   caption: string | null;
   link_url: string | null;
+  photo_taken_at: string | null;
   created_at: string;
 }
 
@@ -40,6 +42,7 @@ function toDomain(row: GardenRow): GardenItem {
     photoPath: row.photo_path,
     caption: row.caption,
     linkUrl: row.link_url,
+    photoTakenAt: row.photo_taken_at ? new Date(row.photo_taken_at).getTime() : null,
     createdAt: new Date(row.created_at).getTime(),
   };
 }
@@ -71,6 +74,7 @@ export async function createGardenItem({
   photoFile,
   caption,
   linkUrl,
+  photoTakenAt,
 }: {
   coupleId: string;
   createdBy: string;
@@ -78,6 +82,7 @@ export async function createGardenItem({
   photoFile?: File;
   caption?: string;
   linkUrl?: string;
+  photoTakenAt?: Date | null;
 }): Promise<GardenItem> {
   const supabase = createSupabaseBrowserClient();
   const itemId = crypto.randomUUID();
@@ -109,6 +114,7 @@ export async function createGardenItem({
       photo_path: photoPath,
       caption: caption || null,
       link_url: linkUrl || null,
+      ...(photoTakenAt ? { photo_taken_at: photoTakenAt.toISOString() } : {}),
     })
     .select()
     .single();

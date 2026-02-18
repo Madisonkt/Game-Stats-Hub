@@ -109,13 +109,14 @@ const MONTH_NAMES = [
 ];
 
 function groupByYearMonth(items: GardenItem[]): { label: string; year: number; month: number; items: GardenItem[] }[] {
-  // Sort items newest first by createdAt
-  const sorted = [...items].sort((a, b) => b.createdAt - a.createdAt);
+  // Sort items newest first — use photoTakenAt for photos, createdAt otherwise
+  const dateOf = (item: GardenItem) => item.photoTakenAt ?? item.createdAt;
+  const sorted = [...items].sort((a, b) => dateOf(b) - dateOf(a));
 
   const groups = new Map<string, { year: number; month: number; items: GardenItem[] }>();
 
   for (const item of sorted) {
-    const d = new Date(item.createdAt);
+    const d = new Date(dateOf(item));
     const year = d.getFullYear();
     const month = d.getMonth();
     const key = `${year}-${month}`;
