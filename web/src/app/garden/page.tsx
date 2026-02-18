@@ -23,29 +23,22 @@ function seedFromId(id: string): number {
 
 function placement(id: string, index: number, total: number) {
   const s = seedFromId(id);
-  const cols = Math.min(total, 4);
-  const col = index % cols;
-  const row = Math.floor(index / cols);
 
-  // SVG is 800×1280. Moss surface is at y≈730 → that is (1280-730)/1280 ≈ 43% from the BOTTOM.
-  // We use CSS `bottom` so the doodle's base is anchored TO the moss surface.
-  // Row 0 base = 40% from bottom (slightly embedded so it looks planted, not floating).
-  // Each extra row adds ~12% (≈ one doodle height).
-  const MOSS_BOTTOM_PCT = 40;
-  const ROW_STEP_PCT = 12;
-  const bottomPct = MOSS_BOTTOM_PCT + row * ROW_STEP_PCT;
-
-  // Center-based horizontal spread (left% refers to the doodle center via translateX(-50%))
-  const baseLeft = cols === 1 ? 50 : 15 + (col / Math.max(cols - 1, 1)) * 68;
-  const jitterX = ((s % 16) - 8);
-  // Only jitter downward (0 to -4%) so doodles never float above the moss
-  const jitterY = -((s >> 4) % 5);
+  // All doodles sit on the moss surface — no row stacking (which caused floating).
+  // Spread them evenly across the full width instead.
+  const baseLeft = total === 1 ? 50 : 10 + (index / Math.max(total - 1, 1)) * 78;
+  const jitterX = ((s % 14) - 7);
+  // Only jitter slightly downward so bases stay embedded in moss, never float up
+  const jitterY = -((s >> 4) % 4);
   const rotation = ((s >> 8) % 16) - 8;
   const scale = 0.85 + ((s >> 12) % 20) / 100;
 
+  // Moss surface ≈ 40% from bottom of the SVG image
+  const MOSS_BOTTOM_PCT = 40;
+
   return {
     leftPercent: Math.max(8, Math.min(88, baseLeft + jitterX)),
-    bottomPercent: bottomPct + jitterY,
+    bottomPercent: MOSS_BOTTOM_PCT + jitterY,
     rotation,
     scale,
   };
