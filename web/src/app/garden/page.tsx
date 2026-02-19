@@ -144,26 +144,49 @@ function GridView({
 }) {
   const gridRef = useRef<HTMLDivElement>(null);
   const [cellPx, setCellPx] = useState(0);
-  const PAD = 6; // edge padding so outermost dots are fully visible
+  const PAD = 6;
 
   useEffect(() => {
     if (!gridRef.current) return;
-    // contentRect.width is the content box (inside padding), so cellPx = inner width / 4
     const ro = new ResizeObserver(([e]) => setCellPx(e.contentRect.width / 4));
     ro.observe(gridRef.current);
     return () => ro.disconnect();
   }, []);
 
-  const dateOf = (item: GardenItem) => item.photoTakenAt ?? item.createdAt;
-  const sorted = [...items].sort((a, b) => dateOf(b) - dateOf(a));
+  const groups = groupByYearMonth(items);
 
-  // Dots at every cell corner: 5 columns × (N+1) rows.
-  // padding pushes grid content inward; backgroundPosition matches so dots
-  // land exactly on cell corners, including the outer edges.
+  // Build flat list of cells: separator labels + doodles + empty padding cells
+  // Separators span 4 columns. After each group's doodles, pad to fill the row.
+  type Cell =
+    | { type: "label"; label: string; key: string }
+    | { type: "doodle"; item: GardenItem }
+    | { type: "empty"; key: string };
+
+  const cells: Cell[] = [];
+  groups.forEach((group) => {
+    cells.push({ type: "label", label: group.label, key: `label-${group.year}-${group.month}` });
+    group.items.forEach((item) => cells.push({ type: "doodle", item }));
+    // Pad remaining cells in the last row so the next label starts on a fresh row
+    const remainder = group.items.length % 4;
+    if (remainder > 0) {
+      for (let i = 0; i < 4 - remainder; i++) {
+        cells.push({ type: "empty", key: `pad-${group.year}-${group.month}-${i}` });
+      }
+    }
+  });
+
+  // Add extra empty rows to fill the screen
+  const MIN_EMPTY_ROWS = 8;
+  for (let r = 0; r < MIN_EMPTY_ROWS; r++) {
+    for (let c = 0; c < 4; c++) {
+      cells.push({ type: "empty", key: `fill-${r}-${c}` });
+    }
+  }
+
   return (
     <div
       ref={gridRef}
-      className="grid"
+      className="grid min-h-screen"
       style={{
         gridTemplateColumns: "repeat(4, 1fr)",
         gap: 0,
@@ -179,19 +202,42 @@ function GridView({
           : {}),
       }}
     >
-      {sorted.map((item) => (
-        <button
-          key={item.id}
-          onClick={() => onSelect(item)}
-          className="active:scale-[0.9] transition-transform overflow-hidden"
-          style={{ aspectRatio: "1", padding: "14%" }}
-        >
-          <div
-            className="w-full h-full"
-            dangerouslySetInnerHTML={{ __html: item.doodleSvg }}
-          />
-        </button>
-      ))}
+      {cells.map((cell) => {
+        if (cell.type === "label") {
+          return (
+            <div
+              key={cell.key}
+              className="font-[family-name:var(--font-suse)] flex items-center"
+              style={{
+                gridColumn: "1 / -1",
+                height: cellPx || "auto",
+                paddingLeft: 8,
+                fontSize: 13,
+                fontWeight: 700,
+                color: "#408052",
+              }}
+            >
+              {cell.label}
+            </div>
+          );
+        }
+        if (cell.type === "doodle") {
+          return (
+            <button
+              key={cell.item.id}
+              onClick={() => onSelect(cell.item)}
+              className="active:scale-[0.9] transition-transform overflow-hidden"
+              style={{ aspectRatio: "1", padding: "14%" }}
+            >
+              <div
+                className="w-full h-full"
+                dangerouslySetInnerHTML={{ __html: cell.item.doodleSvg }}
+              />
+            </button>
+          );
+        }
+        return <div key={cell.key} style={{ aspectRatio: "1" }} />;
+      })}
     </div>
   );
 }
