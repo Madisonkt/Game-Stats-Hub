@@ -628,12 +628,13 @@ export default function LogPage() {
   if (loading) {
     return (
       <div className="flex flex-col items-center px-5 pt-4 pb-2 max-w-lg mx-auto">
-        {/* Pills still visible while loading */}
-        <GameFilterPills
-          games={games}
-          activeGame={activeGame}
-          setActiveGameId={setActiveGameId}
-        />
+        {/* Game name */}
+        <h1
+          className="text-center text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)] mb-4"
+          style={{ fontSize: 22, fontWeight: 800 }}
+        >
+          {activeGame?.name ?? "No Game"}
+        </h1>
 
         {/* Skeleton score cards */}
         <div className="flex w-full gap-2.5 mb-3">
@@ -755,13 +756,14 @@ export default function LogPage() {
         </div>
       )}
 
-      {/* ── Header title — game filter pills (hidden during round) ── */}
+      {/* ── Header title — game name (hidden during round) ── */}
       {!round && (
-        <GameFilterPills
-          games={games}
-          activeGame={activeGame}
-          setActiveGameId={setActiveGameId}
-        />
+        <h1
+          className="text-center text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)] mb-4"
+          style={{ fontSize: 22, fontWeight: 800 }}
+        >
+          {activeGame?.name ?? "No Game"}
+        </h1>
       )}
 
       {/* ── Scoreboard (only when no active round) ──── */}

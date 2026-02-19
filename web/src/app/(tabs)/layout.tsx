@@ -8,8 +8,8 @@ import KawaiiBackground from "@/components/KawaiiBackground";
 import { usePushSubscription } from "@/lib/usePushSubscription";
 
 const tabs = [
-  { href: "/", label: "Log", icon: IoTrophy },
   { href: "/games", label: "Games", icon: IoGameController },
+  { href: "/", label: "Log", icon: IoTrophy },
   { href: "/history", label: "History", icon: IoTime },
 ];
 

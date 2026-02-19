@@ -546,7 +546,7 @@ export default function GardenPage() {
       <div style={{ height: 64 }} />
 
       {/* Garden — moss with sprouting doodles */}
-      <div className={`pb-8 max-w-lg mx-auto ${view === "moss" ? "px-2" : ""}`}>
+      <div className={`pb-8 ${view === "grid" ? "max-w-lg mx-auto" : ""}`}>
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <div className="h-8 w-8 animate-spin rounded-full border-3 border-[#E8A0BF] border-t-transparent" />
@@ -579,8 +579,6 @@ export default function GardenPage() {
             style={{
               position: "relative",
               width: "100%",
-              maxWidth: 448,
-              margin: "0 auto",
             }}
           >
             <img
