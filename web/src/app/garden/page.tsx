@@ -471,9 +471,9 @@ export default function GardenPage() {
   }
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: "#FAFAF7" }}>
+    <div className="min-h-screen bg-[#F3F0EA] dark:bg-[#0A0A0C]">
       {/* Header — fixed */}
-      <div className="fixed top-0 inset-x-0 z-40" style={{ backgroundColor: "rgba(250,250,247,0.8)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)" }}>
+      <div className="fixed top-0 inset-x-0 z-40" style={{ backgroundColor: "rgba(243,240,234,0.8)", backdropFilter: "blur(16px)", WebkitBackdropFilter: "blur(16px)" }}>
       <div className="flex items-center justify-between px-5 pt-4 pb-3 max-w-lg mx-auto">
         <div className="flex items-center gap-3">
           <button
