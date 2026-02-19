@@ -24,21 +24,21 @@ function seedFromId(id: string): number {
 function placement(id: string, index: number, total: number) {
   const s = seedFromId(id);
 
-  // All doodles sit on the moss surface — no row stacking (which caused floating).
-  // Spread them evenly across the full width instead.
-  const baseLeft = total === 1 ? 50 : 10 + (index / Math.max(total - 1, 1)) * 78;
+  // Spread doodles across the fishtank interior.
+  // Tank water area is roughly 10%–85% horizontally, 18%–62% from bottom.
+  const baseLeft = total === 1 ? 50 : 12 + (index / Math.max(total - 1, 1)) * 72;
   const jitterX = ((s % 14) - 7);
-  // Only jitter slightly downward so bases stay embedded in moss, never float up
-  const jitterY = -((s >> 4) % 4);
+  // Scatter vertically throughout the tank water area
+  const TANK_BOTTOM = 20;  // bottom of water area (% from bottom of image)
+  const TANK_TOP = 60;     // top of water area (% from bottom of image)
+  const verticalRange = TANK_TOP - TANK_BOTTOM;
+  const baseBottom = TANK_BOTTOM + ((s >> 4) % 100) / 100 * verticalRange;
   const rotation = ((s >> 8) % 16) - 8;
-  const scale = 0.85 + ((s >> 12) % 20) / 100;
-
-  // Moss surface ≈ 40% from bottom of the SVG image
-  const MOSS_BOTTOM_PCT = 40;
+  const scale = 0.75 + ((s >> 12) % 25) / 100;
 
   return {
-    leftPercent: Math.max(8, Math.min(88, baseLeft + jitterX)),
-    bottomPercent: MOSS_BOTTOM_PCT + jitterY,
+    leftPercent: Math.max(10, Math.min(86, baseLeft + jitterX)),
+    bottomPercent: baseBottom,
     rotation,
     scale,
   };
@@ -586,7 +586,7 @@ export default function GardenPage() {
             }}
           >
             <img
-              src="/images/garden-moss-vector.svg"
+              src="/images/fishtank.svg"
               alt=""
               style={{ width: "100%", display: "block" }}
             />
