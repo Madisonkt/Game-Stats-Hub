@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/lib/auth-context";
 import {
@@ -142,39 +142,49 @@ function GridView({
   items: GardenItem[];
   onSelect: (item: GardenItem) => void;
 }) {
-  const groups = groupByYearMonth(items);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const [cellPx, setCellPx] = useState(0);
+
+  useEffect(() => {
+    if (!gridRef.current) return;
+    const ro = new ResizeObserver(([e]) => setCellPx(e.contentRect.width / 4));
+    ro.observe(gridRef.current);
+    return () => ro.disconnect();
+  }, []);
+
+  const dateOf = (item: GardenItem) => item.photoTakenAt ?? item.createdAt;
+  const sorted = [...items].sort((a, b) => dateOf(b) - dateOf(a));
 
   return (
-    <div className="flex flex-col gap-5">
-      {groups.map((group) => (
-        <div key={`${group.year}-${group.month}`}>
-          {/* Month/Year header */}
-          <p
-            className="font-[family-name:var(--font-nunito)] mb-2 px-1"
-            style={{ fontSize: 13, fontWeight: 700, color: "#8E8E93" }}
-          >
-            {group.label}
-          </p>
-          {/* Grid of doodles */}
+    <div
+      ref={gridRef}
+      className="grid rounded-2xl"
+      style={{
+        gridTemplateColumns: "repeat(4, 1fr)",
+        gap: 0,
+        backgroundColor: "#FFFFFF",
+        ...(cellPx > 0
+          ? {
+              backgroundImage:
+                "radial-gradient(circle, #D9D9D9 3px, transparent 3px)",
+              backgroundSize: `${cellPx}px ${cellPx}px`,
+              backgroundPosition: `${cellPx / 2}px ${cellPx / 2}px`,
+            }
+          : {}),
+      }}
+    >
+      {sorted.map((item) => (
+        <button
+          key={item.id}
+          onClick={() => onSelect(item)}
+          className="active:scale-[0.9] transition-transform"
+          style={{ aspectRatio: "1", padding: 6 }}
+        >
           <div
-            className="grid"
-            style={{ gridTemplateColumns: "repeat(6, 1fr)", gap: 2 }}
-          >
-            {group.items.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => onSelect(item)}
-                className="active:scale-[0.9] transition-transform"
-                style={{ aspectRatio: "1", padding: 1 }}
-              >
-                <div
-                  className="w-full h-full"
-                  dangerouslySetInnerHTML={{ __html: item.doodleSvg }}
-                />
-              </button>
-            ))}
-          </div>
-        </div>
+            className="w-full h-full"
+            dangerouslySetInnerHTML={{ __html: item.doodleSvg }}
+          />
+        </button>
       ))}
     </div>
   );
