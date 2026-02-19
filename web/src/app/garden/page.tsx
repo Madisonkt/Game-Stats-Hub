@@ -10,7 +10,7 @@ import {
   deleteGardenItem,
   type GardenItem,
 } from "@/lib/repos/gardenRepo";
-import { IoAdd, IoClose, IoArrowBack, IoGrid, IoLeaf } from "react-icons/io5";
+import { IoClose, IoArrowBack } from "react-icons/io5";
 
 // ── Deterministic position from id ──────────────────────────
 function seedFromId(id: string): number {
@@ -492,51 +492,13 @@ export default function GardenPage() {
           </div>
         </div>
         <div className="flex items-center gap-2">
-          {/* View toggle */}
-          <div
-            className="flex items-center overflow-hidden"
-            style={{ borderRadius: 10, backgroundColor: "rgba(0,0,0,0.06)" }}
-          >
-            <button
-              onClick={() => setView("moss")}
-              className="flex items-center justify-center transition-all"
-              style={{
-                width: 34, height: 30,
-                borderRadius: 10,
-                backgroundColor: view === "moss" ? "#fff" : "transparent",
-                boxShadow: view === "moss" ? "0 1px 3px rgba(0,0,0,0.1)" : "none",
-              }}
-            >
-              <IoLeaf style={{ fontSize: 15, color: view === "moss" ? "#4CAF50" : "#98989D" }} />
-            </button>
-            <button
-              onClick={() => setView("grid")}
-              className="flex items-center justify-center transition-all"
-              style={{
-                width: 34, height: 30,
-                borderRadius: 10,
-                backgroundColor: view === "grid" ? "#fff" : "transparent",
-                boxShadow: view === "grid" ? "0 1px 3px rgba(0,0,0,0.1)" : "none",
-              }}
-            >
-              <IoGrid style={{ fontSize: 14, color: view === "grid" ? "#3A7BD5" : "#98989D" }} />
-            </button>
-          </div>
+          {/* View toggle — text button */}
           <button
-            onClick={() => router.push("/garden/new")}
-            className="flex items-center gap-1 font-[family-name:var(--font-suse-mono)]
-              active:scale-[0.95] transition-all"
-            style={{
-              borderRadius: 0,
-              padding: "8px 16px",
-              fontSize: 13,
-              fontWeight: 700,
-              color: "#3A7BD5",
-              border: "2px solid #3A7BD5",
-              backgroundColor: "transparent",
-            }}
+            onClick={() => setView(view === "moss" ? "grid" : "moss")}
+            className="font-[family-name:var(--font-suse-mono)] text-[#3A7BD5] hover:opacity-80 transition-all"
+            style={{ fontSize: 13, fontWeight: 700 }}
           >
-            + new fish
+            {view === "moss" ? "grid view" : "tank view"}
           </button>
         </div>
       </div>
@@ -546,7 +508,7 @@ export default function GardenPage() {
       <div style={{ height: 64 }} />
 
       {/* Garden — moss with sprouting doodles */}
-      <div className={`pb-8 ${view === "grid" ? "max-w-lg mx-auto" : ""}`}>
+      <div className={`pb-20 ${view === "grid" ? "max-w-lg mx-auto" : ""}`}>
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <div className="h-8 w-8 animate-spin rounded-full border-3 border-[#E8A0BF] border-t-transparent" />
@@ -612,6 +574,24 @@ export default function GardenPage() {
           canDelete={selected.createdBy === currentUser.id}
         />
       )}
+
+      {/* Fixed bottom new fish button */}
+      <div className="fixed bottom-6 inset-x-0 z-40 flex justify-center">
+        <button
+          onClick={() => router.push("/garden/new")}
+          className="font-[family-name:var(--font-suse-mono)] active:scale-[0.95] transition-all shadow-lg"
+          style={{
+            borderRadius: 999,
+            padding: "14px 32px",
+            fontSize: 15,
+            fontWeight: 700,
+            color: "#fff",
+            backgroundColor: "#3A7BD5",
+          }}
+        >
+          + new fish
+        </button>
+      </div>
     </div>
   );
 }
