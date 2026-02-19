@@ -174,7 +174,7 @@ function GridView({
               backgroundImage:
                 "radial-gradient(circle, #D9D9D9 3px, transparent 3px)",
               backgroundSize: `${cellPx}px ${cellPx}px`,
-              backgroundPosition: `${PAD}px ${PAD}px`,
+              backgroundPosition: `${PAD - cellPx / 2}px ${PAD - cellPx / 2}px`,
             }
           : {}),
       }}
