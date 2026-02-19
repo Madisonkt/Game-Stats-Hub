@@ -138,7 +138,7 @@ function ScoreCard({
       className="flex-1 relative overflow-hidden grain-overlay score-card-hover"
       style={{
         background: gradient,
-        borderRadius: 22,
+        borderRadius: 0,
         padding: 14,
         paddingTop: 34,
       }}
@@ -224,7 +224,7 @@ function ScrambleCard({
   return (
     <div
       className="w-full bg-[#ECE7DE] dark:bg-[#1A1A1C]"
-      style={{ borderRadius: 18, padding: 14 }}
+      style={{ borderRadius: 0, padding: 14 }}
     >
       <p
         className="text-[#98989D] font-[family-name:var(--font-suse)] mb-1.5"
@@ -646,7 +646,7 @@ export default function LogPage() {
                 background: i === 0
                   ? "linear-gradient(135deg, #3A3A3C, #2C2C2E)"
                   : "linear-gradient(135deg, #2C2C2E, #3A3A3C)",
-                borderRadius: 22,
+                borderRadius: 0,
                 padding: 14,
                 paddingTop: 34,
               }}
@@ -686,7 +686,7 @@ export default function LogPage() {
         {/* Skeleton status text */}
         <div
           className="w-full bg-[#ECE7DE] dark:bg-[#1A1A1C] mb-4 animate-pulse"
-          style={{ borderRadius: 16, padding: 14 }}
+          style={{ borderRadius: 0, padding: 14 }}
         >
           <div
             style={{
@@ -702,7 +702,7 @@ export default function LogPage() {
         {/* Skeleton round area */}
         <div
           className="w-full bg-[#ECE7DE] dark:bg-[#1A1A1C] animate-pulse"
-          style={{ borderRadius: 22, padding: 24, height: 120 }}
+          style={{ borderRadius: 0, padding: 24, height: 120 }}
         />
       </div>
     );
@@ -791,7 +791,7 @@ export default function LogPage() {
           {/* ── Status text ─────────────────────────────── */}
           <div
             className="w-full bg-[#ECE7DE] dark:bg-[#1A1A1C] mb-4"
-            style={{ borderRadius: 16, padding: 14 }}
+            style={{ borderRadius: 0, padding: 14 }}
           >
             <p
               className="text-[#98989D] font-[family-name:var(--font-suse)] text-left"
@@ -835,7 +835,7 @@ export default function LogPage() {
               bg-[#3A7BD5] dark:bg-white hover:bg-[#2C5F9E] dark:hover:bg-[#ECE7DE] active:scale-[0.98] transition-all
               disabled:opacity-50 disabled:cursor-not-allowed"
             style={{
-              borderRadius: 22,
+              borderRadius: 999,
               paddingLeft: 56,
               paddingRight: 56,
               paddingTop: 20,
@@ -884,7 +884,7 @@ export default function LogPage() {
                   key={member.id}
                   className="flex-1 flex flex-col items-center gap-2"
                   style={{
-                    borderRadius: 16,
+                    borderRadius: 0,
                     padding: 14,
                     borderWidth: 2,
                     borderStyle: joined ? "solid" : "dashed",
@@ -991,7 +991,7 @@ export default function LogPage() {
                       key={member.id}
                       className="flex-1 flex flex-col items-center gap-2 bg-[#ECE7DE] dark:bg-[#1A1A1C]"
                       style={{
-                        borderRadius: 16,
+                        borderRadius: 0,
                         padding: 14,
                         borderWidth: 2,
                         borderStyle: "solid",
@@ -1230,7 +1230,7 @@ function RoundResults({
               key={member.id}
               className="flex-1 flex flex-col items-center gap-2 bg-[#ECE7DE] dark:bg-[#1A1A1C]"
               style={{
-                borderRadius: 16,
+                borderRadius: 0,
                 padding: 14,
                 borderWidth: 2,
                 borderStyle: "solid",
