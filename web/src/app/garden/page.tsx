@@ -437,7 +437,6 @@ export default function GardenPage() {
             <IoArrowBack style={{ fontSize: 22 }} />
           </button>
           <div className="flex items-center gap-2">
-            <span style={{ fontSize: 22 }}>🐠</span>
             <h1
               className="font-[family-name:var(--font-suse)]"
               style={{ fontSize: 24, fontWeight: 800, color: "#408052" }}
