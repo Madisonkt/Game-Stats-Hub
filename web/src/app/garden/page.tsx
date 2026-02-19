@@ -155,10 +155,12 @@ function GridView({
   const dateOf = (item: GardenItem) => item.photoTakenAt ?? item.createdAt;
   const sorted = [...items].sort((a, b) => dateOf(b) - dateOf(a));
 
+  // Dots sit at every cell corner intersection.
+  // backgroundSize = one cell, backgroundPosition = 0,0 so dots land on edges.
   return (
     <div
       ref={gridRef}
-      className="grid rounded-2xl"
+      className="grid overflow-hidden"
       style={{
         gridTemplateColumns: "repeat(4, 1fr)",
         gap: 0,
@@ -168,7 +170,6 @@ function GridView({
               backgroundImage:
                 "radial-gradient(circle, #D9D9D9 3px, transparent 3px)",
               backgroundSize: `${cellPx}px ${cellPx}px`,
-              backgroundPosition: `${cellPx / 2}px ${cellPx / 2}px`,
             }
           : {}),
       }}
@@ -177,8 +178,8 @@ function GridView({
         <button
           key={item.id}
           onClick={() => onSelect(item)}
-          className="active:scale-[0.9] transition-transform"
-          style={{ aspectRatio: "1", padding: 6 }}
+          className="active:scale-[0.9] transition-transform overflow-hidden"
+          style={{ aspectRatio: "1", padding: "12%" }}
         >
           <div
             className="w-full h-full"
@@ -488,7 +489,7 @@ export default function GardenPage() {
       <div style={{ height: 64 }} />
 
       {/* Garden — moss with sprouting doodles */}
-      <div className="px-2 pb-8 max-w-lg mx-auto">
+      <div className={`pb-8 max-w-lg mx-auto ${view === "moss" ? "px-2" : ""}`}>
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <div className="h-8 w-8 animate-spin rounded-full border-3 border-[#E8A0BF] border-t-transparent" />
