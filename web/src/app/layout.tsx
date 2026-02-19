@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Nunito_Sans, SUSE } from "next/font/google";
+import { Nunito_Sans, SUSE_Mono } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 
@@ -9,10 +9,10 @@ const nunitoSans = Nunito_Sans({
   weight: ["400", "600", "700", "800"],
 });
 
-const suse = SUSE({
+const suseMono = SUSE_Mono({
   variable: "--font-suse",
   subsets: ["latin"],
-  weight: ["400", "700", "800"],
+  weight: ["400", "700"],
 });
 
 export const viewport: Viewport = {
@@ -59,7 +59,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${nunitoSans.variable} ${suse.variable} antialiased`}>
+      <body className={`${nunitoSans.variable} ${suseMono.variable} antialiased`}>
         <Providers>{children}</Providers>
       </body>
     </html>
