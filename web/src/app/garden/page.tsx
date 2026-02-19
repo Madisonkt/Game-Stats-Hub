@@ -191,7 +191,7 @@ function GridView({
         gridTemplateColumns: "repeat(4, 1fr)",
         gap: 0,
         padding: PAD,
-        backgroundColor: "#FFFFFF",
+        backgroundColor: "#FAFAF7",
         ...(cellPx > 0
           ? {
               backgroundImage:
