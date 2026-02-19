@@ -581,8 +581,6 @@ export default function GardenPage() {
               width: "100%",
               maxWidth: 448,
               margin: "0 auto",
-              borderRadius: 16,
-              overflow: "hidden",
             }}
           >
             <img
