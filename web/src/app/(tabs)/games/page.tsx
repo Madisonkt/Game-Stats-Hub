@@ -542,7 +542,7 @@ export default function GamesPage() {
         </>
       )}
 
-      {/* ── Digital Garden Card ───────────────────── */}
+      {/* ── Aquarium Card ───────────────────── */}
       <button
         onClick={() => router.push("/garden")}
         className="w-full flex items-center gap-3 bg-[#ECE7DE] dark:bg-[#1A1A1C] card-press mb-2"
@@ -554,23 +554,23 @@ export default function GamesPage() {
             width: 44,
             height: 44,
             borderRadius: 12,
-            backgroundColor: "rgba(232,160,191,0.15)",
+            backgroundColor: "rgba(64,128,82,0.15)",
           }}
         >
-          <span style={{ fontSize: 22 }}>🌱</span>
+          <span style={{ fontSize: 22 }}>🐟</span>
         </div>
         <div className="flex flex-col items-start">
           <span
             className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]"
             style={{ fontSize: 16, fontWeight: 700 }}
           >
-            Garden
+            Aquarium
           </span>
           <span
             className="text-[#98989D] font-[family-name:var(--font-suse)]"
             style={{ fontSize: 12, fontWeight: 500 }}
           >
-            many plant
+            many fish
           </span>
         </div>
       </button>
