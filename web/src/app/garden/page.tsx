@@ -207,7 +207,7 @@ function GridView({
           return (
             <div
               key={cell.key}
-              className="font-[family-name:var(--font-suse)] flex items-center"
+              className="font-[family-name:var(--font-suse-mono)] flex items-center"
               style={{
                 gridColumn: "1 / -1",
                 height: cellPx || "auto",
@@ -366,7 +366,7 @@ function DetailModal({
         <div className="p-4">
           {item.caption && (
             <p
-              className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)] mb-2"
+              className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)] mb-2"
               style={{ fontSize: 16, fontWeight: 700 }}
             >
               {item.caption}
@@ -383,7 +383,7 @@ function DetailModal({
                   window.open(url, "_blank", "noopener,noreferrer");
                 }
               }}
-              className="flex items-center gap-1.5 text-[#3A7BD5] font-[family-name:var(--font-nunito)] mb-2 hover:underline"
+              className="flex items-center gap-1.5 text-[#3A7BD5] font-[family-name:var(--font-suse)] mb-2 hover:underline"
               style={{ fontSize: 13, fontWeight: 600 }}
             >
               🔗 {(() => { try { return new URL(item.linkUrl.startsWith("http") ? item.linkUrl : "https://" + item.linkUrl).hostname; } catch { return item.linkUrl; } })()}
@@ -391,7 +391,7 @@ function DetailModal({
           )}
 
           <p
-            className="text-[#98989D] font-[family-name:var(--font-nunito)]"
+            className="text-[#98989D] font-[family-name:var(--font-suse)]"
             style={{ fontSize: 12, fontWeight: 500 }}
           >
             Created by {memberName} · {formatDate(item.createdAt)}
@@ -400,7 +400,7 @@ function DetailModal({
           {canDelete && (
             <button
               onClick={onDelete}
-              className="mt-3 text-red-500 font-[family-name:var(--font-nunito)] text-sm font-semibold hover:underline"
+              className="mt-3 text-red-500 font-[family-name:var(--font-suse)] text-sm font-semibold hover:underline"
             >
               Delete
             </button>
@@ -465,7 +465,7 @@ export default function GardenPage() {
   if (!couple || !currentUser) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-[#F3F0EA] dark:bg-[#0A0A0C]">
-        <p className="text-[#98989D] font-[family-name:var(--font-nunito)]">Not signed in</p>
+        <p className="text-[#98989D] font-[family-name:var(--font-suse)]">Not signed in</p>
       </div>
     );
   }
@@ -484,7 +484,7 @@ export default function GardenPage() {
           </button>
           <div className="flex items-center gap-2">
             <h1
-              className="font-[family-name:var(--font-suse)]"
+              className="font-[family-name:var(--font-suse-mono)]"
               style={{ fontSize: 24, fontWeight: 800, color: "#408052" }}
             >
               Aquarium
@@ -524,7 +524,7 @@ export default function GardenPage() {
           </div>
           <button
             onClick={() => router.push("/garden/new")}
-            className="flex items-center gap-1 font-[family-name:var(--font-suse)]
+            className="flex items-center gap-1 font-[family-name:var(--font-suse-mono)]
               active:scale-[0.95] transition-all"
             style={{
               borderRadius: 0,
@@ -561,13 +561,13 @@ export default function GardenPage() {
               style={{ opacity: 0.7 }}
             />
             <p
-              className="text-[#98989D] font-[family-name:var(--font-nunito)] text-center -mt-2"
+              className="text-[#98989D] font-[family-name:var(--font-suse)] text-center -mt-2"
               style={{ fontSize: 15, fontWeight: 600 }}
             >
               Your garden is empty
             </p>
             <p
-              className="text-[#98989D] font-[family-name:var(--font-nunito)] text-center px-8"
+              className="text-[#98989D] font-[family-name:var(--font-suse)] text-center px-8"
               style={{ fontSize: 13 }}
             >
               Tap &quot;New&quot; to plant your first doodle

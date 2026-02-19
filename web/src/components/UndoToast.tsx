@@ -61,7 +61,7 @@ export default function UndoToast({
           minWidth: 280,
         }}
       >
-        <span className="text-white font-[family-name:var(--font-nunito)]" style={{ fontSize: 15, fontWeight: 700 }}>
+        <span className="text-white font-[family-name:var(--font-suse)]" style={{ fontSize: 15, fontWeight: 700 }}>
           {message}
         </span>
         <button
@@ -70,7 +70,7 @@ export default function UndoToast({
             setShow(false);
             setTimeout(onDismiss, 300);
           }}
-          className="font-[family-name:var(--font-nunito)]"
+          className="font-[family-name:var(--font-suse)]"
           style={{
             backgroundColor: "rgba(255,255,255,0.25)",
             borderRadius: 12,

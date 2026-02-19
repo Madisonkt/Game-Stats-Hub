@@ -72,7 +72,7 @@ export function SwipeRow({
           >
             <IoTrashOutline className="text-white" style={{ fontSize: 20 }} />
             <span
-              className="text-white font-[family-name:var(--font-nunito)]"
+              className="text-white font-[family-name:var(--font-suse)]"
               style={{ fontSize: 11, fontWeight: 700 }}
             >
               Delete

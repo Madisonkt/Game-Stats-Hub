@@ -173,7 +173,7 @@ export default function NewDoodlePage() {
   if (!couple || !currentUser) {
     return (
       <div className="flex items-center justify-center min-h-screen bg-[#F3F0EA] dark:bg-[#0A0A0C]">
-        <p className="text-[#98989D] font-[family-name:var(--font-nunito)]">Not signed in</p>
+        <p className="text-[#98989D] font-[family-name:var(--font-suse)]">Not signed in</p>
       </div>
     );
   }
@@ -189,7 +189,7 @@ export default function NewDoodlePage() {
           <IoArrowBack style={{ fontSize: 22 }} />
         </button>
         <h1
-          className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]"
+          className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]"
           style={{ fontSize: 18, fontWeight: 800 }}
         >
           New Doodle
@@ -258,7 +258,7 @@ export default function NewDoodlePage() {
             onClick={handleUndo}
             disabled={committedStrokes.current.length === 0}
             className="flex items-center gap-1 px-4 py-2 bg-[#ECE7DE] dark:bg-[#1A1A1C]
-              text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]
+              text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]
               active:scale-[0.95] transition-all disabled:opacity-30"
             style={{ borderRadius: 12, fontSize: 13, fontWeight: 600 }}
           >
@@ -269,7 +269,7 @@ export default function NewDoodlePage() {
             onClick={handleClear}
             disabled={committedStrokes.current.length === 0}
             className="flex items-center gap-1 px-4 py-2 bg-[#ECE7DE] dark:bg-[#1A1A1C]
-              text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]
+              text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]
               active:scale-[0.95] transition-all disabled:opacity-30"
             style={{ borderRadius: 12, fontSize: 13, fontWeight: 600 }}
           >
@@ -300,7 +300,7 @@ export default function NewDoodlePage() {
         <button
           onClick={() => fileInputRef.current?.click()}
           className="flex items-center gap-2 w-full px-4 py-3 bg-[#ECE7DE] dark:bg-[#1A1A1C]
-            text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]
+            text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]
             active:scale-[0.98] transition-all"
           style={{ borderRadius: 14, fontSize: 14, fontWeight: 600 }}
         >
@@ -322,7 +322,7 @@ export default function NewDoodlePage() {
           onChange={(e) => setCaption(e.target.value)}
           placeholder="Add a caption (optional)"
           className="w-full px-4 py-3 bg-[#ECE7DE] dark:bg-[#1A1A1C] text-[#0A0A0C] dark:text-[#F3F0EA]
-            placeholder:text-[#98989D] font-[family-name:var(--font-nunito)] outline-none"
+            placeholder:text-[#98989D] font-[family-name:var(--font-suse)] outline-none"
           style={{ borderRadius: 14, fontSize: 14, fontWeight: 600 }}
         />
 
@@ -333,7 +333,7 @@ export default function NewDoodlePage() {
           onChange={(e) => setLinkUrl(e.target.value)}
           placeholder="Attach a link (optional)"
           className="w-full px-4 py-3 bg-[#ECE7DE] dark:bg-[#1A1A1C] text-[#0A0A0C] dark:text-[#F3F0EA]
-            placeholder:text-[#98989D] font-[family-name:var(--font-nunito)] outline-none"
+            placeholder:text-[#98989D] font-[family-name:var(--font-suse)] outline-none"
           style={{ borderRadius: 14, fontSize: 14, fontWeight: 600 }}
         />
 
@@ -341,7 +341,7 @@ export default function NewDoodlePage() {
         <button
           onClick={handleSave}
           disabled={saving || committedStrokes.current.length === 0 || (!photo && !linkUrl.trim())}
-          className="flex items-center justify-center gap-2 w-full text-white font-[family-name:var(--font-nunito)]
+          className="flex items-center justify-center gap-2 w-full text-white font-[family-name:var(--font-suse)]
             active:scale-[0.98] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
           style={{
             borderRadius: 999,

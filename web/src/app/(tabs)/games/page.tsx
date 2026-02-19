@@ -109,7 +109,7 @@ function GameRow({
         {/* Name + badges */}
         <div className="flex-1 flex flex-col min-w-0">
           <span
-            className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)] truncate"
+            className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)] truncate"
             style={{ fontSize: 16, fontWeight: 700 }}
           >
             {game.name}
@@ -117,7 +117,7 @@ function GameRow({
           <div className="flex items-center gap-2 mt-0.5">
             {game.isArchived && (
               <span
-                className="text-[#98989D] font-[family-name:var(--font-nunito)]"
+                className="text-[#98989D] font-[family-name:var(--font-suse)]"
                 style={{ fontSize: 10, fontWeight: 600, backgroundColor: "rgba(150,150,150,0.1)", paddingLeft: 6, paddingRight: 6, paddingTop: 2, paddingBottom: 2, borderRadius: 6 }}
               >
                 Archived
@@ -125,7 +125,7 @@ function GameRow({
             )}
             {game.type === "timed" && (
               <span
-                className="flex items-center gap-0.5 font-[family-name:var(--font-nunito)]"
+                className="flex items-center gap-0.5 font-[family-name:var(--font-suse)]"
                 style={{
                   fontSize: 10,
                   fontWeight: 600,
@@ -168,7 +168,7 @@ function GameRow({
                   )}
                 </div>
                 <span
-                  className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]"
+                  className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]"
                   style={{ fontSize: 12, fontWeight: 700 }}
                 >
                   {scores[m.id] ?? 0}
@@ -201,7 +201,7 @@ function GameRow({
             {game.isArchived ? (
               <button
                 onClick={() => { onUnarchive(); setShowActions(false); }}
-                className="flex items-center gap-2 px-4 py-2.5 text-left text-sm text-[#0A0A0C] dark:text-[#F3F0EA] hover:bg-[#ECE7DE] dark:hover:bg-[#2A2A2C] font-[family-name:var(--font-nunito)]"
+                className="flex items-center gap-2 px-4 py-2.5 text-left text-sm text-[#0A0A0C] dark:text-[#F3F0EA] hover:bg-[#ECE7DE] dark:hover:bg-[#2A2A2C] font-[family-name:var(--font-suse)]"
               >
                 <IoArchiveOutline style={{ fontSize: 16 }} />
                 Unarchive
@@ -209,7 +209,7 @@ function GameRow({
             ) : (
               <button
                 onClick={() => { onArchive(); setShowActions(false); }}
-                className="flex items-center gap-2 px-4 py-2.5 text-left text-sm text-[#0A0A0C] dark:text-[#F3F0EA] hover:bg-[#ECE7DE] dark:hover:bg-[#2A2A2C] font-[family-name:var(--font-nunito)]"
+                className="flex items-center gap-2 px-4 py-2.5 text-left text-sm text-[#0A0A0C] dark:text-[#F3F0EA] hover:bg-[#ECE7DE] dark:hover:bg-[#2A2A2C] font-[family-name:var(--font-suse)]"
               >
                 <IoArchiveOutline style={{ fontSize: 16 }} />
                 Archive
@@ -217,14 +217,14 @@ function GameRow({
             )}
             <button
               onClick={() => { onReset(); setShowActions(false); }}
-              className="flex items-center gap-2 px-4 py-2.5 text-left text-sm text-[#FF9500] hover:bg-[#ECE7DE] dark:hover:bg-[#2A2A2C] font-[family-name:var(--font-nunito)]"
+              className="flex items-center gap-2 px-4 py-2.5 text-left text-sm text-[#FF9500] hover:bg-[#ECE7DE] dark:hover:bg-[#2A2A2C] font-[family-name:var(--font-suse)]"
             >
               <IoRefresh style={{ fontSize: 16 }} />
               Reset Scores
             </button>
             <button
               onClick={() => { onDelete(); setShowActions(false); }}
-              className="flex items-center gap-2 px-4 py-2.5 text-left text-sm text-[#FF3B30] hover:bg-[#ECE7DE] dark:hover:bg-[#2A2A2C] font-[family-name:var(--font-nunito)]"
+              className="flex items-center gap-2 px-4 py-2.5 text-left text-sm text-[#FF3B30] hover:bg-[#ECE7DE] dark:hover:bg-[#2A2A2C] font-[family-name:var(--font-suse)]"
             >
               <IoTrashOutline style={{ fontSize: 16 }} />
               Delete
@@ -441,7 +441,7 @@ export default function GamesPage() {
   if (!currentUser) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] p-6">
-        <p className="text-sm text-[#636366] dark:text-[#98989D] font-[family-name:var(--font-nunito)]">
+        <p className="text-sm text-[#636366] dark:text-[#98989D] font-[family-name:var(--font-suse)]">
           Not signed in
         </p>
       </div>
@@ -454,7 +454,7 @@ export default function GamesPage() {
       <div className="shrink-0 z-40 bg-[#F3F0EA] dark:bg-[#0A0A0C] max-w-lg mx-auto w-full px-5 pt-4 pb-3">
         <div className="flex items-center justify-between">
           <h1
-            className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]"
+            className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]"
             style={{ fontSize: 28, fontWeight: 800 }}
           >
             Games
@@ -482,16 +482,16 @@ export default function GamesPage() {
       {games.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16 gap-4">
           <IoGameControllerOutline className="text-[#98989D]" style={{ fontSize: 64 }} />
-          <p className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]" style={{ fontSize: 18, fontWeight: 700 }}>
+          <p className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]" style={{ fontSize: 18, fontWeight: 700 }}>
             Create your first game
           </p>
-          <p className="text-[#98989D] font-[family-name:var(--font-nunito)] text-center" style={{ fontSize: 14 }}>
+          <p className="text-[#98989D] font-[family-name:var(--font-suse)] text-center" style={{ fontSize: 14 }}>
             Add a game to start tracking wins
           </p>
           <button
             onClick={() => openAddGame()}
             className="flex items-center gap-2 bg-[#3A7BD5] dark:bg-white text-white dark:text-[#0A0A0C]
-              font-[family-name:var(--font-nunito)] active:scale-[0.98] transition-all"
+              font-[family-name:var(--font-suse)] active:scale-[0.98] transition-all"
             style={{ borderRadius: 14, padding: "12px 24px", fontSize: 15, fontWeight: 700 }}
           >
             <IoAddCircle style={{ fontSize: 20 }} />
@@ -519,7 +519,7 @@ export default function GamesPage() {
           {archivedGames.length > 0 && (
             <>
               <p
-                className="text-[#98989D] font-[family-name:var(--font-nunito)] mt-4 mb-2"
+                className="text-[#98989D] font-[family-name:var(--font-suse)] mt-4 mb-2"
                 style={{ fontSize: 12, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1.2 }}
               >
                 Archived
@@ -561,13 +561,13 @@ export default function GamesPage() {
         </div>
         <div className="flex flex-col items-start">
           <span
-            className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]"
+            className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]"
             style={{ fontSize: 16, fontWeight: 700 }}
           >
             Garden
           </span>
           <span
-            className="text-[#98989D] font-[family-name:var(--font-nunito)]"
+            className="text-[#98989D] font-[family-name:var(--font-suse)]"
             style={{ fontSize: 12, fontWeight: 500 }}
           >
             many plant
@@ -596,7 +596,7 @@ export default function GamesPage() {
           <div className="flex items-center gap-2">
             <IoHeart style={{ fontSize: 20, color: "#fff" }} />
             <span
-              className="text-white font-[family-name:var(--font-nunito)]"
+              className="text-white font-[family-name:var(--font-suse)]"
               style={{ fontSize: 18, fontWeight: 800 }}
             >
               Happy Valentine&apos;s Day
@@ -613,7 +613,7 @@ export default function GamesPage() {
         >
           <div className="flex flex-col flex-1 min-w-0">
             <span
-              className="text-[#98989D] font-[family-name:var(--font-nunito)]"
+              className="text-[#98989D] font-[family-name:var(--font-suse)]"
               style={{ fontSize: 11, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1.2 }}
             >
               Invite Code
@@ -627,7 +627,7 @@ export default function GamesPage() {
           </div>
           <button
             onClick={handleCopyCode}
-            className="flex items-center gap-1 text-[#3A7BD5] dark:text-white hover:text-[#2C5F9E] dark:hover:text-[#ECE7DE] transition-colors font-[family-name:var(--font-nunito)]"
+            className="flex items-center gap-1 text-[#3A7BD5] dark:text-white hover:text-[#2C5F9E] dark:hover:text-[#ECE7DE] transition-colors font-[family-name:var(--font-suse)]"
             style={{ fontSize: 13, fontWeight: 600 }}
           >
             {codeCopied ? (<><IoCheckmark className="text-green-500" /> Copied</>) : (<><IoCopyOutline /> Copy</>)}
@@ -641,7 +641,7 @@ export default function GamesPage() {
           if (perm === "denied") return (
             <button
               onClick={() => alert("Notifications are blocked.\n\nTo re-enable:\niPhone: Settings → Cheese Squeeze → Notifications → Allow Notifications\n\nAndroid: Settings → Apps → Cheese Squeeze → Notifications")}
-              className="flex items-center justify-center gap-2 w-full font-[family-name:var(--font-nunito)] active:scale-[0.98] transition-all"
+              className="flex items-center justify-center gap-2 w-full font-[family-name:var(--font-suse)] active:scale-[0.98] transition-all"
               style={{ borderRadius: 16, padding: 14, fontSize: 15, fontWeight: 700, color: "#98989D", backgroundColor: "rgba(150,150,150,0.08)" }}
             >
               <IoNotificationsOutline style={{ fontSize: 20 }} />
@@ -659,7 +659,7 @@ export default function GamesPage() {
                   alert(`Sync failed: ${result.error}\n\nTry closing and reopening the app.`);
                 }
               }}
-              className="flex items-center justify-center gap-2 w-full font-[family-name:var(--font-nunito)] active:scale-[0.98] transition-all"
+              className="flex items-center justify-center gap-2 w-full font-[family-name:var(--font-suse)] active:scale-[0.98] transition-all"
               style={{ borderRadius: 16, padding: 14, fontSize: 15, fontWeight: 700, color: "#34C759", backgroundColor: "rgba(52,199,89,0.08)" }}
             >
               <IoNotificationsOutline style={{ fontSize: 20 }} />
@@ -684,7 +684,7 @@ export default function GamesPage() {
                   alert(`Couldn't enable notifications.\n\n${result.error ?? ""}\n\niPhone: Make sure the app is added to your Home Screen and you tapped Allow when prompted.\n\nIf you tapped Don't Allow before, go to Settings → Cheese Squeeze → Notifications and enable them.`);
                 }
               }}
-              className="flex items-center justify-center gap-2 w-full font-[family-name:var(--font-nunito)] active:scale-[0.98] transition-all"
+              className="flex items-center justify-center gap-2 w-full font-[family-name:var(--font-suse)] active:scale-[0.98] transition-all"
               style={{ borderRadius: 16, padding: 14, fontSize: 15, fontWeight: 700, color: "#3A7BD5", backgroundColor: "rgba(58,123,213,0.08)" }}
             >
               <IoNotificationsOutline style={{ fontSize: 20 }} />
@@ -695,7 +695,7 @@ export default function GamesPage() {
           <button
             onClick={() => setShowConfirm("exit")}
             disabled={exitingRoom}
-            className="flex items-center justify-center gap-2 w-full font-[family-name:var(--font-nunito)]
+            className="flex items-center justify-center gap-2 w-full font-[family-name:var(--font-suse)]
               active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
             style={{ borderRadius: 16, padding: 14, fontSize: 15, fontWeight: 700, color: "#FF6B6B", backgroundColor: "rgba(255,107,107,0.08)" }}
           >
@@ -706,7 +706,7 @@ export default function GamesPage() {
         <button
           onClick={() => setShowConfirm("signout")}
           disabled={signingOut}
-          className="flex items-center justify-center gap-2 w-full font-[family-name:var(--font-nunito)]
+          className="flex items-center justify-center gap-2 w-full font-[family-name:var(--font-suse)]
             active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
           style={{ borderRadius: 16, padding: 14, fontSize: 15, fontWeight: 600, color: "#999" }}
         >
@@ -739,7 +739,7 @@ export default function GamesPage() {
           <div className="px-6 pt-14 pb-8">
             <div className="max-w-sm mx-auto">
               <h2
-                className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)] mb-6"
+                className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)] mb-6"
                 style={{ fontSize: 24, fontWeight: 800 }}
               >
                 New Game
@@ -752,7 +752,7 @@ export default function GamesPage() {
               onChange={(e) => setNewGameName(e.target.value)}
               placeholder="Game name"
               className="w-full px-4 py-3 bg-[#ECE7DE] dark:bg-[#1A1A1C] text-[#0A0A0C] dark:text-[#F3F0EA]
-                placeholder:text-[#98989D] font-[family-name:var(--font-nunito)] outline-none mb-4"
+                placeholder:text-[#98989D] font-[family-name:var(--font-suse)] outline-none mb-4"
               style={{ borderRadius: 14, fontSize: 16, fontWeight: 600 }}
             />
 
@@ -760,7 +760,7 @@ export default function GamesPage() {
             <button
               onClick={() => { setNewGameName("Rubik's Cube"); setSelectedType("timed"); }}
               className="flex items-center gap-2 w-full px-4 py-3 bg-[#ECE7DE] dark:bg-[#1A1A1C]
-                text-[#0A0A0C] dark:text-[#F3F0EA] active:scale-[0.98] transition-all mb-4 font-[family-name:var(--font-nunito)]"
+                text-[#0A0A0C] dark:text-[#F3F0EA] active:scale-[0.98] transition-all mb-4 font-[family-name:var(--font-suse)]"
               style={{ borderRadius: 14, fontSize: 14, fontWeight: 600 }}
             >
               <IoTimerOutline style={{ fontSize: 18 }} />
@@ -769,7 +769,7 @@ export default function GamesPage() {
 
             {/* Type selector */}
             <p
-              className="text-[#98989D] font-[family-name:var(--font-nunito)] mb-2"
+              className="text-[#98989D] font-[family-name:var(--font-suse)] mb-2"
               style={{ fontSize: 12, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1 }}
             >
               Game Type
@@ -789,14 +789,14 @@ export default function GamesPage() {
                   style={{ fontSize: 24 }}
                 />
                 <span
-                  className={`font-[family-name:var(--font-nunito)] ${
+                  className={`font-[family-name:var(--font-suse)] ${
                     selectedType === "simple" ? "text-[#3A7BD5] dark:text-white" : "text-[#98989D]"
                   }`}
                   style={{ fontSize: 13, fontWeight: 700 }}
                 >
                   Simple
                 </span>
-                <span className="text-[#98989D] font-[family-name:var(--font-nunito)]" style={{ fontSize: 10 }}>
+                <span className="text-[#98989D] font-[family-name:var(--font-suse)]" style={{ fontSize: 10 }}>
                   Tap to win
                 </span>
               </button>
@@ -814,14 +814,14 @@ export default function GamesPage() {
                   style={{ fontSize: 24 }}
                 />
                 <span
-                  className={`font-[family-name:var(--font-nunito)] ${
+                  className={`font-[family-name:var(--font-suse)] ${
                     selectedType === "timed" ? "text-[#3A7BD5] dark:text-white" : "text-[#98989D]"
                   }`}
                   style={{ fontSize: 13, fontWeight: 700 }}
                 >
                   Timed
                 </span>
-                <span className="text-[#98989D] font-[family-name:var(--font-nunito)]" style={{ fontSize: 10 }}>
+                <span className="text-[#98989D] font-[family-name:var(--font-suse)]" style={{ fontSize: 10 }}>
                   Best time wins
                 </span>
               </button>
@@ -831,7 +831,7 @@ export default function GamesPage() {
             <button
               onClick={handleAddGame}
               disabled={!newGameName.trim() || addingGame}
-              className="flex items-center justify-center gap-2 w-full text-white dark:text-[#0A0A0C] font-[family-name:var(--font-nunito)]
+              className="flex items-center justify-center gap-2 w-full text-white dark:text-[#0A0A0C] font-[family-name:var(--font-suse)]
                 bg-[#3A7BD5] dark:bg-white hover:bg-[#2C5F9E] dark:hover:bg-[#ECE7DE]
                 active:scale-[0.98] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
               style={{ borderRadius: 14, padding: 14, fontSize: 16, fontWeight: 700 }}
@@ -868,7 +868,7 @@ export default function GamesPage() {
           <div className="flex flex-col items-center px-6 pt-16 pb-16">
             <div className="max-w-sm w-full">
               <h2
-                className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)] mb-8"
+                className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)] mb-8"
                 style={{ fontSize: 24, fontWeight: 800 }}
               >
                 Player Settings
@@ -887,7 +887,7 @@ export default function GamesPage() {
                   {editAvatarUrl ? (
                     <img src={editAvatarUrl} alt="Avatar" className="w-full h-full object-cover rounded-full" />
                   ) : (
-                    <span className="text-white text-xl font-bold font-[family-name:var(--font-nunito)]">
+                    <span className="text-white text-xl font-bold font-[family-name:var(--font-suse)]">
                       {editName?.charAt(0)?.toUpperCase() || "?"}
                     </span>
                   )}
@@ -909,14 +909,14 @@ export default function GamesPage() {
               onChange={(e) => setEditName(e.target.value)}
               placeholder="Your name"
               className="w-full px-4 py-3 bg-[#ECE7DE] dark:bg-[#1A1A1C] text-[#0A0A0C] dark:text-[#F3F0EA]
-                font-[family-name:var(--font-nunito)] outline-none mb-4"
+                font-[family-name:var(--font-suse)] outline-none mb-4"
               style={{ borderRadius: 14, fontSize: 16, fontWeight: 600 }}
             />
 
             {/* Save */}
             <button
               onClick={handleSavePlayer}
-              className="flex items-center justify-center gap-2 w-full text-white dark:text-[#0A0A0C] font-[family-name:var(--font-nunito)]
+              className="flex items-center justify-center gap-2 w-full text-white dark:text-[#0A0A0C] font-[family-name:var(--font-suse)]
                 bg-[#3A7BD5] dark:bg-white hover:bg-[#2C5F9E] dark:hover:bg-[#ECE7DE] active:scale-[0.98] transition-all"
               style={{ borderRadius: 14, padding: 14, fontSize: 16, fontWeight: 700 }}
             >
@@ -926,7 +926,7 @@ export default function GamesPage() {
 
             {/* Set Password */}
             <div className="w-full mt-5 pt-5" style={{ borderTop: "1px solid rgba(150,150,150,0.2)" }}>
-              <p className="text-xs font-semibold uppercase tracking-wider text-[#636366] dark:text-[#98989D] mb-2 font-[family-name:var(--font-nunito)]">
+              <p className="text-xs font-semibold uppercase tracking-wider text-[#636366] dark:text-[#98989D] mb-2 font-[family-name:var(--font-suse)]">
                 Set / Update Password
               </p>
               <input
@@ -936,11 +936,11 @@ export default function GamesPage() {
                 onChange={(e) => { setNewPassword(e.target.value); setPasswordMsg(null); }}
                 className="w-full px-4 py-3 bg-[#ECE7DE] dark:bg-[#1A1A1C] text-[#0A0A0C] dark:text-[#F3F0EA]
                   placeholder:text-[#636366] dark:placeholder:text-[#98989D]
-                  font-[family-name:var(--font-nunito)] outline-none mb-2"
+                  font-[family-name:var(--font-suse)] outline-none mb-2"
                 style={{ borderRadius: 14, fontSize: 15, fontWeight: 600 }}
               />
               {passwordMsg && (
-                <p className={`text-sm font-semibold mb-2 font-[family-name:var(--font-nunito)] ${passwordMsg.type === "ok" ? "text-green-500" : "text-red-500"}`}>
+                <p className={`text-sm font-semibold mb-2 font-[family-name:var(--font-suse)] ${passwordMsg.type === "ok" ? "text-green-500" : "text-red-500"}`}>
                   {passwordMsg.text}
                 </p>
               )}
@@ -960,7 +960,7 @@ export default function GamesPage() {
                   } finally { setSavingPassword(false); }
                 }}
                 disabled={savingPassword || !newPassword}
-                className="flex items-center justify-center gap-2 w-full font-[family-name:var(--font-nunito)]
+                className="flex items-center justify-center gap-2 w-full font-[family-name:var(--font-suse)]
                   text-[#3A7BD5] dark:text-white border border-[#3A7BD5] dark:border-white
                   hover:bg-[#3A7BD5]/10 dark:hover:bg-white/10 active:scale-[0.98] transition-all
                   disabled:opacity-40 disabled:cursor-not-allowed"
@@ -1002,7 +1002,7 @@ export default function GamesPage() {
           <div className="flex flex-col items-center px-8 pt-16 pb-16 min-h-full justify-center">
             <div className="max-w-sm w-full">
               <p
-                className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)] whitespace-pre-line leading-relaxed"
+                className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)] whitespace-pre-line leading-relaxed"
                 style={{ fontSize: 16, fontWeight: 500, lineHeight: 1.8 }}
               >
                 hello sir{"\n"}happy valentines day{"\n"}{"\n"}congrats on not being shawty-lesss this year.{"\n"}I feel very lucky to have found someone who makes me smile as much as you do.{"\n"}{"\n"}thank you for opening up to me these past months, I feel like I&apos;ve learned so much about how your mind works, what your goals and fears are and I dont take that for granted. I appreciate you trusting me with this and want you to know that I am your biggest fan. You&apos;re capable of doing amazing things and I hope you can lean on me when you need to. Im consistently inspired by your drive, self conviction and creativity. You push me, challenge me, and support me and Im very grateful to be growing alongside u. Even though we may not always see eye to eye, getting to understand you more deeply has been an infinitely rewarding experience. love madison {"<3"}
@@ -1017,20 +1017,20 @@ export default function GamesPage() {
       {showConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-6 modal-backdrop">
           <div className="w-full max-w-sm bg-white dark:bg-[#0A0A0C] shadow-xl flex flex-col gap-4 modal-content" style={{ borderRadius: 20, padding: 24 }}>
-            <h3 className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]" style={{ fontSize: 18, fontWeight: 800 }}>
+            <h3 className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]" style={{ fontSize: 18, fontWeight: 800 }}>
               {showConfirm === "signout" ? "Sign out?" : "Leave room?"}
             </h3>
-            <p className="text-sm text-[#636366] dark:text-[#98989D] font-[family-name:var(--font-nunito)]">
+            <p className="text-sm text-[#636366] dark:text-[#98989D] font-[family-name:var(--font-suse)]">
               {showConfirm === "signout"
                 ? "You'll need to sign in again with your email."
                 : "You'll leave this room and your partner will be alone. You can re-join with the invite code."}
             </p>
             <div className="flex gap-3">
-              <button onClick={() => setShowConfirm(null)} className="flex-1 py-3 text-sm font-semibold text-[#0A0A0C] dark:text-[#F3F0EA] bg-[#ECE7DE] dark:bg-[#1A1A1C] hover:opacity-80 transition-all font-[family-name:var(--font-nunito)]" style={{ borderRadius: 12 }}>Cancel</button>
+              <button onClick={() => setShowConfirm(null)} className="flex-1 py-3 text-sm font-semibold text-[#0A0A0C] dark:text-[#F3F0EA] bg-[#ECE7DE] dark:bg-[#1A1A1C] hover:opacity-80 transition-all font-[family-name:var(--font-suse)]" style={{ borderRadius: 12 }}>Cancel</button>
               <button
                 onClick={showConfirm === "signout" ? handleSignOut : handleExitRoom}
                 disabled={signingOut || exitingRoom}
-                className="flex-1 py-3 text-sm font-semibold text-white bg-red-500 hover:bg-red-600 transition-all disabled:opacity-50 font-[family-name:var(--font-nunito)]"
+                className="flex-1 py-3 text-sm font-semibold text-white bg-red-500 hover:bg-red-600 transition-all disabled:opacity-50 font-[family-name:var(--font-suse)]"
                 style={{ borderRadius: 12 }}
               >
                 {showConfirm === "signout" ? (signingOut ? "Signing out..." : "Sign Out") : (exitingRoom ? "Leaving..." : "Leave Room")}

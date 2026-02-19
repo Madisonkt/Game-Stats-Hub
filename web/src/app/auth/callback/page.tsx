@@ -95,13 +95,13 @@ export default function AuthCallbackPage() {
         >
           <IoCheckmarkCircle className="text-green-500" style={{ fontSize: 56 }} />
           <h1
-            className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)] text-center"
+            className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)] text-center"
             style={{ fontSize: 22, fontWeight: 800 }}
           >
             You&apos;re signed in!
           </h1>
           <p
-            className="text-[#636366] dark:text-[#98989D] font-[family-name:var(--font-nunito)] text-center"
+            className="text-[#636366] dark:text-[#98989D] font-[family-name:var(--font-suse)] text-center"
             style={{ fontSize: 14, lineHeight: 1.5 }}
           >
             Switch back to the <strong>Cheese Squeeze</strong> app on your home screen to continue.
@@ -119,7 +119,7 @@ export default function AuthCallbackPage() {
               />
             </div>
             <span
-              className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]"
+              className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]"
               style={{ fontSize: 13, fontWeight: 600 }}
             >
               Tap the app icon on your<br />home screen
@@ -129,7 +129,7 @@ export default function AuthCallbackPage() {
           {/* Fallback: continue in Safari */}
           <button
             onClick={() => { window.location.href = "/"; }}
-            className="mt-4 text-[#636366] dark:text-[#98989D] hover:text-[#0A0A0C] dark:hover:text-[#F3F0EA] transition-colors font-[family-name:var(--font-nunito)] underline"
+            className="mt-4 text-[#636366] dark:text-[#98989D] hover:text-[#0A0A0C] dark:hover:text-[#F3F0EA] transition-colors font-[family-name:var(--font-suse)] underline"
             style={{ fontSize: 13, fontWeight: 600 }}
           >
             Or continue in Safari

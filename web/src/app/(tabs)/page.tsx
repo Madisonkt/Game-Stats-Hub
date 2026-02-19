@@ -75,7 +75,7 @@ function GameFilterPills({
     // Single game — just show the name
     return (
       <h1
-        className="text-center text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)] mb-4"
+        className="text-center text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)] mb-4"
         style={{ fontSize: 22, fontWeight: 800 }}
       >
         {activeGame?.name ?? "No Game"}
@@ -91,7 +91,7 @@ function GameFilterPills({
           <button
             key={game.id}
             onClick={() => setActiveGameId(game.id)}
-            className={`whitespace-nowrap font-[family-name:var(--font-nunito)] active:scale-[0.95] transition-all ${
+            className={`whitespace-nowrap font-[family-name:var(--font-suse)] active:scale-[0.95] transition-all ${
               isActive
                 ? "bg-[#0A0A0C] dark:bg-[#F3F0EA] text-white dark:text-[#0A0A0C]"
                 : "bg-[#ECE7DE] dark:bg-[#1A1A1C] text-[#0A0A0C] dark:text-[#F3F0EA]"
@@ -180,7 +180,7 @@ function ScoreCard({
                 />
               ) : (
                 <span
-                  className="text-white font-[family-name:var(--font-nunito)]"
+                  className="text-white font-[family-name:var(--font-suse)]"
                   style={{ fontSize: 20, fontWeight: 800 }}
                 >
                   {initial}
@@ -193,13 +193,13 @@ function ScoreCard({
         {/* Name + score column */}
         <div className="flex-1 flex flex-col items-start gap-0.5">
           <span
-            className="font-[family-name:var(--font-nunito)]"
+            className="font-[family-name:var(--font-suse)]"
             style={{ fontSize: 14, fontWeight: 600, color: "#fff" }}
           >
             {name}
           </span>
           <span
-            className="text-white font-[family-name:var(--font-nunito)]"
+            className="text-white font-[family-name:var(--font-suse)]"
             style={{ fontSize: 48, fontWeight: 800, lineHeight: "52px" }}
           >
             {score}
@@ -227,7 +227,7 @@ function ScrambleCard({
       style={{ borderRadius: 18, padding: 14 }}
     >
       <p
-        className="text-[#98989D] font-[family-name:var(--font-nunito)] mb-1.5"
+        className="text-[#98989D] font-[family-name:var(--font-suse)] mb-1.5"
         style={{ fontSize: 12, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1 }}
       >
         Scramble
@@ -236,7 +236,7 @@ function ScrambleCard({
       {/* Scramble text + 3D Cube */}
       <div className="flex items-center gap-3">
         <p
-          className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)] flex-1"
+          className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)] flex-1"
           style={{ fontSize: 15, fontWeight: 700, lineHeight: "22px" }}
         >
           {scramble}
@@ -253,7 +253,7 @@ function ScrambleCard({
             className="flex items-center gap-1 text-[#98989D] hover:text-[#636366] transition-colors"
           >
             <IoRefresh className="text-sm" />
-            <span className="text-xs font-semibold font-[family-name:var(--font-nunito)]">
+            <span className="text-xs font-semibold font-[family-name:var(--font-suse)]">
               New Scramble
             </span>
           </button>
@@ -601,7 +601,7 @@ export default function LogPage() {
   if (!couple || !currentUser) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] p-6">
-        <p className="text-sm text-[#636366] dark:text-[#98989D] font-[family-name:var(--font-nunito)]">
+        <p className="text-sm text-[#636366] dark:text-[#98989D] font-[family-name:var(--font-suse)]">
           Join or create a room first
         </p>
       </div>
@@ -792,7 +792,7 @@ export default function LogPage() {
             style={{ borderRadius: 16, padding: 14 }}
           >
             <p
-              className="text-[#98989D] font-[family-name:var(--font-nunito)] text-left"
+              className="text-[#98989D] font-[family-name:var(--font-suse)] text-left"
               style={{ fontSize: 13, fontWeight: 600 }}
             >
               {statusText}
@@ -809,13 +809,13 @@ export default function LogPage() {
           onClick={stopTimer}
         >
           <p
-            className="text-white tabular-nums font-[family-name:var(--font-nunito)]"
+            className="text-white tabular-nums font-[family-name:var(--font-suse)]"
             style={{ fontSize: 72, fontWeight: 800 }}
           >
             {formatMsDisplay(timerElapsed)}
           </p>
           <p
-            className="text-white/70 font-[family-name:var(--font-nunito)]"
+            className="text-white/70 font-[family-name:var(--font-suse)]"
             style={{ fontSize: 18, fontWeight: 600, marginTop: 24 }}
           >
             Tap anywhere to stop
@@ -829,7 +829,7 @@ export default function LogPage() {
           <button
             onClick={handleCreateRound}
             disabled={actionLoading}
-            className="flex items-center justify-center gap-2 text-white dark:text-[#0A0A0C] font-[family-name:var(--font-nunito)]
+            className="flex items-center justify-center gap-2 text-white dark:text-[#0A0A0C] font-[family-name:var(--font-suse)]
               bg-[#3A7BD5] dark:bg-white hover:bg-[#2C5F9E] dark:hover:bg-[#ECE7DE] active:scale-[0.98] transition-all
               disabled:opacity-50 disabled:cursor-not-allowed"
             style={{
@@ -854,7 +854,7 @@ export default function LogPage() {
         <div className="w-full flex flex-col gap-4">
           {/* Header */}
           <h2
-            className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]"
+            className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]"
             style={{ fontSize: 20, fontWeight: 800 }}
           >
             Game in Progress
@@ -866,7 +866,7 @@ export default function LogPage() {
           }} />
 
           <p
-            className="text-[#98989D] font-[family-name:var(--font-nunito)] text-center"
+            className="text-[#98989D] font-[family-name:var(--font-suse)] text-center"
             style={{ fontSize: 13, fontWeight: 600 }}
           >
             Waiting for both players to join...
@@ -924,7 +924,7 @@ export default function LogPage() {
                     )}
                   </div>
                   <span
-                    className="font-[family-name:var(--font-nunito)]"
+                    className="font-[family-name:var(--font-suse)]"
                     style={{
                       fontSize: 13,
                       fontWeight: 700,
@@ -939,14 +939,14 @@ export default function LogPage() {
                     <button
                       onClick={handleJoinRound}
                       disabled={actionLoading}
-                      className="font-bold hover:underline disabled:opacity-50 font-[family-name:var(--font-nunito)]"
+                      className="font-bold hover:underline disabled:opacity-50 font-[family-name:var(--font-suse)]"
                       style={{ fontSize: 13, color: getPlayerColor(i) }}
                     >
                       Tap to Join
                     </button>
                   ) : (
                     <span
-                      className="text-[#98989D] font-[family-name:var(--font-nunito)]"
+                      className="text-[#98989D] font-[family-name:var(--font-suse)]"
                       style={{ fontSize: 13 }}
                     >
                       Waiting...
@@ -960,7 +960,7 @@ export default function LogPage() {
           {/* Cancel round */}
           <button
             onClick={handleCancelRound}
-            className="w-full flex items-center justify-center font-[family-name:var(--font-nunito)]
+            className="w-full flex items-center justify-center font-[family-name:var(--font-suse)]
               border border-[#98989D]/40 text-[#98989D] hover:border-[#636366] hover:text-[#636366]
               active:scale-[0.98] transition-all"
             style={{ borderRadius: 999, padding: 12, fontSize: 14, fontWeight: 700 }}
@@ -1017,21 +1017,21 @@ export default function LogPage() {
                         )}
                       </div>
                       <span
-                        className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)] uppercase"
+                        className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)] uppercase"
                         style={{ fontSize: 13, fontWeight: 600 }}
                       >
                         {member.name}
                       </span>
                       {solve ? (
                         <span
-                          className="tabular-nums font-[family-name:var(--font-nunito)]"
+                          className="tabular-nums font-[family-name:var(--font-suse)]"
                           style={{ fontSize: 22, fontWeight: 800, color: getPlayerColor(i) }}
                         >
                           {solve.dnf ? "DNF" : formatMs(solve.timeMs)}
                         </span>
                       ) : (
                         <span
-                          className="text-[#98989D] italic font-[family-name:var(--font-nunito)]"
+                          className="text-[#98989D] italic font-[family-name:var(--font-suse)]"
                           style={{ fontSize: 14 }}
                         >
                           Waiting…
@@ -1046,7 +1046,7 @@ export default function LogPage() {
               {!timerRunning && (
                 <div className="flex flex-col items-center gap-2 mt-2">
                   <p
-                    className="tabular-nums text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]"
+                    className="tabular-nums text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]"
                     style={{ fontSize: 64, fontWeight: 800 }}
                   >
                     {formatMsDisplay(timerElapsed)}
@@ -1058,7 +1058,7 @@ export default function LogPage() {
               {!mySolve && !timerRunning && (
                 <button
                   onClick={startTimer}
-                  className="flex items-center justify-center gap-2 text-white dark:text-[#0A0A0C] font-[family-name:var(--font-nunito)]
+                  className="flex items-center justify-center gap-2 text-white dark:text-[#0A0A0C] font-[family-name:var(--font-suse)]
                     bg-[#3A7BD5] dark:bg-white hover:bg-[#2C5F9E] dark:hover:bg-[#ECE7DE] active:scale-[0.98] transition-all self-center"
                   style={{
                     borderRadius: 999,
@@ -1076,12 +1076,12 @@ export default function LogPage() {
 
               {mySolve && (
                 <div className="flex flex-col items-center gap-2">
-                  <p className="text-sm text-green-600 font-semibold font-[family-name:var(--font-nunito)]">
+                  <p className="text-sm text-green-600 font-semibold font-[family-name:var(--font-suse)]">
                     Your time: {formatMs(mySolve.timeMs)}
                   </p>
                   <button
                     onClick={handleResetSolve}
-                    className="flex items-center gap-1 text-xs text-[#98989D] hover:text-red-500 transition-colors font-[family-name:var(--font-nunito)]"
+                    className="flex items-center gap-1 text-xs text-[#98989D] hover:text-red-500 transition-colors font-[family-name:var(--font-suse)]"
                   >
                     <IoRefresh />
                     Reset my solve
@@ -1093,7 +1093,7 @@ export default function LogPage() {
             /* ── Simple game: "Who Won?" big avatar circles ──── */
             <div className="flex flex-col items-center gap-6">
               <p
-                className="text-[#98989D] font-[family-name:var(--font-nunito)] text-center"
+                className="text-[#98989D] font-[family-name:var(--font-suse)] text-center"
                 style={{ fontSize: 15, fontWeight: 600 }}
               >
                 Who won this round?
@@ -1124,7 +1124,7 @@ export default function LogPage() {
                       )}
                     </div>
                     <span
-                      className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]"
+                      className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]"
                       style={{ fontSize: 16, fontWeight: 700 }}
                     >
                       {member.name}
@@ -1138,7 +1138,7 @@ export default function LogPage() {
           {/* Cancel round */}
           <button
             onClick={handleCancelRound}
-            className="text-[#98989D] hover:text-[#636366] transition-colors font-[family-name:var(--font-nunito)] underline self-center"
+            className="text-[#98989D] hover:text-[#636366] transition-colors font-[family-name:var(--font-suse)] underline self-center"
             style={{ fontSize: 13, fontWeight: 600 }}
           >
             Cancel round
@@ -1153,7 +1153,7 @@ export default function LogPage() {
           <button
             onClick={handleCreateRound}
             disabled={actionLoading}
-            className="flex items-center justify-center gap-2 text-white dark:text-[#0A0A0C] font-[family-name:var(--font-nunito)]
+            className="flex items-center justify-center gap-2 text-white dark:text-[#0A0A0C] font-[family-name:var(--font-suse)]
               bg-[#3A7BD5] dark:bg-white hover:bg-[#2C5F9E] dark:hover:bg-[#ECE7DE] active:scale-[0.98] transition-all
               disabled:opacity-50 disabled:cursor-not-allowed"
             style={{
@@ -1199,7 +1199,7 @@ function RoundResults({
       <div className="flex items-center gap-2">
         <IoCheckmarkCircle className="text-green-500" style={{ fontSize: 24 }} />
         <h2
-          className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]"
+          className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]"
           style={{ fontSize: 20, fontWeight: 800 }}
         >
           Round Complete!
@@ -1208,7 +1208,7 @@ function RoundResults({
 
       {winnerMember && (
         <p
-          className="font-[family-name:var(--font-nunito)]"
+          className="font-[family-name:var(--font-suse)]"
           style={{
             fontSize: 15,
             fontWeight: 700,
@@ -1257,13 +1257,13 @@ function RoundResults({
                 )}
               </div>
               <span
-                className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]"
+                className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]"
                 style={{ fontSize: 13, fontWeight: 600 }}
               >
                 {member.name}
               </span>
               <span
-                className="tabular-nums font-[family-name:var(--font-nunito)]"
+                className="tabular-nums font-[family-name:var(--font-suse)]"
                 style={{ fontSize: 22, fontWeight: 800, color: getPlayerColor(i) }}
               >
                 {solve ? (solve.dnf ? "DNF" : formatMs(solve.timeMs)) : "—"}

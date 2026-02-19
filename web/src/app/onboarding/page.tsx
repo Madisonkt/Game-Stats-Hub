@@ -90,7 +90,7 @@ export default function OnboardingPage() {
       <div className="w-full max-w-sm">
         {/* Name input (always shown) */}
         <div className="flex flex-col items-center gap-3 mb-8">
-          <h1 className="text-3xl font-extrabold text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]">
+          <h1 className="text-3xl font-extrabold text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]">
             {mode === "choose" ? "What's your name?" : mode === "create" ? "Create a Room" : "Join a Room"}
           </h1>
         </div>
@@ -99,7 +99,7 @@ export default function OnboardingPage() {
           {mode !== "choose" && (
             <button
               onClick={() => { setMode("choose"); setError(null); }}
-              className="flex items-center gap-1 text-sm text-[#636366] dark:text-[#98989D] mb-2 hover:text-[#0A0A0C] dark:hover:text-[#F3F0EA] transition-colors font-[family-name:var(--font-nunito)]"
+              className="flex items-center gap-1 text-sm text-[#636366] dark:text-[#98989D] mb-2 hover:text-[#0A0A0C] dark:hover:text-[#F3F0EA] transition-colors font-[family-name:var(--font-suse)]"
             >
               <IoArrowBack />
               Back
@@ -118,7 +118,7 @@ export default function OnboardingPage() {
               border border-[#ECE7DE] dark:border-[#1A1A1C]
               placeholder:text-[#636366] dark:placeholder:text-[#98989D]
               focus:outline-none focus:ring-2 focus:ring-[#3A7BD5] dark:focus:ring-white
-              font-[family-name:var(--font-nunito)]"
+              font-[family-name:var(--font-suse)]"
           />
 
           {mode === "join" && (
@@ -134,12 +134,12 @@ export default function OnboardingPage() {
                 border border-[#ECE7DE] dark:border-[#1A1A1C]
                 placeholder:text-[#636366] dark:placeholder:text-[#98989D] placeholder:tracking-normal
                 focus:outline-none focus:ring-2 focus:ring-[#3A7BD5] dark:focus:ring-white
-                font-[family-name:var(--font-nunito)]"
+                font-[family-name:var(--font-suse)]"
             />
           )}
 
           {error && (
-            <p className="text-sm font-semibold text-red-500 font-[family-name:var(--font-nunito)]">
+            <p className="text-sm font-semibold text-red-500 font-[family-name:var(--font-suse)]">
               {error}
             </p>
           )}
@@ -151,7 +151,7 @@ export default function OnboardingPage() {
                 className="flex items-center justify-center gap-2.5 w-full py-4 rounded-2xl
                   bg-[#3A7BD5] text-white dark:bg-white dark:text-[#0A0A0C] font-bold text-lg
                   hover:bg-[#2C5F9E] dark:hover:bg-[#ECE7DE] active:scale-[0.98] transition-all
-                  font-[family-name:var(--font-nunito)]"
+                  font-[family-name:var(--font-suse)]"
               >
                 <IoAdd className="text-xl" />
                 Create Room
@@ -164,7 +164,7 @@ export default function OnboardingPage() {
                   bg-[#ECE7DE] dark:bg-[#1A1A1C]
                   text-[#0A0A0C] dark:text-[#F3F0EA]
                   font-bold text-lg hover:opacity-80 active:scale-[0.98] transition-all
-                  font-[family-name:var(--font-nunito)]"
+                  font-[family-name:var(--font-suse)]"
               >
                 <IoPeople className="text-xl" />
                 Join with Code
@@ -177,7 +177,7 @@ export default function OnboardingPage() {
                   text-[#636366] dark:text-[#98989D] text-sm font-semibold
                   hover:text-[#0A0A0C] dark:hover:text-[#F3F0EA] transition-colors
                   disabled:opacity-50 disabled:cursor-not-allowed
-                  font-[family-name:var(--font-nunito)]"
+                  font-[family-name:var(--font-suse)]"
               >
                 <IoFlash />
                 {loading ? "Creating..." : "Quick Start (solo test)"}
@@ -189,7 +189,7 @@ export default function OnboardingPage() {
               className="flex items-center justify-center gap-2.5 w-full py-4 rounded-2xl
                 bg-[#3A7BD5] text-white dark:bg-white dark:text-[#0A0A0C] font-bold text-lg
                 hover:bg-[#2C5F9E] dark:hover:bg-[#ECE7DE] active:scale-[0.98] transition-all
-                font-[family-name:var(--font-nunito)]"
+                font-[family-name:var(--font-suse)]"
             >
               <IoAdd className="text-xl" />
               Create Room
@@ -200,7 +200,7 @@ export default function OnboardingPage() {
               className="flex items-center justify-center gap-2.5 w-full py-4 rounded-2xl
                 bg-[#3A7BD5] text-white dark:bg-white dark:text-[#0A0A0C] font-bold text-lg
                 hover:bg-[#2C5F9E] dark:hover:bg-[#ECE7DE] active:scale-[0.98] transition-all
-                font-[family-name:var(--font-nunito)]"
+                font-[family-name:var(--font-suse)]"
             >
               <IoPeople className="text-xl" />
               Join Room

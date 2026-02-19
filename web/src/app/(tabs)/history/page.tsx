@@ -129,7 +129,7 @@ function PlayerProfileCard({
                 />
               ) : (
                 <span
-                  className="text-white font-[family-name:var(--font-nunito)]"
+                  className="text-white font-[family-name:var(--font-suse)]"
                   style={{ fontSize: 20, fontWeight: 800 }}
                 >
                   {initial}
@@ -142,13 +142,13 @@ function PlayerProfileCard({
         {/* Name + score column */}
         <div className="flex-1 flex flex-col items-start gap-0.5">
           <span
-            className="font-[family-name:var(--font-nunito)]"
+            className="font-[family-name:var(--font-suse)]"
             style={{ fontSize: 14, fontWeight: 600, color: "#fff" }}
           >
             {name}
           </span>
           <span
-            className="text-white font-[family-name:var(--font-nunito)]"
+            className="text-white font-[family-name:var(--font-suse)]"
             style={{ fontSize: 48, fontWeight: 800, lineHeight: "52px" }}
           >
             {wins}
@@ -211,7 +211,7 @@ function EventRow({
             />
           ) : (
             <span
-              className="text-white font-[family-name:var(--font-nunito)]"
+              className="text-white font-[family-name:var(--font-suse)]"
               style={{ fontSize: 10, fontWeight: 700 }}
             >
               {winnerInitial}
@@ -226,7 +226,7 @@ function EventRow({
           <div className="flex items-center gap-1.5">
             <span className="text-[#98989D]"><IoTime style={{ fontSize: 14 }} /></span>
             <span
-              className="text-[#98989D] font-[family-name:var(--font-nunito)]"
+              className="text-[#98989D] font-[family-name:var(--font-suse)]"
               style={{ fontSize: 12, fontWeight: 400 }}
             >
               Rubik&apos;s Cube
@@ -234,7 +234,7 @@ function EventRow({
           </div>
           <div className="flex items-center gap-1">
             <span
-              className="text-[#98989D] font-[family-name:var(--font-nunito)]"
+              className="text-[#98989D] font-[family-name:var(--font-suse)]"
               style={{ fontSize: 11, fontWeight: 400 }}
             >
               {timeText}
@@ -242,7 +242,7 @@ function EventRow({
           </div>
         </div>
         <span
-          className="font-[family-name:var(--font-nunito)]"
+          className="font-[family-name:var(--font-suse)]"
           style={{ fontSize: 15, fontWeight: 700, color: winnerColor }}
         >
           {winnerName} won{elapsedDisplay ? ` — ${elapsedDisplay}` : ""}
@@ -404,7 +404,7 @@ export default function HistoryPage() {
   if (!couple || !currentUser) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] p-6">
-        <p className="text-sm text-[#636366] dark:text-[#98989D] font-[family-name:var(--font-nunito)]">
+        <p className="text-sm text-[#636366] dark:text-[#98989D] font-[family-name:var(--font-suse)]">
           Join or create a room first
         </p>
       </div>
@@ -427,7 +427,7 @@ export default function HistoryPage() {
       {/* ── Header ──────────────────────────────────── */}
       <div className="px-5 pt-4 pb-3">
         <h1
-          className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]"
+          className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]"
           style={{ fontSize: 28, fontWeight: 800 }}
         >
           History
@@ -468,7 +468,7 @@ export default function HistoryPage() {
           <div className="flex items-center mb-4">
             <div className="flex-1">
               <span
-                className="font-[family-name:var(--font-nunito)] uppercase tracking-wide"
+                className="font-[family-name:var(--font-suse)] uppercase tracking-wide"
                 style={{ fontSize: 13, fontWeight: 800, color: getPlayerColor(0) }}
               >
                 {members[0]?.name || "Player 1"}
@@ -476,7 +476,7 @@ export default function HistoryPage() {
             </div>
             <div className="flex-1 text-right">
               <span
-                className="font-[family-name:var(--font-nunito)] uppercase tracking-wide"
+                className="font-[family-name:var(--font-suse)] uppercase tracking-wide"
                 style={{ fontSize: 13, fontWeight: 800, color: getPlayerColor(1) }}
               >
                 {members[1]?.name || "Player 2"}
@@ -489,18 +489,18 @@ export default function HistoryPage() {
 
           {/* BEST TIME */}
           <div className="flex items-center mb-1">
-            <span className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)] uppercase tracking-wide" style={{ fontSize: 11, fontWeight: 800 }}>
+            <span className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)] uppercase tracking-wide" style={{ fontSize: 11, fontWeight: 800 }}>
               Best Time
             </span>
           </div>
           <div className="flex items-center mb-4">
             <div className="flex-1">
-              <span className="font-[family-name:var(--font-nunito)] tabular-nums" style={{ fontSize: 16, fontWeight: 600, color: getPlayerColor(0) }}>
+              <span className="font-[family-name:var(--font-suse)] tabular-nums" style={{ fontSize: 16, fontWeight: 600, color: getPlayerColor(0) }}>
                 {timedStatsA?.bestTime ? formatMs(timedStatsA.bestTime) : "—"}
               </span>
             </div>
             <div className="flex-1 text-right">
-              <span className="font-[family-name:var(--font-nunito)] tabular-nums" style={{ fontSize: 16, fontWeight: 600, color: getPlayerColor(1) }}>
+              <span className="font-[family-name:var(--font-suse)] tabular-nums" style={{ fontSize: 16, fontWeight: 600, color: getPlayerColor(1) }}>
                 {timedStatsB?.bestTime ? formatMs(timedStatsB.bestTime) : "—"}
               </span>
             </div>
@@ -511,18 +511,18 @@ export default function HistoryPage() {
 
           {/* AVG TIME */}
           <div className="flex items-center mb-1">
-            <span className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)] uppercase tracking-wide" style={{ fontSize: 11, fontWeight: 800 }}>
+            <span className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)] uppercase tracking-wide" style={{ fontSize: 11, fontWeight: 800 }}>
               Avg Time
             </span>
           </div>
           <div className="flex items-center mb-4">
             <div className="flex-1">
-              <span className="font-[family-name:var(--font-nunito)] tabular-nums" style={{ fontSize: 16, fontWeight: 600, color: getPlayerColor(0) }}>
+              <span className="font-[family-name:var(--font-suse)] tabular-nums" style={{ fontSize: 16, fontWeight: 600, color: getPlayerColor(0) }}>
                 {timedStatsA?.avgTime ? formatMs(timedStatsA.avgTime) : "—"}
               </span>
             </div>
             <div className="flex-1 text-right">
-              <span className="font-[family-name:var(--font-nunito)] tabular-nums" style={{ fontSize: 16, fontWeight: 600, color: getPlayerColor(1) }}>
+              <span className="font-[family-name:var(--font-suse)] tabular-nums" style={{ fontSize: 16, fontWeight: 600, color: getPlayerColor(1) }}>
                 {timedStatsB?.avgTime ? formatMs(timedStatsB.avgTime) : "—"}
               </span>
             </div>
@@ -533,18 +533,18 @@ export default function HistoryPage() {
 
           {/* WIN RATE */}
           <div className="flex items-center mb-1">
-            <span className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)] uppercase tracking-wide" style={{ fontSize: 11, fontWeight: 800 }}>
+            <span className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)] uppercase tracking-wide" style={{ fontSize: 11, fontWeight: 800 }}>
               Win Rate
             </span>
           </div>
           <div className="flex items-center">
             <div className="flex-1">
-              <span className="font-[family-name:var(--font-nunito)] tabular-nums" style={{ fontSize: 16, fontWeight: 600, color: getPlayerColor(0) }}>
+              <span className="font-[family-name:var(--font-suse)] tabular-nums" style={{ fontSize: 16, fontWeight: 600, color: getPlayerColor(0) }}>
                 {timedStatsA?.winRate ?? 0}%
               </span>
             </div>
             <div className="flex-1 text-right">
-              <span className="font-[family-name:var(--font-nunito)] tabular-nums" style={{ fontSize: 16, fontWeight: 600, color: getPlayerColor(1) }}>
+              <span className="font-[family-name:var(--font-suse)] tabular-nums" style={{ fontSize: 16, fontWeight: 600, color: getPlayerColor(1) }}>
                 {timedStatsB?.winRate ?? 0}%
               </span>
             </div>
@@ -555,7 +555,7 @@ export default function HistoryPage() {
       {/* ── Result count ────────────────────────────── */}
       {timeline.length > 0 && (
         <p
-          className="text-[#98989D] font-[family-name:var(--font-nunito)] px-4 mb-2"
+          className="text-[#98989D] font-[family-name:var(--font-suse)] px-4 mb-2"
           style={{ fontSize: 12, fontWeight: 600 }}
         >
           {timeline.length} result{timeline.length !== 1 ? "s" : ""}
@@ -567,13 +567,13 @@ export default function HistoryPage() {
         <div className="flex flex-col items-center pt-16 gap-3">
           <IoTimeOutline className="text-[#98989D]" style={{ fontSize: 64 }} />
           <p
-            className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]"
+            className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]"
             style={{ fontSize: 20, fontWeight: 700 }}
           >
             No wins recorded yet
           </p>
           <p
-            className="text-[#98989D] font-[family-name:var(--font-nunito)] text-center px-10"
+            className="text-[#98989D] font-[family-name:var(--font-suse)] text-center px-10"
             style={{ fontSize: 14, fontWeight: 400 }}
           >
             Go to the Log tab and start tapping to record wins
@@ -711,7 +711,7 @@ export default function HistoryPage() {
                     </svg>
                   )}
                   <span
-                    className="text-white font-[family-name:var(--font-nunito)] truncate flex-1"
+                    className="text-white font-[family-name:var(--font-suse)] truncate flex-1"
                     style={{ fontSize: 28, fontWeight: 800 }}
                   >
                     {player?.name}
@@ -719,7 +719,7 @@ export default function HistoryPage() {
                 </div>
 
                 <span
-                  className="font-[family-name:var(--font-nunito)] block"
+                  className="font-[family-name:var(--font-suse)] block"
                   style={{
                     fontSize: 13,
                     fontWeight: 600,
@@ -735,26 +735,26 @@ export default function HistoryPage() {
                 {/* Stats */}
                 <div className="flex flex-col gap-1.5 mb-1">
                   <div style={{ paddingTop: 2, paddingBottom: 2 }}>
-                    <span className="text-white font-[family-name:var(--font-nunito)]" style={{ fontSize: 34, fontWeight: 800, lineHeight: "38px" }}>
+                    <span className="text-white font-[family-name:var(--font-suse)]" style={{ fontSize: 34, fontWeight: 800, lineHeight: "38px" }}>
                       {playerScore}
                     </span>
-                    <span className="block font-[family-name:var(--font-nunito)]" style={{ fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: 1.5, marginTop: -2 }}>
+                    <span className="block font-[family-name:var(--font-suse)]" style={{ fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: 1.5, marginTop: -2 }}>
                       WINS
                     </span>
                   </div>
                   <div style={{ paddingTop: 2, paddingBottom: 2 }}>
-                    <span className="text-white font-[family-name:var(--font-nunito)]" style={{ fontSize: 34, fontWeight: 800, lineHeight: "38px" }}>
+                    <span className="text-white font-[family-name:var(--font-suse)]" style={{ fontSize: 34, fontWeight: 800, lineHeight: "38px" }}>
                       {stats?.winRate ?? 0}%
                     </span>
-                    <span className="block font-[family-name:var(--font-nunito)]" style={{ fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: 1.5, marginTop: -2 }}>
+                    <span className="block font-[family-name:var(--font-suse)]" style={{ fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: 1.5, marginTop: -2 }}>
                       WIN RATE
                     </span>
                   </div>
                   <div style={{ paddingTop: 2, paddingBottom: 2 }}>
-                    <span className="text-white font-[family-name:var(--font-nunito)]" style={{ fontSize: 34, fontWeight: 800, lineHeight: "38px" }}>
+                    <span className="text-white font-[family-name:var(--font-suse)]" style={{ fontSize: 34, fontWeight: 800, lineHeight: "38px" }}>
                       {isOnStreak ? streak.count : 0}
                     </span>
-                    <span className="block font-[family-name:var(--font-nunito)]" style={{ fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: 1.5, marginTop: -2 }}>
+                    <span className="block font-[family-name:var(--font-suse)]" style={{ fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: 1.5, marginTop: -2 }}>
                       STREAK
                     </span>
                   </div>
@@ -765,33 +765,33 @@ export default function HistoryPage() {
                   <>
                     <div style={{ height: 1, backgroundColor: "rgba(255,255,255,0.1)", marginTop: 8, marginBottom: 8 }} />
                     <span
-                      className="block font-[family-name:var(--font-nunito)]"
+                      className="block font-[family-name:var(--font-suse)]"
                       style={{ fontSize: 12, fontWeight: 700, color: "rgba(255,255,255,0.35)", letterSpacing: 2, marginBottom: 8, marginTop: 4 }}
                     >
                       ROUND STATS
                     </span>
                     <div className="flex flex-col gap-1.5 mb-1">
                       <div style={{ paddingTop: 2, paddingBottom: 2 }}>
-                        <span className="text-white font-[family-name:var(--font-nunito)]" style={{ fontSize: 34, fontWeight: 800, lineHeight: "38px" }}>
+                        <span className="text-white font-[family-name:var(--font-suse)]" style={{ fontSize: 34, fontWeight: 800, lineHeight: "38px" }}>
                           {stats?.bestTime ? formatMs(stats.bestTime) : "—"}
                         </span>
-                        <span className="block font-[family-name:var(--font-nunito)]" style={{ fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: 1.5, marginTop: -2 }}>
+                        <span className="block font-[family-name:var(--font-suse)]" style={{ fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: 1.5, marginTop: -2 }}>
                           BEST
                         </span>
                       </div>
                       <div style={{ paddingTop: 2, paddingBottom: 2 }}>
-                        <span className="text-white font-[family-name:var(--font-nunito)]" style={{ fontSize: 34, fontWeight: 800, lineHeight: "38px" }}>
+                        <span className="text-white font-[family-name:var(--font-suse)]" style={{ fontSize: 34, fontWeight: 800, lineHeight: "38px" }}>
                           {stats?.avgTime ? formatMs(stats.avgTime) : "—"}
                         </span>
-                        <span className="block font-[family-name:var(--font-nunito)]" style={{ fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: 1.5, marginTop: -2 }}>
+                        <span className="block font-[family-name:var(--font-suse)]" style={{ fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: 1.5, marginTop: -2 }}>
                           AVERAGE
                         </span>
                       </div>
                       <div style={{ paddingTop: 2, paddingBottom: 2 }}>
-                        <span className="text-white font-[family-name:var(--font-nunito)]" style={{ fontSize: 34, fontWeight: 800, lineHeight: "38px" }}>
+                        <span className="text-white font-[family-name:var(--font-suse)]" style={{ fontSize: 34, fontWeight: 800, lineHeight: "38px" }}>
                           {stats?.roundCount ?? 0}
                         </span>
-                        <span className="block font-[family-name:var(--font-nunito)]" style={{ fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: 1.5, marginTop: -2 }}>
+                        <span className="block font-[family-name:var(--font-suse)]" style={{ fontSize: 11, fontWeight: 600, color: "rgba(255,255,255,0.4)", textTransform: "uppercase", letterSpacing: 1.5, marginTop: -2 }}>
                           ROUNDS
                         </span>
                       </div>
@@ -800,7 +800,7 @@ export default function HistoryPage() {
                 )}
 
                 <p
-                  className="text-center font-[family-name:var(--font-nunito)]"
+                  className="text-center font-[family-name:var(--font-suse)]"
                   style={{ fontSize: 12, fontWeight: 600, color: "rgba(255,255,255,0.25)", marginTop: 20 }}
                 >
                   Tap outside to close

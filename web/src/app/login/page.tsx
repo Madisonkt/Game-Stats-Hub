@@ -71,10 +71,10 @@ export default function LoginPage() {
         {/* Title */}
         <div className="flex flex-col items-center gap-3 mb-10">
           <IoGameController className="text-5xl text-[#3A7BD5] dark:text-white" />
-          <h1 className="text-3xl font-extrabold text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-nunito)]">
+          <h1 className="text-3xl font-extrabold text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]">
             {mode === "sign-in" ? "Welcome back" : "Create account"}
           </h1>
-          <p className="text-sm text-[#636366] dark:text-[#98989D] text-center font-[family-name:var(--font-nunito)]">
+          <p className="text-sm text-[#636366] dark:text-[#98989D] text-center font-[family-name:var(--font-suse)]">
             {mode === "sign-in" ? "Sign in to continue" : "Sign up to get started"}
           </p>
         </div>
@@ -82,7 +82,7 @@ export default function LoginPage() {
         {/* Form */}
         <div className="flex flex-col gap-3">
           <div>
-            <label className="text-xs font-semibold uppercase tracking-wider text-[#636366] dark:text-[#98989D] font-[family-name:var(--font-nunito)]">
+            <label className="text-xs font-semibold uppercase tracking-wider text-[#636366] dark:text-[#98989D] font-[family-name:var(--font-suse)]">
               Email
             </label>
             <input
@@ -100,12 +100,12 @@ export default function LoginPage() {
                 placeholder:text-[#636366] dark:placeholder:text-[#98989D]
                 focus:outline-none focus:ring-2 focus:ring-[#3A7BD5] dark:focus:ring-white
                 disabled:opacity-50
-                font-[family-name:var(--font-nunito)]"
+                font-[family-name:var(--font-suse)]"
             />
           </div>
 
           <div>
-            <label className="text-xs font-semibold uppercase tracking-wider text-[#636366] dark:text-[#98989D] font-[family-name:var(--font-nunito)]">
+            <label className="text-xs font-semibold uppercase tracking-wider text-[#636366] dark:text-[#98989D] font-[family-name:var(--font-suse)]">
               Password
             </label>
             <input
@@ -123,12 +123,12 @@ export default function LoginPage() {
                 placeholder:text-[#636366] dark:placeholder:text-[#98989D]
                 focus:outline-none focus:ring-2 focus:ring-[#3A7BD5] dark:focus:ring-white
                 disabled:opacity-50
-                font-[family-name:var(--font-nunito)]"
+                font-[family-name:var(--font-suse)]"
             />
           </div>
 
           {error && (
-            <p className="text-sm font-semibold text-red-500 font-[family-name:var(--font-nunito)]">
+            <p className="text-sm font-semibold text-red-500 font-[family-name:var(--font-suse)]">
               {error}
             </p>
           )}
@@ -140,7 +140,7 @@ export default function LoginPage() {
               bg-[#3A7BD5] text-white dark:bg-white dark:text-[#0A0A0C] font-bold text-lg
               hover:bg-[#2C5F9E] dark:hover:bg-[#ECE7DE] active:scale-[0.98] transition-all
               disabled:opacity-60 disabled:cursor-not-allowed
-              font-[family-name:var(--font-nunito)]"
+              font-[family-name:var(--font-suse)]"
           >
             {loading ? (
               <div className="h-5 w-5 animate-spin rounded-full border-2 border-white dark:border-[#0A0A0C] border-t-transparent" />
@@ -164,7 +164,7 @@ export default function LoginPage() {
               setError(null);
             }}
             className="text-sm text-[#636366] dark:text-[#98989D] hover:text-[#0A0A0C] dark:hover:text-[#F3F0EA]
-              transition-colors font-[family-name:var(--font-nunito)] mt-2 text-center"
+              transition-colors font-[family-name:var(--font-suse)] mt-2 text-center"
           >
             {mode === "sign-in" ? (
               <>Don&apos;t have an account? <span className="font-bold underline">Sign up</span></>

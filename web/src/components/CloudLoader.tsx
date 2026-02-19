@@ -21,7 +21,7 @@ export default function CloudLoader({ message }: { message?: string }) {
         </span>
       </span>
       {message && (
-        <p className="text-sm font-semibold text-[#636366] dark:text-[#98989D] font-[family-name:var(--font-nunito)]">
+        <p className="text-sm font-semibold text-[#636366] dark:text-[#98989D] font-[family-name:var(--font-suse)]">
           {message}
         </p>
       )}

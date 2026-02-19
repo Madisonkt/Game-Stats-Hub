@@ -48,7 +48,7 @@ export default function TabLayout({ children }: { children: ReactNode }) {
                     }`}
                 >
                   <Icon className="text-[22px] relative z-10" />
-                  <span className="text-[10px] font-bold font-[family-name:var(--font-nunito)] relative z-10 tracking-wide">
+                  <span className="text-[10px] font-bold font-[family-name:var(--font-suse)] relative z-10 tracking-wide">
                     {tab.label}
                   </span>
                 </Link>
