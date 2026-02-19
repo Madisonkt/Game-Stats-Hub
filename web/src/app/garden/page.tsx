@@ -10,7 +10,8 @@ import {
   deleteGardenItem,
   type GardenItem,
 } from "@/lib/repos/gardenRepo";
-import { IoAdd, IoClose, IoArrowBack, IoGrid, IoLeaf } from "react-icons/io5";
+import { IoAdd, IoClose, IoArrowBack, IoGrid, IoLeaf, IoCube } from "react-icons/io5";
+import { FishTank3D } from "@/components/3d/FishTank3D";
 
 // ── Deterministic position from id ──────────────────────────
 function seedFromId(id: string): number {
@@ -422,7 +423,7 @@ export default function GardenPage() {
   const [items, setItems] = useState<GardenItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<GardenItem | null>(null);
-  const [view, setView] = useState<"moss" | "grid">("moss");
+  const [view, setView] = useState<"moss" | "grid" | "3d">("moss");
 
   const coupleId = couple?.id;
   const members = couple?.members ?? [];
@@ -521,6 +522,18 @@ export default function GardenPage() {
             >
               <IoGrid style={{ fontSize: 14, color: view === "grid" ? "#3A7BD5" : "#98989D" }} />
             </button>
+            <button
+              onClick={() => setView("3d")}
+              className="flex items-center justify-center transition-all"
+              style={{
+                width: 34, height: 30,
+                borderRadius: 10,
+                backgroundColor: view === "3d" ? "#fff" : "transparent",
+                boxShadow: view === "3d" ? "0 1px 3px rgba(0,0,0,0.1)" : "none",
+              }}
+            >
+              <IoCube style={{ fontSize: 14, color: view === "3d" ? "#E07850" : "#98989D" }} />
+            </button>
           </div>
           <button
             onClick={() => router.push("/garden/new")}
@@ -546,7 +559,7 @@ export default function GardenPage() {
       <div style={{ height: 64 }} />
 
       {/* Garden — moss with sprouting doodles */}
-      <div className={`pb-8 ${view === "grid" ? "max-w-lg mx-auto" : ""}`}>
+      <div className={`pb-8 ${view === "grid" ? "max-w-lg mx-auto" : ""} ${view === "3d" ? "px-4 max-w-lg mx-auto" : ""}`}>
         {loading ? (
           <div className="flex items-center justify-center py-20">
             <div className="h-8 w-8 animate-spin rounded-full border-3 border-[#E8A0BF] border-t-transparent" />
@@ -596,9 +609,17 @@ export default function GardenPage() {
               />
             ))}
           </div>
-        ) : (
+        ) : view === "grid" ? (
           // Grid view — doodles organized by date
           <GridView items={items} onSelect={setSelected} />
+        ) : (
+          // 3D interactive view
+          <div className="py-4">
+            <FishTank3D height="460px" width="100%" style={{ borderRadius: 12 }} />
+            <p className="text-center text-[#98989D] font-[family-name:var(--font-suse)] mt-3" style={{ fontSize: 11 }}>
+              drag to rotate · pinch / scroll to zoom
+            </p>
+          </div>
         )}
       </div>
 

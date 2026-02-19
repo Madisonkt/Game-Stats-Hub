@@ -835,7 +835,7 @@ export default function LogPage() {
               bg-[#3A7BD5] dark:bg-white hover:bg-[#2C5F9E] dark:hover:bg-[#ECE7DE] active:scale-[0.98] transition-all
               disabled:opacity-50 disabled:cursor-not-allowed"
             style={{
-              borderRadius: 999,
+              borderRadius: 22,
               paddingLeft: 56,
               paddingRight: 56,
               paddingTop: 20,
