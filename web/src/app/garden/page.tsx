@@ -144,9 +144,11 @@ function GridView({
 }) {
   const gridRef = useRef<HTMLDivElement>(null);
   const [cellPx, setCellPx] = useState(0);
+  const PAD = 6; // edge padding so outermost dots are fully visible
 
   useEffect(() => {
     if (!gridRef.current) return;
+    // contentRect.width is the content box (inside padding), so cellPx = inner width / 4
     const ro = new ResizeObserver(([e]) => setCellPx(e.contentRect.width / 4));
     ro.observe(gridRef.current);
     return () => ro.disconnect();
@@ -155,21 +157,24 @@ function GridView({
   const dateOf = (item: GardenItem) => item.photoTakenAt ?? item.createdAt;
   const sorted = [...items].sort((a, b) => dateOf(b) - dateOf(a));
 
-  // Dots sit at every cell corner intersection.
-  // backgroundSize = one cell, backgroundPosition = 0,0 so dots land on edges.
+  // Dots at every cell corner: 5 columns × (N+1) rows.
+  // padding pushes grid content inward; backgroundPosition matches so dots
+  // land exactly on cell corners, including the outer edges.
   return (
     <div
       ref={gridRef}
-      className="grid overflow-hidden"
+      className="grid"
       style={{
         gridTemplateColumns: "repeat(4, 1fr)",
         gap: 0,
+        padding: PAD,
         backgroundColor: "#FFFFFF",
         ...(cellPx > 0
           ? {
               backgroundImage:
                 "radial-gradient(circle, #D9D9D9 3px, transparent 3px)",
               backgroundSize: `${cellPx}px ${cellPx}px`,
+              backgroundPosition: `${PAD}px ${PAD}px`,
             }
           : {}),
       }}
@@ -179,7 +184,7 @@ function GridView({
           key={item.id}
           onClick={() => onSelect(item)}
           className="active:scale-[0.9] transition-transform overflow-hidden"
-          style={{ aspectRatio: "1", padding: "12%" }}
+          style={{ aspectRatio: "1", padding: "14%" }}
         >
           <div
             className="w-full h-full"
