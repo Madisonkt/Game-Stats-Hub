@@ -7,7 +7,7 @@ import { createGardenItem } from "@/lib/repos/gardenRepo";
 import { extractPhotoDate } from "@/lib/exif-date";
 import { IoArrowBack, IoArrowUndo, IoTrash, IoImage } from "react-icons/io5";
 
-const COLORS = ["#E8A0BF", "#F5C842", "#F4724A", "#B57BCC"];
+const COLORS = ["#3A7BD5", "#F5C842", "#F4724A", "#B57BCC"];
 const CANVAS_SIZE = 300;
 const STROKE_WIDTH = 6;
 
@@ -304,7 +304,7 @@ export default function NewDoodlePage() {
             active:scale-[0.98] transition-all"
           style={{ borderRadius: 14, fontSize: 14, fontWeight: 600 }}
         >
-          <IoImage style={{ fontSize: 18, color: "#E8A0BF" }} />
+          <IoImage style={{ fontSize: 18, color: "#3A7BD5" }} />
           {photo ? `📷 ${photo.name}` : "Attach a photo"}
         </button>
         <input
@@ -348,10 +348,10 @@ export default function NewDoodlePage() {
             padding: 16,
             fontSize: 16,
             fontWeight: 800,
-            backgroundColor: "#E8A0BF",
+            backgroundColor: "#3A7BD5",
           }}
         >
-          {saving ? "Planting..." : "Plant in Garden 🌱"}
+          {saving ? "Adding..." : "Add to Tank 🐟"}
         </button>
       </div>
     </div>

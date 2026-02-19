@@ -214,7 +214,7 @@ function GridView({
                 paddingLeft: 8,
                 fontSize: 13,
                 fontWeight: 700,
-                color: "#408052",
+                color: "#3A7BD5",
               }}
             >
               {cell.label}
@@ -485,7 +485,7 @@ export default function GardenPage() {
           <div className="flex items-center gap-2">
             <h1
               className="font-[family-name:var(--font-suse-mono)]"
-              style={{ fontSize: 24, fontWeight: 800, color: "#408052" }}
+              style={{ fontSize: 24, fontWeight: 800, color: "#3A7BD5" }}
             >
               Aquarium
             </h1>
@@ -531,8 +531,8 @@ export default function GardenPage() {
               padding: "8px 16px",
               fontSize: 13,
               fontWeight: 700,
-              color: "#408052",
-              border: "2px solid #408052",
+              color: "#3A7BD5",
+              border: "2px solid #3A7BD5",
               backgroundColor: "transparent",
             }}
           >
