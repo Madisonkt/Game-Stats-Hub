@@ -481,7 +481,7 @@ export default function GardenPage() {
             className="flex items-center gap-1 font-[family-name:var(--font-suse)]
               active:scale-[0.95] transition-all"
             style={{
-              borderRadius: 6,
+              borderRadius: 0,
               padding: "8px 16px",
               fontSize: 13,
               fontWeight: 700,
