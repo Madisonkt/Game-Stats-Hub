@@ -31,7 +31,7 @@ function formatMsDisplay(ms: number): string {
 }
 
 function getPlayerColor(index: number): string {
-  return index === 0 ? "#E07850" : "#3A7BD5";
+  return index === 0 ? "#E07850" : "#F1899C";
 }
 
 // ── Main page ───────────────────────────────────────────────

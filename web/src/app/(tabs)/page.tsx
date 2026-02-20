@@ -40,7 +40,7 @@ const GRADIENT_A = "radial-gradient(248.46% 209.77% at 0% -122.17%, #FAD6BE 56.9
 const GRADIENT_B = "radial-gradient(153.92% 152.12% at 92.94% 12.61%, #F0869A 0%, #FBE1D2 100%)";
 
 function getPlayerColor(index: number): string {
-  return index === 0 ? "#E07850" : "#3A7BD5";
+  return index === 0 ? "#E07850" : "#F1899C";
 }
 
 function getPlayerGradient(index: number): string {
