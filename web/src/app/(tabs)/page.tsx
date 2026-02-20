@@ -789,8 +789,8 @@ export default function LogPage() {
 
           {/* ── Status text ─────────────────────────────── */}
           <div
-            className="w-full bg-[#FEFEFE] mb-4"
-            style={{ borderRadius: 16, padding: 14 }}
+            className="w-full bg-[#FEFEFE]"
+            style={{ borderRadius: 16, padding: 14, marginBottom: 44 }}
           >
             <p
               className="text-[#98989D] font-[family-name:var(--font-suse)] text-left"
@@ -826,22 +826,20 @@ export default function LogPage() {
 
       {/* ── NO ACTIVE ROUND ─────────────────────────── */}
       {!round && (
-        <div className="w-full flex flex-col items-center gap-4">
+        <div className="w-full flex flex-col items-center">
           <button
             onClick={handleCreateRound}
             disabled={actionLoading}
-            className="flex items-center justify-center gap-2 text-white font-[family-name:var(--font-suse)]
+            className="w-full flex items-center justify-center gap-2 font-[family-name:var(--font-suse-mono)]
               bg-[#292929] hover:bg-[#1A1A1A] active:scale-[0.98] transition-all
               disabled:opacity-50 disabled:cursor-not-allowed"
             style={{
               borderRadius: 999,
-              paddingLeft: 56,
-              paddingRight: 56,
               paddingTop: 20,
               paddingBottom: 20,
-              fontSize: 22,
-              fontWeight: 800,
-              minWidth: 220,
+              fontSize: 24,
+              fontWeight: 600,
+              color: "#FEFEFE",
             }}
           >
             <IoPlay />
