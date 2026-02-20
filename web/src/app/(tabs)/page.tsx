@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
+import { createPortal } from "react-dom";
 import dynamic from "next/dynamic";
 import { useSession } from "@/lib/auth-context";
 import { useGames } from "@/lib/game-context";
@@ -1230,9 +1231,9 @@ export default function LogPage() {
       )}
 
       {/* ── Mode Picker Modal ────────────────────────── */}
-      {showModeModal && (
+      {showModeModal && createPortal(
         <div
-          className="fixed inset-0 z-[100] flex items-end justify-center px-4 pt-4 pb-24"
+          className="fixed inset-0 z-[200] flex items-end justify-center px-4 pt-4 pb-24"
           style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
           onClick={() => setShowModeModal(false)}
         >
@@ -1292,7 +1293,8 @@ export default function LogPage() {
               </span>
             </button>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
