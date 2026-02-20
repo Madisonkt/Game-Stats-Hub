@@ -635,85 +635,7 @@ export default function GamesPage() {
         </div>
       )}
 
-      {/* ── Actions ─────────────────────────────────── */}
-      <div className="flex flex-col gap-3 mt-auto">        {isPushSupported() && couple && (() => {
-          const perm = getPushPermission();
-          if (perm === "denied") return (
-            <button
-              onClick={() => alert("Notifications are blocked.\n\nTo re-enable:\niPhone: Settings → Cheese Squeeze → Notifications → Allow Notifications\n\nAndroid: Settings → Apps → Cheese Squeeze → Notifications")}
-              className="flex items-center justify-center gap-2 w-full font-[family-name:var(--font-suse)] active:scale-[0.98] transition-all"
-              style={{ borderRadius: 16, padding: 14, fontSize: 15, fontWeight: 700, color: "#98989D", backgroundColor: "rgba(150,150,150,0.08)" }}
-            >
-              <IoNotificationsOutline style={{ fontSize: 20 }} />
-              Notifications Blocked
-            </button>
-          );
-          if (perm === "granted") return (
-            <button
-              onClick={async () => {
-                if (!currentUser || !couple) return;
-                const result = await resyncPushSubscription(currentUser.id, couple.id);
-                if (result.ok) {
-                  alert("Notifications synced! ✓");
-                } else {
-                  alert(`Sync failed: ${result.error}\n\nTry closing and reopening the app.`);
-                }
-              }}
-              className="flex items-center justify-center gap-2 w-full font-[family-name:var(--font-suse)] active:scale-[0.98] transition-all"
-              style={{ borderRadius: 16, padding: 14, fontSize: 15, fontWeight: 700, color: "#34C759", backgroundColor: "rgba(52,199,89,0.08)" }}
-            >
-              <IoNotificationsOutline style={{ fontSize: 20 }} />
-              Notifications On · Resync
-            </button>
-          );
-          // "default" — not yet asked
-          return (
-            <button
-              onClick={async () => {
-                if (!currentUser || !couple) return;
-                const isStandalone = window.matchMedia("(display-mode: standalone)").matches
-                  || (window.navigator as { standalone?: boolean }).standalone === true;
-                if (!isStandalone) {
-                  alert("To enable notifications on iPhone:\n\n1. Tap the Share button in Safari\n2. Tap \"Add to Home Screen\"\n3. Open the app from your home screen\n4. Tap Enable Notifications again");
-                  return;
-                }
-                const result = await subscribeToPush(currentUser.id, couple.id);
-                if (result.ok) {
-                  alert("Notifications enabled! 🔔 You'll get a notification when your partner adds something.");
-                } else {
-                  alert(`Couldn't enable notifications.\n\n${result.error ?? ""}\n\niPhone: Make sure the app is added to your Home Screen and you tapped Allow when prompted.\n\nIf you tapped Don't Allow before, go to Settings → Cheese Squeeze → Notifications and enable them.`);
-                }
-              }}
-              className="flex items-center justify-center gap-2 w-full font-[family-name:var(--font-suse)] active:scale-[0.98] transition-all"
-              style={{ borderRadius: 16, padding: 14, fontSize: 15, fontWeight: 700, color: "#292929", backgroundColor: "rgba(41,41,41,0.08)" }}
-            >
-              <IoNotificationsOutline style={{ fontSize: 20 }} />
-              Enable Notifications
-            </button>
-          );
-        })()}        {couple && (
-          <button
-            onClick={() => setShowConfirm("exit")}
-            disabled={exitingRoom}
-            className="flex items-center justify-center gap-2 w-full font-[family-name:var(--font-suse)]
-              active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-            style={{ borderRadius: 16, padding: 14, fontSize: 15, fontWeight: 700, color: "#FF6B6B", backgroundColor: "rgba(255,107,107,0.08)" }}
-          >
-            <IoExitOutline style={{ fontSize: 20 }} />
-            Exit Room
-          </button>
-        )}
-        <button
-          onClick={() => setShowConfirm("signout")}
-          disabled={signingOut}
-          className="flex items-center justify-center gap-2 w-full font-[family-name:var(--font-suse)]
-            active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-          style={{ borderRadius: 16, padding: 14, fontSize: 15, fontWeight: 600, color: "#999" }}
-        >
-          <IoLogOutOutline style={{ fontSize: 20 }} />
-          Sign Out
-        </button>
-      </div>
+
 
       {/* ── Add Game Modal ──────────────────────────── */}
       {showAddGame && createPortal(
@@ -970,6 +892,94 @@ export default function GamesPage() {
                 {savingPassword ? "Saving..." : "Set Password"}
               </button>
             </div>
+
+            {/* ── Notifications ─────────────────────── */}
+            <div className="w-full mt-5 pt-5" style={{ borderTop: "1px solid rgba(150,150,150,0.2)" }}>
+              <div className="flex flex-col gap-3">
+                {isPushSupported() && couple && (() => {
+                  const perm = getPushPermission();
+                  if (perm === "denied") return (
+                    <button
+                      onClick={() => alert("Notifications are blocked.\n\nTo re-enable:\niPhone: Settings → Cheese Squeeze → Notifications → Allow Notifications\n\nAndroid: Settings → Apps → Cheese Squeeze → Notifications")}
+                      className="flex items-center justify-center gap-2 w-full font-[family-name:var(--font-suse)] active:scale-[0.98] transition-all"
+                      style={{ borderRadius: 16, padding: 14, fontSize: 15, fontWeight: 700, color: "#98989D", backgroundColor: "rgba(150,150,150,0.08)" }}
+                    >
+                      <IoNotificationsOutline style={{ fontSize: 20 }} />
+                      Notifications Blocked
+                    </button>
+                  );
+                  if (perm === "granted") return (
+                    <button
+                      onClick={async () => {
+                        if (!currentUser || !couple) return;
+                        const result = await resyncPushSubscription(currentUser.id, couple.id);
+                        if (result.ok) {
+                          alert("Notifications synced! ✓");
+                        } else {
+                          alert(`Sync failed: ${result.error}\n\nTry closing and reopening the app.`);
+                        }
+                      }}
+                      className="flex items-center justify-center gap-2 w-full font-[family-name:var(--font-suse)] active:scale-[0.98] transition-all"
+                      style={{ borderRadius: 16, padding: 14, fontSize: 15, fontWeight: 700, color: "#34C759", backgroundColor: "rgba(52,199,89,0.08)" }}
+                    >
+                      <IoNotificationsOutline style={{ fontSize: 20 }} />
+                      Notifications On · Resync
+                    </button>
+                  );
+                  return (
+                    <button
+                      onClick={async () => {
+                        if (!currentUser || !couple) return;
+                        const isStandalone = window.matchMedia("(display-mode: standalone)").matches
+                          || (window.navigator as { standalone?: boolean }).standalone === true;
+                        if (!isStandalone) {
+                          alert("To enable notifications on iPhone:\n\n1. Tap the Share button in Safari\n2. Tap \"Add to Home Screen\"\n3. Open the app from your home screen\n4. Tap Enable Notifications again");
+                          return;
+                        }
+                        const result = await subscribeToPush(currentUser.id, couple.id);
+                        if (result.ok) {
+                          alert("Notifications enabled! 🔔 You'll get a notification when your partner adds something.");
+                        } else {
+                          alert(`Couldn't enable notifications.\n\n${result.error ?? ""}\n\niPhone: Make sure the app is added to your Home Screen and you tapped Allow when prompted.\n\nIf you tapped Don't Allow before, go to Settings → Cheese Squeeze → Notifications and enable them.`);
+                        }
+                      }}
+                      className="flex items-center justify-center gap-2 w-full font-[family-name:var(--font-suse)] active:scale-[0.98] transition-all"
+                      style={{ borderRadius: 16, padding: 14, fontSize: 15, fontWeight: 700, color: "#292929", backgroundColor: "rgba(41,41,41,0.08)" }}
+                    >
+                      <IoNotificationsOutline style={{ fontSize: 20 }} />
+                      Enable Notifications
+                    </button>
+                  );
+                })()}
+
+                {/* Exit Room */}
+                {couple && (
+                  <button
+                    onClick={() => setShowConfirm("exit")}
+                    disabled={exitingRoom}
+                    className="flex items-center justify-center gap-2 w-full font-[family-name:var(--font-suse)]
+                      active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{ borderRadius: 16, padding: 14, fontSize: 15, fontWeight: 700, color: "#FF6B6B", backgroundColor: "rgba(255,107,107,0.08)" }}
+                  >
+                    <IoExitOutline style={{ fontSize: 20 }} />
+                    Exit Room
+                  </button>
+                )}
+
+                {/* Sign Out */}
+                <button
+                  onClick={() => setShowConfirm("signout")}
+                  disabled={signingOut}
+                  className="flex items-center justify-center gap-2 w-full font-[family-name:var(--font-suse)]
+                    active:scale-[0.98] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                  style={{ borderRadius: 16, padding: 14, fontSize: 15, fontWeight: 600, color: "#999" }}
+                >
+                  <IoLogOutOutline style={{ fontSize: 20 }} />
+                  Sign Out
+                </button>
+              </div>
+            </div>
+
             </div>
           </div>
         </div>,
