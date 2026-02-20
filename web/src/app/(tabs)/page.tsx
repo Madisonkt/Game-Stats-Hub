@@ -1232,7 +1232,7 @@ export default function LogPage() {
       {/* ── Mode Picker Modal ────────────────────────── */}
       {showModeModal && (
         <div
-          className="fixed inset-0 z-50 flex items-end justify-center p-4"
+          className="fixed inset-0 z-50 flex items-end justify-center px-4 pt-4 pb-24"
           style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
           onClick={() => setShowModeModal(false)}
         >
