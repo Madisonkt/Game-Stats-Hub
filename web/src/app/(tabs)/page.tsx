@@ -1140,8 +1140,8 @@ export default function LogPage() {
                 })}
               </div>
 
-              {/* Timer display (inline, not fullscreen) */}
-              {!timerRunning && (
+              {/* Timer display — hide once submitted or after round */}
+              {!timerRunning && !mySolve && !round.submittedUserIds.includes(currentUser.id) && (
                 <div className="flex flex-col items-center gap-2 mt-2">
                   <p
                     className="tabular-nums text-[#292929] font-[family-name:var(--font-suse)]"
