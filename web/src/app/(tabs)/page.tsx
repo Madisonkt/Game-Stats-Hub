@@ -124,6 +124,7 @@ function ScoreCard({
   avatarUrl,
   initial,
   isLeading,
+  scoreColor,
 }: {
   name: string;
   score: number;
@@ -132,6 +133,7 @@ function ScoreCard({
   avatarUrl?: string;
   initial: string;
   isLeading: boolean;
+  scoreColor?: string;
 }) {
   return (
     <div
@@ -199,8 +201,8 @@ function ScoreCard({
             {name}
           </span>
           <span
-            className="text-white font-[family-name:var(--font-suse)]"
-            style={{ fontSize: 48, fontWeight: 700, lineHeight: "52px" }}
+            className="font-[family-name:var(--font-suse)]"
+            style={{ fontSize: 48, fontWeight: 700, lineHeight: "52px", color: scoreColor || "#fff" }}
           >
             {score}
           </span>
@@ -782,6 +784,7 @@ export default function LogPage() {
                   avatarUrl={member.avatarUrl}
                   initial={member.name?.charAt(0)?.toUpperCase() || "?"}
                   isLeading={score > 0 && score > otherScore}
+                  scoreColor={i === 1 ? "#F1899C" : undefined}
                 />
               );
             })}

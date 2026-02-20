@@ -40,7 +40,7 @@ const GRADIENT_A = "radial-gradient(248.46% 209.77% at 0% -122.17%, #FAD6BE 56.9
 const GRADIENT_B = "radial-gradient(153.92% 152.12% at 92.94% 12.61%, #F0869A 0%, #FBE1D2 100%)";
 
 function getPlayerColor(index: number): string {
-  return index === 0 ? "#E07850" : "#3A7BD5";
+  return index === 0 ? "#E07850" : "#F1899C";
 }
 
 function getPlayerGradient(index: number): string {
@@ -70,6 +70,7 @@ function PlayerProfileCard({
   initial,
   isLeading,
   playerColor,
+  scoreColor,
   onClick,
 }: {
   name: string;
@@ -79,6 +80,7 @@ function PlayerProfileCard({
   initial: string;
   isLeading: boolean;
   playerColor: string;
+  scoreColor?: string;
   onClick?: () => void;
 }) {
   return (
@@ -148,8 +150,8 @@ function PlayerProfileCard({
             {name}
           </span>
           <span
-            className="text-white font-[family-name:var(--font-suse)]"
-            style={{ fontSize: 48, fontWeight: 700, lineHeight: "52px" }}
+            className="font-[family-name:var(--font-suse)]"
+            style={{ fontSize: 48, fontWeight: 700, lineHeight: "52px", color: scoreColor || "#fff" }}
           >
             {wins}
           </span>
@@ -453,8 +455,7 @@ export default function HistoryPage() {
           avatarUrl={members[1]?.avatarUrl}
           initial={members[1]?.name?.charAt(0)?.toUpperCase() || "2"}
           isLeading={overallB > overallA}
-          playerColor="#3A7BD5"
-          onClick={() => setStatSheetPlayer(1)}
+          playerColor="#F1899C"          scoreColor="#F1899C"          onClick={() => setStatSheetPlayer(1)}
         />
       </div>
 
