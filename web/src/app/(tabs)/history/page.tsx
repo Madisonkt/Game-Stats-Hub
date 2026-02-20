@@ -492,12 +492,12 @@ export default function HistoryPage() {
           </div>
           <div className="flex items-center mb-4">
             <div className="flex-1">
-              <span className="font-[family-name:var(--font-suse-mono)] tabular-nums" style={{ fontSize: 16, fontWeight: 500, color: getPlayerColor(0) }}>
+              <span className="font-[family-name:var(--font-suse-mono)] tabular-nums" style={{ fontSize: 16, fontWeight: 600, color: getPlayerColor(0) }}>
                 {timedStatsA?.bestTime ? formatMs(timedStatsA.bestTime) : "—"}
               </span>
             </div>
             <div className="flex-1 text-right">
-              <span className="font-[family-name:var(--font-suse-mono)] tabular-nums" style={{ fontSize: 16, fontWeight: 500, color: getPlayerColor(1) }}>
+              <span className="font-[family-name:var(--font-suse-mono)] tabular-nums" style={{ fontSize: 16, fontWeight: 600, color: getPlayerColor(1) }}>
                 {timedStatsB?.bestTime ? formatMs(timedStatsB.bestTime) : "—"}
               </span>
             </div>
@@ -511,12 +511,12 @@ export default function HistoryPage() {
           </div>
           <div className="flex items-center mb-4">
             <div className="flex-1">
-              <span className="font-[family-name:var(--font-suse-mono)] tabular-nums" style={{ fontSize: 16, fontWeight: 500, color: getPlayerColor(0) }}>
+              <span className="font-[family-name:var(--font-suse-mono)] tabular-nums" style={{ fontSize: 16, fontWeight: 600, color: getPlayerColor(0) }}>
                 {timedStatsA?.avgTime ? formatMs(timedStatsA.avgTime) : "—"}
               </span>
             </div>
             <div className="flex-1 text-right">
-              <span className="font-[family-name:var(--font-suse-mono)] tabular-nums" style={{ fontSize: 16, fontWeight: 500, color: getPlayerColor(1) }}>
+              <span className="font-[family-name:var(--font-suse-mono)] tabular-nums" style={{ fontSize: 16, fontWeight: 600, color: getPlayerColor(1) }}>
                 {timedStatsB?.avgTime ? formatMs(timedStatsB.avgTime) : "—"}
               </span>
             </div>
@@ -530,12 +530,12 @@ export default function HistoryPage() {
           </div>
           <div className="flex items-center">
             <div className="flex-1">
-              <span className="font-[family-name:var(--font-suse-mono)] tabular-nums" style={{ fontSize: 16, fontWeight: 500, color: getPlayerColor(0) }}>
+              <span className="font-[family-name:var(--font-suse-mono)] tabular-nums" style={{ fontSize: 16, fontWeight: 600, color: getPlayerColor(0) }}>
                 {timedStatsA?.winRate ?? 0}%
               </span>
             </div>
             <div className="flex-1 text-right">
-              <span className="font-[family-name:var(--font-suse-mono)] tabular-nums" style={{ fontSize: 16, fontWeight: 500, color: getPlayerColor(1) }}>
+              <span className="font-[family-name:var(--font-suse-mono)] tabular-nums" style={{ fontSize: 16, fontWeight: 600, color: getPlayerColor(1) }}>
                 {timedStatsB?.winRate ?? 0}%
               </span>
             </div>
