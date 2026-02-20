@@ -328,7 +328,7 @@ function DetailModal({
       onClick={handleClose}
     >
       <div
-        className="relative w-full max-w-sm bg-[#FEFEFE] overflow-hidden transition-all duration-250"
+        className="relative w-full max-w-sm bg-[#F4F3F1] overflow-hidden transition-all duration-250"
         style={{
           borderRadius: 20,
           transform: visible ? "scale(1) translateY(0)" : "scale(0.9) translateY(20px)",
@@ -464,7 +464,7 @@ export default function GardenPage() {
 
   if (!couple || !currentUser) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-[#FEFEFE]">
+      <div className="flex items-center justify-center min-h-screen bg-[#F4F3F1]">
         <p className="text-[#98989D] font-[family-name:var(--font-suse)]">Not signed in</p>
       </div>
     );

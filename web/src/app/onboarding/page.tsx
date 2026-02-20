@@ -86,7 +86,7 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#FEFEFE] p-6">
+    <div className="flex min-h-screen items-center justify-center bg-[#F4F3F1] p-6">
       <div className="w-full max-w-sm">
         {/* Name input (always shown) */}
         <div className="flex flex-col items-center gap-3 mb-8">
@@ -113,9 +113,9 @@ export default function OnboardingPage() {
             onChange={(e) => setName(e.target.value)}
             autoFocus
             className="w-full px-4 py-3.5 rounded-xl text-base font-semibold
-              bg-[#F4F3F1]
+              bg-[#FEFEFE]
               text-[#292929]
-              border border-[#F4F3F1]
+              border border-[#FEFEFE]
               placeholder:text-[#636366]
               focus:outline-none focus:ring-2 focus:ring-[#292929]
               font-[family-name:var(--font-suse)]"
@@ -129,9 +129,9 @@ export default function OnboardingPage() {
               onChange={(e) => setJoinCode(e.target.value.toUpperCase())}
               maxLength={6}
               className="w-full px-4 py-3.5 rounded-xl text-base font-semibold text-center tracking-[0.3em]
-                bg-[#F4F3F1]
+                bg-[#FEFEFE]
                 text-[#292929]
-                border border-[#F4F3F1]
+                border border-[#FEFEFE]
                 placeholder:text-[#636366] placeholder:tracking-normal
                 focus:outline-none focus:ring-2 focus:ring-[#292929]
                 font-[family-name:var(--font-suse)]"
@@ -160,8 +160,8 @@ export default function OnboardingPage() {
               <button
                 onClick={() => setMode("join")}
                 className="flex items-center justify-center gap-2.5 w-full py-4 rounded-2xl
-                  border border-[#F4F3F1]
-                  bg-[#F4F3F1]
+                  border border-[#FEFEFE]
+                  bg-[#FEFEFE]
                   text-[#292929]
                   font-bold text-lg hover:opacity-80 active:scale-[0.98] transition-all
                   font-[family-name:var(--font-suse)]"

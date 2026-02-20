@@ -1,7 +1,7 @@
 const palette = {
   // Paper + print texture
-  paper: "#FEFEFE",
-  paperAlt: "#F4F3F1",
+  paper: "#F4F3F1",
+  paperAlt: "#FEFEFE",
 
   // Ink (neutral dark greys)
   ink: "#292929",

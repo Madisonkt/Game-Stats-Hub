@@ -76,7 +76,7 @@ function GameRow({
     <div className="relative">
       <button
         onClick={onSelect}
-        className={`flex items-center gap-3 w-full text-left bg-[#F4F3F1] mb-2 active:scale-[0.98] transition-all ${
+        className={`flex items-center gap-3 w-full text-left bg-[#FEFEFE] mb-2 active:scale-[0.98] transition-all ${
           isActive ? "ring-2 ring-[#292929]" : ""
         }`}
         style={{ borderRadius: 18, padding: 14 }}
@@ -195,13 +195,13 @@ function GameRow({
         <>
           <div className="fixed inset-0 z-40" onClick={() => setShowActions(false)} />
           <div
-            className="absolute right-2 top-12 z-50 bg-white shadow-lg border border-[#F4F3F1] flex flex-col py-1"
+            className="absolute right-2 top-12 z-50 bg-white shadow-lg border border-[#FEFEFE] flex flex-col py-1"
             style={{ borderRadius: 12, minWidth: 160 }}
           >
             {game.isArchived ? (
               <button
                 onClick={() => { onUnarchive(); setShowActions(false); }}
-                className="flex items-center gap-2 px-4 py-2.5 text-left text-sm text-[#292929] hover:bg-[#F4F3F1] font-[family-name:var(--font-suse)]"
+                className="flex items-center gap-2 px-4 py-2.5 text-left text-sm text-[#292929] hover:bg-[#FEFEFE] font-[family-name:var(--font-suse)]"
               >
                 <IoArchiveOutline style={{ fontSize: 16 }} />
                 Unarchive
@@ -209,7 +209,7 @@ function GameRow({
             ) : (
               <button
                 onClick={() => { onArchive(); setShowActions(false); }}
-                className="flex items-center gap-2 px-4 py-2.5 text-left text-sm text-[#292929] hover:bg-[#F4F3F1] font-[family-name:var(--font-suse)]"
+                className="flex items-center gap-2 px-4 py-2.5 text-left text-sm text-[#292929] hover:bg-[#FEFEFE] font-[family-name:var(--font-suse)]"
               >
                 <IoArchiveOutline style={{ fontSize: 16 }} />
                 Archive
@@ -217,14 +217,14 @@ function GameRow({
             )}
             <button
               onClick={() => { onReset(); setShowActions(false); }}
-              className="flex items-center gap-2 px-4 py-2.5 text-left text-sm text-[#FF9500] hover:bg-[#F4F3F1] font-[family-name:var(--font-suse)]"
+              className="flex items-center gap-2 px-4 py-2.5 text-left text-sm text-[#FF9500] hover:bg-[#FEFEFE] font-[family-name:var(--font-suse)]"
             >
               <IoRefresh style={{ fontSize: 16 }} />
               Reset Scores
             </button>
             <button
               onClick={() => { onDelete(); setShowActions(false); }}
-              className="flex items-center gap-2 px-4 py-2.5 text-left text-sm text-[#FF3B30] hover:bg-[#F4F3F1] font-[family-name:var(--font-suse)]"
+              className="flex items-center gap-2 px-4 py-2.5 text-left text-sm text-[#FF3B30] hover:bg-[#FEFEFE] font-[family-name:var(--font-suse)]"
             >
               <IoTrashOutline style={{ fontSize: 16 }} />
               Delete
@@ -451,7 +451,7 @@ export default function GamesPage() {
   return (
     <div className="absolute inset-0 flex flex-col">
       {/* ── Header (non-scrolling) ──────────────────── */}
-      <div className="shrink-0 z-40 bg-[#FEFEFE] max-w-lg mx-auto w-full px-5 pt-4 pb-3">
+      <div className="shrink-0 z-40 bg-[#F4F3F1] max-w-lg mx-auto w-full px-5 pt-4 pb-3">
         <div className="flex items-center justify-between">
           <h1
             className="text-[#292929] font-[family-name:var(--font-suse)]"
@@ -545,7 +545,7 @@ export default function GamesPage() {
       {/* ── Aquarium Card ───────────────────── */}
       <button
         onClick={() => router.push("/garden")}
-        className="w-full flex items-center gap-3 bg-[#F4F3F1] card-press mb-2"
+        className="w-full flex items-center gap-3 bg-[#FEFEFE] card-press mb-2"
         style={{ borderRadius: 18, padding: 14 }}
       >
         <div
@@ -608,7 +608,7 @@ export default function GamesPage() {
       {/* ── Invite Code ─────────────────────────────── */}
       {couple && (
         <div
-          className="flex items-center gap-3 bg-[#F4F3F1] mt-4 mb-6"
+          className="flex items-center gap-3 bg-[#FEFEFE] mt-4 mb-6"
           style={{ borderRadius: 18, padding: 14 }}
         >
           <div className="flex flex-col flex-1 min-w-0">
@@ -718,7 +718,7 @@ export default function GamesPage() {
       {/* ── Add Game Modal ──────────────────────────── */}
       {showAddGame && createPortal(
         <div
-          className="fixed inset-0 bg-[#FEFEFE] overflow-y-auto"
+          className="fixed inset-0 bg-[#F4F3F1] overflow-y-auto"
           style={{
             zIndex: 99999,
             transform: addGameVisible ? "translateY(0)" : "translateY(100%)",
@@ -729,7 +729,7 @@ export default function GamesPage() {
           <button
             onClick={closeAddGame}
             className="fixed top-4 right-4 flex items-center justify-center
-              bg-[#F4F3F1] hover:bg-[#D6D1C8]
+              bg-[#FEFEFE] hover:bg-[#D6D1C8]
               transition-colors active:scale-95"
             style={{ zIndex: 100000, width: 36, height: 36, borderRadius: 18 }}
           >
@@ -751,7 +751,7 @@ export default function GamesPage() {
               value={newGameName}
               onChange={(e) => setNewGameName(e.target.value)}
               placeholder="Game name"
-              className="w-full px-4 py-3 bg-[#F4F3F1] text-[#292929]
+              className="w-full px-4 py-3 bg-[#FEFEFE] text-[#292929]
                 placeholder:text-[#98989D] font-[family-name:var(--font-suse)] outline-none mb-4"
               style={{ borderRadius: 14, fontSize: 16, fontWeight: 600 }}
             />
@@ -759,7 +759,7 @@ export default function GamesPage() {
             {/* Quick preset */}
             <button
               onClick={() => { setNewGameName("Rubik's Cube"); setSelectedType("timed"); }}
-              className="flex items-center gap-2 w-full px-4 py-3 bg-[#F4F3F1]
+              className="flex items-center gap-2 w-full px-4 py-3 bg-[#FEFEFE]
                 text-[#292929] active:scale-[0.98] transition-all mb-4 font-[family-name:var(--font-suse)]"
               style={{ borderRadius: 14, fontSize: 14, fontWeight: 600 }}
             >
@@ -780,7 +780,7 @@ export default function GamesPage() {
                 className={`flex-1 flex flex-col items-center gap-2 py-4 transition-all active:scale-[0.98] ${
                   selectedType === "simple"
                     ? "ring-2 ring-[#292929] bg-[#292929]/10"
-                    : "bg-[#F4F3F1]"
+                    : "bg-[#FEFEFE]"
                 }`}
                 style={{ borderRadius: 14 }}
               >
@@ -805,7 +805,7 @@ export default function GamesPage() {
                 className={`flex-1 flex flex-col items-center gap-2 py-4 transition-all active:scale-[0.98] ${
                   selectedType === "timed"
                     ? "ring-2 ring-[#292929] bg-[#292929]/10"
-                    : "bg-[#F4F3F1]"
+                    : "bg-[#FEFEFE]"
                 }`}
                 style={{ borderRadius: 14 }}
               >
@@ -847,7 +847,7 @@ export default function GamesPage() {
       {/* ── Player Settings Modal ───────────────────── */}
       {showPlayerSettings && createPortal(
         <div
-          className="fixed inset-0 bg-[#FEFEFE] overflow-y-auto"
+          className="fixed inset-0 bg-[#F4F3F1] overflow-y-auto"
           style={{
             zIndex: 99999,
             transform: playerSettingsVisible ? "translateY(0)" : "translateY(100%)",
@@ -858,7 +858,7 @@ export default function GamesPage() {
           <button
             onClick={closePlayerSettings}
             className="fixed top-4 right-4 flex items-center justify-center
-              bg-[#F4F3F1] hover:bg-[#D6D1C8]
+              bg-[#FEFEFE] hover:bg-[#D6D1C8]
               transition-colors active:scale-95"
             style={{ zIndex: 100000, width: 36, height: 36, borderRadius: 18 }}
           >
@@ -908,7 +908,7 @@ export default function GamesPage() {
               value={editName}
               onChange={(e) => setEditName(e.target.value)}
               placeholder="Your name"
-              className="w-full px-4 py-3 bg-[#F4F3F1] text-[#292929]
+              className="w-full px-4 py-3 bg-[#FEFEFE] text-[#292929]
                 font-[family-name:var(--font-suse)] outline-none mb-4"
               style={{ borderRadius: 14, fontSize: 16, fontWeight: 600 }}
             />
@@ -934,7 +934,7 @@ export default function GamesPage() {
                 placeholder="New password (6+ chars)"
                 value={newPassword}
                 onChange={(e) => { setNewPassword(e.target.value); setPasswordMsg(null); }}
-                className="w-full px-4 py-3 bg-[#F4F3F1] text-[#292929]
+                className="w-full px-4 py-3 bg-[#FEFEFE] text-[#292929]
                   placeholder:text-[#636366]
                   font-[family-name:var(--font-suse)] outline-none mb-2"
                 style={{ borderRadius: 14, fontSize: 15, fontWeight: 600 }}
@@ -979,7 +979,7 @@ export default function GamesPage() {
       {/* ── Valentine's Day Note ─ Full-screen slide-up sheet ── */}
       {showLoveNote && createPortal(
         <div
-          className="fixed inset-0 bg-[#FEFEFE] overflow-y-auto"
+          className="fixed inset-0 bg-[#F4F3F1] overflow-y-auto"
           style={{
             zIndex: 99999,
             transform: loveNoteVisible ? "translateY(0)" : "translateY(100%)",
@@ -991,7 +991,7 @@ export default function GamesPage() {
           <button
             onClick={closeLoveNote}
             className="fixed top-4 right-4 flex items-center justify-center
-              bg-[#F4F3F1] hover:bg-[#D6D1C8]
+              bg-[#FEFEFE] hover:bg-[#D6D1C8]
               transition-colors active:scale-95"
             style={{ zIndex: 100000, width: 36, height: 36, borderRadius: 18 }}
           >
@@ -1026,7 +1026,7 @@ export default function GamesPage() {
                 : "You'll leave this room and your partner will be alone. You can re-join with the invite code."}
             </p>
             <div className="flex gap-3">
-              <button onClick={() => setShowConfirm(null)} className="flex-1 py-3 text-sm font-semibold text-[#292929] bg-[#F4F3F1] hover:opacity-80 transition-all font-[family-name:var(--font-suse)]" style={{ borderRadius: 12 }}>Cancel</button>
+              <button onClick={() => setShowConfirm(null)} className="flex-1 py-3 text-sm font-semibold text-[#292929] bg-[#FEFEFE] hover:opacity-80 transition-all font-[family-name:var(--font-suse)]" style={{ borderRadius: 12 }}>Cancel</button>
               <button
                 onClick={showConfirm === "signout" ? handleSignOut : handleExitRoom}
                 disabled={signingOut || exitingRoom}

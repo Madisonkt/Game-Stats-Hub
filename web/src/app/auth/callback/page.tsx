@@ -88,9 +88,9 @@ export default function AuthCallbackPage() {
   // ── iOS Safari: show "return to PWA" prompt ───────────────
   if (showPWAPrompt) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#FEFEFE] p-6">
+      <div className="flex min-h-screen items-center justify-center bg-[#F4F3F1] p-6">
         <div
-          className="flex flex-col items-center gap-5 w-full max-w-sm bg-[#F4F3F1] p-8"
+          className="flex flex-col items-center gap-5 w-full max-w-sm bg-[#FEFEFE] p-8"
           style={{ borderRadius: 24 }}
         >
           <IoCheckmarkCircle className="text-green-500" style={{ fontSize: 56 }} />
@@ -141,7 +141,7 @@ export default function AuthCallbackPage() {
 
   // ── Default: loading ──────────────────────────────
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#FEFEFE]">
+    <div className="flex min-h-screen items-center justify-center bg-[#F4F3F1]">
       <CloudLoader message={authed ? "Signed in! Redirecting..." : "Signing you in..."} />
     </div>
   );

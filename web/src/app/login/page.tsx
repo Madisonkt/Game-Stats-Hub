@@ -66,7 +66,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#FEFEFE] p-6">
+    <div className="flex min-h-screen items-center justify-center bg-[#F4F3F1] p-6">
       <div className="w-full max-w-sm">
         {/* Title */}
         <div className="flex flex-col items-center gap-3 mb-10">
@@ -94,9 +94,9 @@ export default function LoginPage() {
               autoComplete="email"
               disabled={loading}
               className="w-full px-4 py-3.5 rounded-xl text-base font-semibold mt-1
-                bg-[#F4F3F1]
+                bg-[#FEFEFE]
                 text-[#292929]
-                border border-[#F4F3F1]
+                border border-[#FEFEFE]
                 placeholder:text-[#636366]
                 focus:outline-none focus:ring-2 focus:ring-[#292929]
                 disabled:opacity-50
@@ -117,9 +117,9 @@ export default function LoginPage() {
               disabled={loading}
               onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
               className="w-full px-4 py-3.5 rounded-xl text-base font-semibold mt-1
-                bg-[#F4F3F1]
+                bg-[#FEFEFE]
                 text-[#292929]
-                border border-[#F4F3F1]
+                border border-[#FEFEFE]
                 placeholder:text-[#636366]
                 focus:outline-none focus:ring-2 focus:ring-[#292929]
                 disabled:opacity-50

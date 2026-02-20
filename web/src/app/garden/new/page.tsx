@@ -172,14 +172,14 @@ export default function NewDoodlePage() {
 
   if (!couple || !currentUser) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-[#FEFEFE]">
+      <div className="flex items-center justify-center min-h-screen bg-[#F4F3F1]">
         <p className="text-[#98989D] font-[family-name:var(--font-suse)]">Not signed in</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#FEFEFE]">
+    <div className="min-h-screen bg-[#F4F3F1]">
       {/* Header */}
       <div className="flex items-center justify-between px-5 pt-4 pb-3 max-w-lg mx-auto">
         <button
@@ -257,7 +257,7 @@ export default function NewDoodlePage() {
           <button
             onClick={handleUndo}
             disabled={committedStrokes.current.length === 0}
-            className="flex items-center gap-1 px-4 py-2 bg-[#F4F3F1]
+            className="flex items-center gap-1 px-4 py-2 bg-[#FEFEFE]
               text-[#292929] font-[family-name:var(--font-suse)]
               active:scale-[0.95] transition-all disabled:opacity-30"
             style={{ borderRadius: 12, fontSize: 13, fontWeight: 600 }}
@@ -268,7 +268,7 @@ export default function NewDoodlePage() {
           <button
             onClick={handleClear}
             disabled={committedStrokes.current.length === 0}
-            className="flex items-center gap-1 px-4 py-2 bg-[#F4F3F1]
+            className="flex items-center gap-1 px-4 py-2 bg-[#FEFEFE]
               text-[#292929] font-[family-name:var(--font-suse)]
               active:scale-[0.95] transition-all disabled:opacity-30"
             style={{ borderRadius: 12, fontSize: 13, fontWeight: 600 }}
@@ -299,7 +299,7 @@ export default function NewDoodlePage() {
         {/* Photo attachment */}
         <button
           onClick={() => fileInputRef.current?.click()}
-          className="flex items-center gap-2 w-full px-4 py-3 bg-[#F4F3F1]
+          className="flex items-center gap-2 w-full px-4 py-3 bg-[#FEFEFE]
             text-[#292929] font-[family-name:var(--font-suse)]
             active:scale-[0.98] transition-all"
           style={{ borderRadius: 14, fontSize: 14, fontWeight: 600 }}
@@ -321,7 +321,7 @@ export default function NewDoodlePage() {
           value={caption}
           onChange={(e) => setCaption(e.target.value)}
           placeholder="Add a caption (optional)"
-          className="w-full px-4 py-3 bg-[#F4F3F1] text-[#292929]
+          className="w-full px-4 py-3 bg-[#FEFEFE] text-[#292929]
             placeholder:text-[#98989D] font-[family-name:var(--font-suse)] outline-none"
           style={{ borderRadius: 14, fontSize: 14, fontWeight: 600 }}
         />
@@ -332,7 +332,7 @@ export default function NewDoodlePage() {
           value={linkUrl}
           onChange={(e) => setLinkUrl(e.target.value)}
           placeholder="Attach a link (optional)"
-          className="w-full px-4 py-3 bg-[#F4F3F1] text-[#292929]
+          className="w-full px-4 py-3 bg-[#FEFEFE] text-[#292929]
             placeholder:text-[#98989D] font-[family-name:var(--font-suse)] outline-none"
           style={{ borderRadius: 14, fontSize: 14, fontWeight: 600 }}
         />

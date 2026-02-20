@@ -45,7 +45,7 @@ export function AuthGuard({ children }: { children: ReactNode }) {
   // While loading, show cloud loader
   if (isLoading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#FEFEFE]">
+      <div className="flex min-h-screen items-center justify-center bg-[#F4F3F1]">
         <CloudLoader />
       </div>
     );

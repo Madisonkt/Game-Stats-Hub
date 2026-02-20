@@ -178,7 +178,7 @@ function EventRow({
 }) {
   return (
     <div
-      className="flex items-center gap-2.5 bg-[#F4F3F1]"
+      className="flex items-center gap-2.5 bg-[#FEFEFE]"
       style={{ borderRadius: 18, padding: 14 }}
     >
       {/* Winner dot */}
@@ -461,7 +461,7 @@ export default function HistoryPage() {
       {/* ── Timed Stats Card ────────────────────────── */}
       {(timedStatsA?.roundCount ?? 0) > 0 || (timedStatsB?.roundCount ?? 0) > 0 ? (
         <div
-          className="mx-4 mb-3 bg-[#F4F3F1] flex flex-col"
+          className="mx-4 mb-3 bg-[#FEFEFE] flex flex-col"
           style={{ borderRadius: 18, padding: 16 }}
         >
           {/* Player header row */}

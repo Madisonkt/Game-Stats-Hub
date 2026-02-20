@@ -82,7 +82,7 @@ export default function LobbyPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#FEFEFE] p-6">
+    <div className="flex min-h-screen items-center justify-center bg-[#F4F3F1] p-6">
       <div className="w-full max-w-sm flex flex-col items-center gap-6">
         <h1 className="text-2xl font-extrabold text-[#292929] font-[family-name:var(--font-suse)]">
           Waiting for partner...
@@ -96,7 +96,7 @@ export default function LobbyPage() {
         <button
           onClick={handleCopy}
           className="flex items-center gap-3 px-8 py-4 rounded-2xl
-            bg-[#F4F3F1]
+            bg-[#FEFEFE]
             hover:opacity-80 active:scale-[0.98] transition-all group"
         >
           <span className="text-3xl font-extrabold tracking-[0.3em] text-[#292929] font-[family-name:var(--font-suse)]">
@@ -141,7 +141,7 @@ export default function LobbyPage() {
           {/* Waiting slot for partner */}
           {(session.couple?.members.length ?? 0) < 2 && (
             <div className="flex items-center gap-3 py-2">
-              <div className="w-8 h-8 rounded-full flex items-center justify-center bg-[#F4F3F1] border-2 border-dashed border-[#98989D]">
+              <div className="w-8 h-8 rounded-full flex items-center justify-center bg-[#FEFEFE] border-2 border-dashed border-[#98989D]">
                 <span className="text-[#98989D] text-xs">?</span>
               </div>
               <span className="text-sm text-[#98989D] italic font-[family-name:var(--font-suse)]">

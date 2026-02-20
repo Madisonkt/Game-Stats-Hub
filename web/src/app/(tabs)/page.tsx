@@ -94,7 +94,7 @@ function GameFilterPills({
             className={`whitespace-nowrap font-[family-name:var(--font-suse)] active:scale-[0.95] transition-all ${
               isActive
                 ? "bg-[#292929] text-white"
-                : "bg-[#F4F3F1] text-[#292929]"
+                : "bg-[#FEFEFE] text-[#292929]"
             }`}
             style={{
               borderRadius: 999,
@@ -223,7 +223,7 @@ function ScrambleCard({
 }) {
   return (
     <div
-      className="w-full bg-[#F4F3F1]"
+      className="w-full bg-[#FEFEFE]"
       style={{ borderRadius: 18, padding: 14 }}
     >
       <p
@@ -685,7 +685,7 @@ export default function LogPage() {
 
         {/* Skeleton status text */}
         <div
-          className="w-full bg-[#F4F3F1] mb-4 animate-pulse"
+          className="w-full bg-[#FEFEFE] mb-4 animate-pulse"
           style={{ borderRadius: 16, padding: 14 }}
         >
           <div
@@ -700,7 +700,7 @@ export default function LogPage() {
 
         {/* Skeleton round area */}
         <div
-          className="w-full bg-[#F4F3F1] animate-pulse"
+          className="w-full bg-[#FEFEFE] animate-pulse"
           style={{ borderRadius: 22, padding: 24, height: 120 }}
         />
       </div>
@@ -789,7 +789,7 @@ export default function LogPage() {
 
           {/* ── Status text ─────────────────────────────── */}
           <div
-            className="w-full bg-[#F4F3F1] mb-4"
+            className="w-full bg-[#FEFEFE] mb-4"
             style={{ borderRadius: 16, padding: 14 }}
           >
             <p
@@ -988,7 +988,7 @@ export default function LogPage() {
                   return (
                     <div
                       key={member.id}
-                      className="flex-1 flex flex-col items-center gap-2 bg-[#F4F3F1]"
+                      className="flex-1 flex flex-col items-center gap-2 bg-[#FEFEFE]"
                       style={{
                         borderRadius: 16,
                         padding: 14,
@@ -1227,7 +1227,7 @@ function RoundResults({
           return (
             <div
               key={member.id}
-              className="flex-1 flex flex-col items-center gap-2 bg-[#F4F3F1]"
+              className="flex-1 flex flex-col items-center gap-2 bg-[#FEFEFE]"
               style={{
                 borderRadius: 16,
                 padding: 14,
