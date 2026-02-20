@@ -11,6 +11,7 @@ import {
   IoRefresh,
   IoCheckmarkCircle,
   IoCopy,
+  IoShareSocial,
 } from "react-icons/io5";
 
 const ConfettiEffect = dynamic(() => import("@/components/ConfettiEffect"), { ssr: false });
@@ -301,6 +302,9 @@ export default function LogPage() {
   // Cat overlay
   const [showCat, setShowCat] = useState(false);
 
+  // Mode picker modal
+  const [showModeModal, setShowModeModal] = useState(false);
+
   // Track rounds that already triggered confetti (prevent duplicates from polling)
   const confettiFiredRef = useRef<Set<string>>(new Set());
 
@@ -411,24 +415,36 @@ export default function LogPage() {
       setRound(updatedRound);
       if (updatedRound) {
         rubiksRepo.getSolves(updatedRound.id).then(setSolves);
+        // Async: if both players have submitted, reveal + close the round
+        if (
+          updatedRound.mode === "async" &&
+          updatedRound.submittedUserIds.length >= 2 &&
+          updatedRound.revealStatus === "hidden"
+        ) {
+          rubiksRepo.revealAndCloseRound(updatedRound.id).then(async () => {
+            const allSolves = await rubiksRepo.getSolves(updatedRound.id);
+            handleRoundComplete(updatedRound.id, allSolves);
+          }).catch(() => {/* ignore — other device may have revealed already */});
+        }
       } else {
         setSolves([]);
       }
     });
     return () => unsub();
-  }, [couple?.id]);
+  }, [couple?.id, handleRoundComplete]);
 
   // ── Realtime: subscribe to solves ─────────────────────────
   useEffect(() => {
     if (!round?.id) return;
     const unsub = rubiksRepo.subscribeToSolves(round.id, (updatedSolves) => {
       setSolves(updatedSolves);
-      if (round.status === "in_progress" && updatedSolves.length >= 2) {
+      // Live rounds: auto-complete when both solves are visible
+      if (round.status === "in_progress" && round.mode !== "async" && updatedSolves.length >= 2) {
         handleRoundComplete(round.id, updatedSolves);
       }
     });
     return () => unsub();
-  }, [round?.id, round?.status, handleRoundComplete]);
+  }, [round?.id, round?.status, round?.mode, handleRoundComplete]);
 
   // ── Timer logic ───────────────────────────────────────────
   const startTimer = useCallback(() => {
@@ -453,11 +469,22 @@ export default function LogPage() {
     if (round?.id && currentUser?.id) {
       try {
         await rubiksRepo.submitSolve(round.id, currentUser.id, finalTime);
+        // Async mode: track submission and reveal if both have submitted
+        if (round.mode === "async") {
+          const updatedRound = await rubiksRepo.trackSolveSubmitted(round.id, currentUser.id);
+          if (updatedRound && updatedRound.submittedUserIds.length >= 2) {
+            await rubiksRepo.revealAndCloseRound(round.id);
+            const allSolves = await rubiksRepo.getSolves(round.id);
+            handleRoundComplete(round.id, allSolves);
+          } else if (updatedRound) {
+            setRound(updatedRound);
+          }
+        }
       } catch (e) {
         console.error("Failed to submit solve:", e);
       }
     }
-  }, [round?.id, currentUser?.id]);
+  }, [round?.id, round?.mode, currentUser?.id, handleRoundComplete]);
 
   useEffect(() => {
     return () => {
@@ -490,11 +517,11 @@ export default function LogPage() {
   }, [round?.id]);
 
   // ── Actions ───────────────────────────────────────────────
-  const handleCreateRound = async () => {
+  const handleCreateRound = async (mode: "live" | "async" = "live") => {
     if (!couple?.id || !currentUser?.id) return;
     setActionLoading(true);
     try {
-      const newRound = await rubiksRepo.createRound(couple.id, currentUser.id, gameKey);
+      const newRound = await rubiksRepo.createRound(couple.id, currentUser.id, gameKey, mode);
       // For simple games, auto-join both players so we skip the "open" gate
       if (!isTimed && couple.members.length >= 2) {
         const otherMember = couple.members.find((m) => m.id !== currentUser.id);
@@ -830,7 +857,7 @@ export default function LogPage() {
       {!round && (
         <div className="w-full flex flex-col items-center">
           <button
-            onClick={handleCreateRound}
+            onClick={() => isTimed ? setShowModeModal(true) : handleCreateRound("live")}
             disabled={actionLoading}
             className="w-full flex items-center justify-center gap-2 font-[family-name:var(--font-suse-mono)]
               bg-[#292929] hover:bg-[#1A1A1A] active:scale-[0.98] transition-all
@@ -974,10 +1001,29 @@ export default function LogPage() {
       {/* ── ROUND: IN PROGRESS ──────────────────────── */}
       {round && round.status === "in_progress" && (
         <div className="w-full flex flex-col gap-4">
-          {isTimed && <ScrambleCard scramble={round.scramble} onNewScramble={async () => {
+          {isTimed && <ScrambleCard scramble={round.scramble} onNewScramble={round.mode === "live" ? async () => {
             const updated = await rubiksRepo.refreshScramble(round.id);
             if (updated) setRound(updated);
-          }} />}
+          } : undefined} />}
+
+          {/* Async: share link card (visible until both submitted) */}
+          {round.mode === "async" && round.submittedUserIds.length < 2 && (
+            <AsyncShareCard roundId={round.id} />
+          )}
+
+          {/* Async: current user hasn't joined yet — show accept button */}
+          {round.mode === "async" && !round.joinedUserIds.includes(currentUser.id) && (
+            <button
+              onClick={handleJoinRound}
+              disabled={actionLoading}
+              className="w-full flex items-center justify-center gap-2 text-white font-[family-name:var(--font-suse)]
+                bg-[#292929] hover:bg-[#1A1A1A] active:scale-[0.98] transition-all
+                disabled:opacity-50"
+              style={{ borderRadius: 999, paddingTop: 20, paddingBottom: 20, fontSize: 20, fontWeight: 700 }}
+            >
+              {actionLoading ? "Joining..." : "🏋 Accept Challenge"}
+            </button>
+          )}
 
           {isTimed ? (
             <>
@@ -1030,6 +1076,13 @@ export default function LogPage() {
                         >
                           {solve.dnf ? "DNF" : formatMs(solve.timeMs)}
                         </span>
+                      ) : round.mode === "async" && round.submittedUserIds.includes(member.id) ? (
+                        <span
+                          className="font-[family-name:var(--font-suse)]"
+                          style={{ fontSize: 13, fontWeight: 600, color: getPlayerColor(i) }}
+                        >
+                          Submitted ✓
+                        </span>
                       ) : (
                         <span
                           className="text-[#98989D] italic font-[family-name:var(--font-suse)]"
@@ -1055,8 +1108,8 @@ export default function LogPage() {
                 </div>
               )}
 
-              {/* Timer controls */}
-              {!mySolve && !timerRunning && (
+              {/* Timer controls — show if user has joined and hasn't submitted */}
+              {!mySolve && !timerRunning && (round.mode === "live" || round.joinedUserIds.includes(currentUser.id)) && (
                 <button
                   onClick={startTimer}
                   className="flex items-center justify-center gap-2 text-white font-[family-name:var(--font-suse)]
@@ -1079,6 +1132,9 @@ export default function LogPage() {
                 <div className="flex flex-col items-center gap-2">
                   <p className="text-sm text-green-600 font-semibold font-[family-name:var(--font-suse)]">
                     Your time: {formatMs(mySolve.timeMs)}
+                    {round.mode === "async" && round.submittedUserIds.length < 2 && (
+                      <span className="text-[#98989D] ml-2">— waiting for partner…</span>
+                    )}
                   </p>
                   <button
                     onClick={handleResetSolve}
@@ -1152,7 +1208,7 @@ export default function LogPage() {
         <div className="w-full flex flex-col items-center gap-4">
           <RoundResults members={members} solves={solves} />
           <button
-            onClick={handleCreateRound}
+            onClick={() => isTimed ? setShowModeModal(true) : handleCreateRound("live")}
             disabled={actionLoading}
             className="flex items-center justify-center gap-2 text-white font-[family-name:var(--font-suse)]
               bg-[#292929] hover:bg-[#1A1A1A] active:scale-[0.98] transition-all
@@ -1170,6 +1226,72 @@ export default function LogPage() {
             <IoRefresh className="text-xl" />
             {actionLoading ? "Creating..." : "New Round"}
           </button>
+        </div>
+      )}
+
+      {/* ── Mode Picker Modal ────────────────────────── */}
+      {showModeModal && (
+        <div
+          className="fixed inset-0 z-50 flex items-end justify-center p-4"
+          style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+          onClick={() => setShowModeModal(false)}
+        >
+          <div
+            className="w-full max-w-lg bg-[#F4F3F1] flex flex-col gap-3 p-4 pb-8"
+            style={{ borderRadius: 28 }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <p
+              className="text-center text-[#292929] font-[family-name:var(--font-suse)]"
+              style={{ fontSize: 16, fontWeight: 700, marginBottom: 4 }}
+            >
+              Choose Round Mode
+            </p>
+
+            {/* Live */}
+            <button
+              onClick={async () => { setShowModeModal(false); await handleCreateRound("live"); }}
+              disabled={actionLoading}
+              className="flex flex-col items-start gap-1 bg-[#FEFEFE] active:scale-[0.98] transition-all
+                disabled:opacity-50 text-left"
+              style={{ borderRadius: 18, padding: "16px 18px" }}
+            >
+              <span
+                className="text-[#292929] font-[family-name:var(--font-suse)]"
+                style={{ fontSize: 16, fontWeight: 700 }}
+              >
+                🤝 Play Together
+              </span>
+              <span
+                className="text-[#98989D] font-[family-name:var(--font-suse)]"
+                style={{ fontSize: 13, fontWeight: 500 }}
+              >
+                Both players solve at the same time
+              </span>
+            </button>
+
+            {/* Async */}
+            <button
+              onClick={async () => { setShowModeModal(false); await handleCreateRound("async"); }}
+              disabled={actionLoading}
+              className="flex flex-col items-start gap-1 bg-[#292929] active:scale-[0.98] transition-all
+                disabled:opacity-50 text-left"
+              style={{ borderRadius: 18, padding: "16px 18px" }}
+            >
+              <span
+                className="text-white font-[family-name:var(--font-suse)]"
+                style={{ fontSize: 16, fontWeight: 700 }}
+              >
+                ⚡ Async Challenge
+              </span>
+              <span
+                className="text-white/60 font-[family-name:var(--font-suse)]"
+                style={{ fontSize: 13, fontWeight: 500 }}
+              >
+                Solve separately — times reveal after both submit
+              </span>
+            </button>
+          </div>
         </div>
       )}
     </div>
@@ -1272,6 +1394,76 @@ function RoundResults({
             </div>
           );
         })}
+      </div>
+    </div>
+  );
+}
+
+// ── Async Share Card ────────────────────────────────────────
+
+function AsyncShareCard({ roundId }: { roundId: string }) {
+  const [copied, setCopied] = useState(false);
+  const url =
+    typeof window !== "undefined"
+      ? `${window.location.origin}/rubiks/round/${roundId}`
+      : `/rubiks/round/${roundId}`;
+
+  const handleCopy = async () => {
+    try {
+      await navigator.clipboard.writeText(url);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    } catch {
+      /* ignore */
+    }
+  };
+
+  const handleShare = async () => {
+    if (typeof navigator !== "undefined" && navigator.share) {
+      try {
+        await navigator.share({ title: "Async Cube Challenge", url });
+      } catch {
+        /* user cancelled */
+      }
+    } else {
+      handleCopy();
+    }
+  };
+
+  return (
+    <div
+      className="w-full bg-[#FEFEFE] flex flex-col gap-3"
+      style={{ borderRadius: 18, padding: 14 }}
+    >
+      <p
+        className="text-[#98989D] font-[family-name:var(--font-suse)] uppercase"
+        style={{ fontSize: 11, fontWeight: 600, letterSpacing: 1 }}
+      >
+        ⚡ Async Challenge
+      </p>
+      <p
+        className="text-[#292929] font-[family-name:var(--font-suse)]"
+        style={{ fontSize: 13, fontWeight: 600 }}
+      >
+        Send this link to your partner. Their time is hidden until you both submit.
+      </p>
+      <div className="flex gap-2">
+        <button
+          onClick={handleCopy}
+          className="flex items-center gap-1.5 bg-[#F4F3F1] active:scale-[0.97] transition-all font-[family-name:var(--font-suse)]"
+          style={{ borderRadius: 12, padding: "8px 14px", fontSize: 13, fontWeight: 600, color: "#292929" }}
+        >
+          <IoCopy style={{ fontSize: 14 }} />
+          {copied ? "Copied!" : "Copy Link"}
+        </button>
+        <button
+          onClick={handleShare}
+          className="flex items-center gap-1.5 bg-[#292929] text-white active:scale-[0.97] transition-all font-[family-name:var(--font-suse)]"
+          style={{ borderRadius: 12, padding: "8px 14px", fontSize: 13, fontWeight: 600 }}
+        >
+          <IoShareSocial style={{ fontSize: 14 }} />
+          Share
+        </button>
       </div>
     </div>
   );

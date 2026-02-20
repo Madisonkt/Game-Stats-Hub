@@ -19,6 +19,12 @@ export interface Round {
   gameId: string;
   scramble: string;
   status: "open" | "in_progress" | "closed";
+  /** 'live' = both join before timing; 'async' = each player solves independently */
+  mode: "live" | "async";
+  /** 'hidden' = partner time hidden until both submit; 'revealed' = both times visible */
+  revealStatus: "hidden" | "revealed";
+  /** User IDs who have submitted their solve (tracked separately from solves RLS) */
+  submittedUserIds: string[];
   /** User IDs of players who have joined / marked ready */
   joinedUserIds: string[];
   createdByUserId: string;

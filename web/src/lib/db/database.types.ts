@@ -84,6 +84,9 @@ export interface Database {
           origin_id: string;
           scramble: string;
           status: string;
+          mode: string;
+          reveal_status: string;
+          submitted_user_ids: string[];
           created_by: string | null;
           joined_user_ids: string[];
           started_at: string;
@@ -96,6 +99,9 @@ export interface Database {
           origin_id: string;
           scramble: string;
           status?: string;
+          mode?: string;
+          reveal_status?: string;
+          submitted_user_ids?: string[];
           created_by?: string | null;
           joined_user_ids?: string[];
           started_at?: string;
@@ -108,6 +114,9 @@ export interface Database {
           origin_id?: string;
           scramble?: string;
           status?: string;
+          mode?: string;
+          reveal_status?: string;
+          submitted_user_ids?: string[];
           created_by?: string | null;
           joined_user_ids?: string[];
           started_at?: string;

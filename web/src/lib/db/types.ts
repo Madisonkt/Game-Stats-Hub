@@ -36,6 +36,9 @@ export interface RoundRow {
   origin_id: string;
   scramble: string;
   status: "open" | "in_progress" | "closed";
+  mode: string;                    // 'live' | 'async'
+  reveal_status: string;           // 'hidden' | 'revealed'
+  submitted_user_ids: string[];    // users who have submitted a solve
   created_by: string | null;
   joined_user_ids: string[];
   started_at: string;

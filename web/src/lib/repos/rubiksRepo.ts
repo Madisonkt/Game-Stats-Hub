@@ -19,6 +19,9 @@ function toDomainRound(r: RoundRow): Round {
     gameId: r.game_key,
     scramble: r.scramble,
     status: r.status,
+    mode: (r.mode as "live" | "async") ?? "live",
+    revealStatus: (r.reveal_status as "hidden" | "revealed") ?? "hidden",
+    submittedUserIds: r.submitted_user_ids ?? [],
     joinedUserIds: r.joined_user_ids ?? [],
     createdByUserId: r.created_by ?? "",
     startedAt: new Date(r.started_at).getTime(),
@@ -81,11 +84,13 @@ export async function getActiveRound(
 /**
  * Create a new round. The creator is auto-joined.
  * Uses crypto.randomUUID() as origin_id for dedupe safety.
+ * mode='async': round is immediately in_progress (no partner join needed to start timing).
  */
 export async function createRound(
   coupleId: string,
   userId: string,
-  gameKey: string = "rubiks"
+  gameKey: string = "rubiks",
+  mode: "live" | "async" = "live"
 ): Promise<Round> {
   const supabase = createSupabaseBrowserClient();
   const originId = crypto.randomUUID();
@@ -98,7 +103,11 @@ export async function createRound(
       game_key: gameKey,
       origin_id: originId,
       scramble,
-      status: "open",
+      // Async rounds jump straight to in_progress so creator can time immediately
+      status: mode === "async" ? "in_progress" : "open",
+      mode,
+      reveal_status: "hidden",
+      submitted_user_ids: [],
       created_by: userId,
       joined_user_ids: [userId],
     })
@@ -114,7 +123,8 @@ export async function createRound(
 
 /**
  * Join an existing round. Updates joined_user_ids to include userId
- * (no duplicates). Auto-transitions to in_progress when 2 players joined.
+ * (no duplicates). Auto-transitions live rounds to in_progress when 2 players joined.
+ * Async rounds stay in_progress (they were created that way).
  */
 export async function joinRound(
   roundId: string,
@@ -137,7 +147,12 @@ export async function joinRound(
   }
 
   const updatedJoined = [...row.joined_user_ids, userId];
-  const newStatus = updatedJoined.length >= 2 ? "in_progress" : row.status;
+  // For live rounds: move to in_progress once 2 players have joined.
+  // For async rounds: already in_progress, keep status.
+  const newStatus =
+    row.mode !== "async" && updatedJoined.length >= 2
+      ? "in_progress"
+      : row.status;
 
   const { data: updated, error: updateErr } = await supabase
     .from("rounds")
@@ -221,6 +236,63 @@ export async function getRound(roundId: string): Promise<Round | null> {
     .single();
 
   return data ? toDomainRound(data as RoundRow) : null;
+}
+
+/**
+ * Reveal both solves and close an async round.
+ * Called when both submitted_user_ids are present.
+ */
+export async function revealAndCloseRound(roundId: string): Promise<void> {
+  const supabase = createSupabaseBrowserClient();
+  await supabase
+    .from("rounds")
+    .update({
+      reveal_status: "revealed",
+      status: "closed",
+      closed_at: new Date().toISOString(),
+    })
+    .eq("id", roundId);
+}
+
+/**
+ * Track that a user has submitted their async solve.
+ * Appends userId to submitted_user_ids (idempotent).
+ * Returns the updated round so the caller knows if both have submitted.
+ */
+export async function trackSolveSubmitted(
+  roundId: string,
+  userId: string
+): Promise<Round | null> {
+  const supabase = createSupabaseBrowserClient();
+
+  const { data: current } = await supabase
+    .from("rounds")
+    .select("submitted_user_ids")
+    .eq("id", roundId)
+    .single();
+
+  if (!current) return null;
+
+  const existing = (current.submitted_user_ids as string[]) ?? [];
+  if (existing.includes(userId)) {
+    // Already tracked — fetch and return current state
+    const { data } = await supabase
+      .from("rounds")
+      .select("*")
+      .eq("id", roundId)
+      .single();
+    return data ? toDomainRound(data as RoundRow) : null;
+  }
+
+  const newIds = [...existing, userId];
+  const { data: updated } = await supabase
+    .from("rounds")
+    .update({ submitted_user_ids: newIds })
+    .eq("id", roundId)
+    .select()
+    .single();
+
+  return updated ? toDomainRound(updated as RoundRow) : null;
 }
 
 /**
@@ -390,6 +462,8 @@ export function subscribeToRounds(
 /**
  * Subscribe to solve changes for a specific round.
  * Callback receives the full list of solves for that round.
+ * Note: for async rounds with reveal_status='hidden', RLS will only return
+ * the current user's own solve until the round is revealed.
  */
 export function subscribeToSolves(
   roundId: string,
@@ -412,6 +486,47 @@ export function subscribeToSolves(
         schema: "public",
         table: "solves",
         filter: `round_id=eq.${roundId}`,
+      },
+      () => {
+        fetchAndNotify();
+      }
+    )
+    .subscribe();
+
+  return () => {
+    if (channel) supabase.removeChannel(channel);
+  };
+}
+
+/**
+ * Subscribe to changes for a single specific round by ID.
+ * Useful for the deep-link async challenge page.
+ */
+export function subscribeToRound(
+  roundId: string,
+  cb: (round: Round | null) => void
+): () => void {
+  const supabase = createSupabaseBrowserClient();
+  let channel: RealtimeChannel | null = null;
+
+  const fetchAndNotify = async () => {
+    const { data } = await supabase
+      .from("rounds")
+      .select("*")
+      .eq("id", roundId)
+      .maybeSingle();
+    cb(data ? toDomainRound(data as RoundRow) : null);
+  };
+
+  channel = supabase
+    .channel(`round:${roundId}`)
+    .on(
+      "postgres_changes",
+      {
+        event: "*",
+        schema: "public",
+        table: "rounds",
+        filter: `id=eq.${roundId}`,
       },
       () => {
         fetchAndNotify();
