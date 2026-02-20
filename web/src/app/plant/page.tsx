@@ -284,8 +284,8 @@ export default function PlantPage() {
               className="absolute left-1/2"
               style={{
                 transform: "translateX(-50%)",
-                bottom: "28%",
-                width: "62%",
+                bottom: "21%",
+                width: "74%",
                 zIndex: 10,
               }}
             >
