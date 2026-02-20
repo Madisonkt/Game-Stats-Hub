@@ -135,7 +135,7 @@ function ScoreCard({
 }) {
   return (
     <div
-      className="flex-1 relative overflow-hidden grain-overlay score-card-hover"
+      className="flex-1 relative overflow-hidden score-card-hover"
       style={{
         background: gradient,
         borderRadius: 22,

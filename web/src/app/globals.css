@@ -95,20 +95,6 @@ body {
   }
 }
 
-/* Grain overlay on gradient cards */
-.grain-overlay::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  background-image: url(/images/grain.png);
-  background-repeat: repeat;
-  background-size: 200px 200px;
-  opacity: 0.18;
-  mix-blend-mode: overlay;
-  pointer-events: none;
-  border-radius: inherit;
-}
 
 /* Cat overlay animation */
 @keyframes cat-fade {

@@ -84,7 +84,7 @@ function PlayerProfileCard({
   return (
     <button
       onClick={onClick}
-      className="flex-1 relative overflow-hidden grain-overlay text-left cursor-pointer active:scale-[0.98] transition-transform"
+      className="flex-1 relative overflow-hidden text-left cursor-pointer active:scale-[0.98] transition-transform"
       style={{
         background: gradient,
         borderRadius: 22,
