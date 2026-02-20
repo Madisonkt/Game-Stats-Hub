@@ -211,6 +211,28 @@ async function logAction(coupleId: string, userId: string, action: "water" | "su
 }
 
 /**
+ * Reset the plant back to default (growth_points = 10, stage 1).
+ */
+export async function resetPlant(coupleId: string): Promise<PlantState> {
+  const supabase = createSupabaseBrowserClient();
+  const now = new Date().toISOString();
+
+  const { data, error } = await (supabase.from("couple_plant") as any)
+    .upsert({
+      couple_id: coupleId,
+      growth_points: 10,
+      last_watered_at: now,
+      last_sunned_at: now,
+      updated_at: now,
+    })
+    .select()
+    .single();
+
+  if (error || !data) throw new Error(error?.message ?? "Failed to reset plant");
+  return rowToState(data as PlantRow);
+}
+
+/**
  * Subscribe to couple_plant changes. Returns an unsubscribe function.
  * Re-fetches the full row on any change and calls cb with fresh PlantState.
  */

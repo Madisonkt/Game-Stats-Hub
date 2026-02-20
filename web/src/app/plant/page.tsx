@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "@/lib/auth-context";
 import * as plantRepo from "@/lib/repos/plantRepo";
 import type { PlantState } from "@/lib/repos/plantRepo";
-import { IoArrowBack } from "react-icons/io5";
+import { IoArrowBack, IoEllipsisVertical, IoRefresh } from "react-icons/io5";
 
 // ── Icons ────────────────────────────────────────────────────
 
@@ -68,6 +68,8 @@ export default function PlantPage() {
   const [busySun, setBusySun] = useState(false);
   const [actionToast, setActionToast] = useState<string | null>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const [showMenu, setShowMenu] = useState(false);
+  const [busyReset, setBusyReset] = useState(false);
 
   const showToast = useCallback((msg: string) => {
     setActionToast(msg);
@@ -110,6 +112,22 @@ export default function PlantPage() {
       console.error(e);
     } finally {
       setBusyWater(false);
+    }
+  };
+
+  const handleReset = async () => {
+    if (!couple?.id || busyReset) return;
+    setShowMenu(false);
+    if (!confirm("Reset the plant back to a seedling? This can't be undone.")) return;
+    setBusyReset(true);
+    try {
+      const updated = await plantRepo.resetPlant(couple.id);
+      setPlant(updated);
+      showToast("Plant reset 🌱");
+    } catch (e) {
+      console.error(e);
+    } finally {
+      setBusyReset(false);
     }
   };
 
@@ -175,7 +193,38 @@ export default function PlantPage() {
           </div>
 
           {/* Action buttons */}
-          <div className="flex gap-2">
+          <div className="flex items-center gap-2">
+            {/* ⋯ menu */}
+            <div className="relative">
+              <button
+                onClick={() => setShowMenu((v) => !v)}
+                className="flex items-center justify-center text-[#98989D] hover:text-[#636366] transition-colors"
+                style={{ width: 36, height: 36 }}
+                aria-label="More options"
+              >
+                <IoEllipsisVertical style={{ fontSize: 20 }} />
+              </button>
+              {showMenu && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setShowMenu(false)} />
+                  <div
+                    className="absolute right-0 top-10 z-50 bg-white rounded-2xl overflow-hidden"
+                    style={{ minWidth: 160, boxShadow: "0 4px 24px rgba(0,0,0,0.13)" }}
+                  >
+                    <button
+                      onClick={handleReset}
+                      disabled={busyReset}
+                      className="flex items-center gap-2 w-full px-4 py-3 text-left text-sm text-[#FF3B30] hover:bg-[#FFF5F5] font-[family-name:var(--font-suse)] disabled:opacity-40"
+                      style={{ fontWeight: 600 }}
+                    >
+                      <IoRefresh style={{ fontSize: 16 }} />
+                      Reset plant
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+
             {/* Water button */}
             <button
               onClick={handleWater}
