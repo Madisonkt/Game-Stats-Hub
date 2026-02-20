@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 300" fill="none">
+  <!-- Pot shadow -->
+  <ellipse cx="120" cy="266" rx="52" ry="9" fill="#C4A882" opacity="0.35"/>
+  <!-- Pot -->
+  <path d="M78 244 Q76 274 100 280 H140 Q164 274 162 244 Z" fill="#D4976A"/>
+  <rect x="73" y="236" width="94" height="12" rx="6" fill="#C4845A"/>
+  <!-- Soil -->
+  <ellipse cx="120" cy="244" rx="44" ry="8" fill="#6B4226"/>
+
+  <!-- Stems -->
+  <path d="M118 242 Q112 218 108 194 Q104 172 106 154" stroke="#4E7C30" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+  <path d="M122 242 Q124 215 126 190 Q128 168 130 150 Q134 130 138 116" stroke="#4E7C30" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+  <path d="M120 242 Q120 220 120 200 Q120 178 118 158" stroke="#4E7C30" stroke-width="3" stroke-linecap="round" fill="none"/>
+
+  <!-- Large left leaf -->
+  <path d="M108 194 Q74 176 62 148 Q60 126 74 118 Q90 112 104 130 Q112 146 110 170Z" fill="#52A836"/>
+  <path d="M108 194 Q78 179 68 152 Q78 144 96 155 Q108 166 110 182Z" fill="#68C04A" opacity="0.5"/>
+
+  <!-- Large right leaf -->
+  <path d="M126 190 Q158 170 170 140 Q172 120 158 113 Q143 108 132 126 Q124 143 124 168Z" fill="#55A838"/>
+  <path d="M126 190 Q154 172 164 144 Q154 138 140 148 Q129 160 126 178Z" fill="#6AC24C" opacity="0.5"/>
+
+  <!-- Middle leaf -->
+  <path d="M118 158 Q100 140 92 118 Q90 102 102 98 Q114 96 118 112 Q120 128 120 148Z" fill="#5AB43E"/>
+
+  <!-- Bloom stem -->
+  <path d="M138 116 Q144 100 148 86" stroke="#4E7C30" stroke-width="3" stroke-linecap="round" fill="none"/>
+
+  <!-- Red spathe (heart/spade shape) -->
+  <path d="M148 86 Q138 60 126 54 Q116 50 114 60 Q112 70 120 78 Q134 86 148 86Z" fill="#E8324A"/>
+  <path d="M148 86 Q160 62 162 50 Q162 40 154 38 Q144 37 140 48 Q136 60 148 86Z" fill="#D42840"/>
+  <!-- Spathe sheen -->
+  <path d="M128 60 Q124 56 122 62 Q126 68 132 68Z" fill="#F04458" opacity="0.6"/>
+
+  <!-- Spadix -->
+  <path d="M148 86 Q150 70 152 56" stroke="#F5C842" stroke-width="4" stroke-linecap="round" fill="none"/>
+  <ellipse cx="152" cy="54" rx="3.5" ry="2.5" fill="#F5D84E" transform="rotate(-20 152 54)"/>
+</svg>

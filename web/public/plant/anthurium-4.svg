@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 300" fill="none">
+  <!-- Pot shadow -->
+  <ellipse cx="120" cy="268" rx="54" ry="9.5" fill="#C4A882" opacity="0.35"/>
+  <!-- Pot -->
+  <path d="M76 246 Q74 278 100 284 H140 Q166 278 164 246 Z" fill="#D4976A"/>
+  <rect x="71" y="237" width="98" height="13" rx="6.5" fill="#C4845A"/>
+  <!-- Soil -->
+  <ellipse cx="120" cy="246" rx="46" ry="8" fill="#6B4226"/>
+
+  <!-- Stems -->
+  <path d="M116 244 Q108 216 102 188 Q96 164 98 144" stroke="#4A7830" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+  <path d="M120 244 Q120 215 122 188 Q124 162 126 140 Q130 118 136 100" stroke="#4A7830" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+  <path d="M124 244 Q130 218 134 192 Q138 168 136 146 Q134 126 130 110" stroke="#4A7830" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <path d="M118 244 Q112 222 108 200 Q104 180 104 160" stroke="#4A7830" stroke-width="3" stroke-linecap="round" fill="none"/>
+
+  <!-- Large back-left leaf -->
+  <path d="M102 188 Q64 168 50 136 Q48 110 66 102 Q84 96 98 116 Q108 134 104 162Z" fill="#4CA030"/>
+  <path d="M102 188 Q68 170 58 140 Q72 130 90 143 Q104 156 104 174Z" fill="#66B848" opacity="0.5"/>
+
+  <!-- Large back-right leaf -->
+  <path d="M122 188 Q162 165 176 132 Q180 106 164 99 Q148 93 136 114 Q128 132 126 162Z" fill="#4FA233"/>
+  <path d="M122 188 Q158 167 170 136 Q158 128 142 140 Q130 154 126 174Z" fill="#68BA4A" opacity="0.5"/>
+
+  <!-- Mid leaves -->
+  <path d="M98 144 Q70 124 64 98 Q62 80 76 76 Q90 72 98 90 Q104 106 100 130Z" fill="#52A836"/>
+  <path d="M104 160 Q80 144 72 118 Q78 108 92 116 Q102 128 104 148Z" fill="#5DB440" opacity="0.7"/>
+  <path d="M136 146 Q162 128 168 102 Q166 85 152 82 Q138 80 134 98 Q130 116 134 138Z" fill="#52A634"/>
+
+  <!-- Bloom 1 (left, red) -->
+  <path d="M98 144 Q94 130 92 116" stroke="#4A7830" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <path d="M92 116 Q80 90 68 84 Q58 80 56 92 Q54 104 64 112 Q80 120 92 116Z" fill="#E42A44"/>
+  <path d="M92 116 Q104 92 104 78 Q104 66 96 64 Q86 63 82 76 Q78 90 92 116Z" fill="#CC2038"/>
+  <path d="M70 92 Q66 88 64 94 Q68 100 74 100Z" fill="#F03C54" opacity="0.6"/>
+  <path d="M92 116 Q96 98 98 82" stroke="#F0C83A" stroke-width="4" stroke-linecap="round" fill="none"/>
+  <ellipse cx="98" cy="80" rx="3.5" ry="2.5" fill="#F5D84E" transform="rotate(-10 98 80)"/>
+
+  <!-- Bloom 2 (right, slightly different red) -->
+  <path d="M136 100 Q138 86 140 72" stroke="#4A7830" stroke-width="3" stroke-linecap="round" fill="none"/>
+  <path d="M140 72 Q128 46 116 40 Q106 36 104 48 Q102 60 112 68 Q128 76 140 72Z" fill="#E83048"/>
+  <path d="M140 72 Q154 48 154 34 Q154 22 146 20 Q136 19 132 32 Q128 46 140 72Z" fill="#D02540"/>
+  <path d="M118 48 Q114 44 112 50 Q116 56 122 56Z" fill="#F03E56" opacity="0.6"/>
+  <path d="M140 72 Q142 56 144 40" stroke="#F0C83A" stroke-width="4" stroke-linecap="round" fill="none"/>
+  <ellipse cx="144" cy="38" rx="3.5" ry="2.5" fill="#F5D84E" transform="rotate(-10 144 38)"/>
+</svg>

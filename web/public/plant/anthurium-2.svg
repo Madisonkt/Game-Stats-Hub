@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 300" fill="none">
+  <!-- Pot shadow -->
+  <ellipse cx="120" cy="264" rx="50" ry="9" fill="#C4A882" opacity="0.35"/>
+  <!-- Pot body -->
+  <path d="M80 242 Q78 272 100 278 H140 Q162 272 160 242 Z" fill="#D4976A"/>
+  <rect x="75" y="234" width="90" height="12" rx="6" fill="#C4845A"/>
+  <!-- Soil -->
+  <ellipse cx="120" cy="242" rx="42" ry="7.5" fill="#6B4226"/>
+
+  <!-- Main stem -->
+  <path d="M120 240 Q116 218 118 198 Q119 182 120 168" stroke="#4E7C30" stroke-width="4" stroke-linecap="round" fill="none"/>
+
+  <!-- Left leaf (large, heart-shaped) -->
+  <path d="M118 200 Q92 185 80 162 Q78 146 88 140 Q100 136 110 148 Q118 160 118 176Z" fill="#5DB440"/>
+  <path d="M118 200 Q94 187 83 163 Q91 155 104 162 Q115 172 118 190Z" fill="#6DC84E" opacity="0.5"/>
+
+  <!-- Right leaf -->
+  <path d="M120 188 Q144 172 156 148 Q158 134 148 130 Q136 127 126 140 Q120 153 120 170Z" fill="#60B842"/>
+  <path d="M120 188 Q142 175 152 151 Q144 147 134 154 Q125 163 120 178Z" fill="#72CC55" opacity="0.5"/>
+
+  <!-- Small top leaf -->
+  <path d="M120 168 Q128 152 136 140 Q130 148 120 158Z" fill="#7DC858"/>
+</svg>

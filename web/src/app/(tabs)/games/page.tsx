@@ -577,6 +577,44 @@ export default function GamesPage() {
         </div>
       </button>
 
+      {/* ── Couple Plant Card ───────────────────────── */}
+      <button
+        onClick={() => router.push("/plant")}
+        className="w-full flex items-center gap-3 bg-[#FEFEFE] card-press mb-2"
+        style={{ borderRadius: 18, padding: 14 }}
+      >
+        <div
+          className="flex items-center justify-center overflow-hidden"
+          style={{
+            width: 44,
+            height: 44,
+            borderRadius: 12,
+            backgroundColor: "rgba(93,180,64,0.13)",
+          }}
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/plant/anthurium-3.svg"
+            alt=""
+            style={{ width: 36, height: 36, objectFit: "contain" }}
+          />
+        </div>
+        <div className="flex flex-col items-start">
+          <span
+            className="text-[#292929] font-[family-name:var(--font-suse)]"
+            style={{ fontSize: 16, fontWeight: 700 }}
+          >
+            Couple Plant
+          </span>
+          <span
+            className="text-[#98989D] font-[family-name:var(--font-suse)]"
+            style={{ fontSize: 12, fontWeight: 500 }}
+          >
+            Anthurium
+          </span>
+        </div>
+      </button>
+
       {/* ── Valentine's Day Card ─────────────────────── */}
       <button
         onClick={() => openLoveNote()}

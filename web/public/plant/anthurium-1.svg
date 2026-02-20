@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 300" fill="none">
+  <!-- Pot -->
+  <ellipse cx="120" cy="262" rx="46" ry="8" fill="#C4A882" opacity="0.4"/>
+  <path d="M82 240 Q80 270 100 275 H140 Q160 270 158 240 Z" fill="#D4976A"/>
+  <rect x="76" y="232" width="88" height="12" rx="6" fill="#C4845A"/>
+  <!-- Soil -->
+  <ellipse cx="120" cy="240" rx="40" ry="7" fill="#6B4226"/>
+
+  <!-- Stem -->
+  <path d="M120 238 Q118 220 115 205 Q112 190 114 178" stroke="#5A8A3C" stroke-width="3.5" stroke-linecap="round" fill="none"/>
+
+  <!-- Tiny leaves -->
+  <path d="M114 205 Q98 198 94 186 Q106 188 114 198 Z" fill="#6DB44E"/>
+  <path d="M115 190 Q126 180 132 170 Q122 178 115 188 Z" fill="#7DC55D"/>
+
+  <!-- Tiny bud -->
+  <ellipse cx="114" cy="177" rx="4" ry="5.5" fill="#A8D878" transform="rotate(-15 114 177)"/>
+</svg>
