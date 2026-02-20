@@ -793,7 +793,7 @@ export default function LogPage() {
             style={{ borderRadius: 16, padding: 14, marginBottom: 44 }}
           >
             <p
-              className="text-[#98989D] font-[family-name:var(--font-suse)] text-left"
+              className="text-[#292929] font-[family-name:var(--font-suse)] text-center"
               style={{ fontSize: 13, fontWeight: 600 }}
             >
               {statusText}
