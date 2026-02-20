@@ -35,7 +35,7 @@ function formatMsDisplay(ms: number): string {
 }
 
 const GRADIENT_A = "linear-gradient(160deg, #F5D5C8, #F0B89E, #E8956E, #E07850, #D4628A)";
-const GRADIENT_B = "linear-gradient(160deg, #A8C8F0, #88BDE8, #6CB4EE, #7DD4D4, #90DBC8)";
+const GRADIENT_B = "radial-gradient(153.92% 152.12% at 92.94% 12.61%, #F0869A 0%, #FBE1D2 100%)";
 
 function getPlayerColor(index: number): string {
   return index === 0 ? "#E07850" : "#3A7BD5";
