@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
   try {
     initVapid();
     const body = await req.json();
-    const { coupleId, senderUserId, message } = body;
+    const { coupleId, senderUserId, message, url } = body;
 
     if (!coupleId || !senderUserId || !message) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
@@ -62,7 +62,7 @@ export async function POST(req: NextRequest) {
     const payload = JSON.stringify({
       title: "Cheese Squeeze",
       body: message,
-      data: { url: "/" },
+      data: { url: url || "/" },
     });
 
     let sent = 0;

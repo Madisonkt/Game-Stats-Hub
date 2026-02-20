@@ -470,6 +470,11 @@ export default function LogPage() {
     if (round?.id && currentUser?.id) {
       try {
         await rubiksRepo.submitSolve(round.id, currentUser.id, finalTime);
+        // Optimistically add my solve to local state so the Start Timer button hides immediately
+        setSolves((prev) => {
+          if (prev.find((s) => s.userId === currentUser.id)) return prev;
+          return [...prev, { id: "pending", roundId: round.id, userId: currentUser.id, timeMs: finalTime, createdAt: Date.now() } as Solve];
+        });
         // Async mode: track submission and reveal if both have submitted
         if (round.mode === "async") {
           const updatedRound = await rubiksRepo.trackSolveSubmitted(round.id, currentUser.id);
@@ -479,13 +484,27 @@ export default function LogPage() {
             handleRoundComplete(round.id, allSolves);
           } else if (updatedRound) {
             setRound(updatedRound);
+            // First to submit — notify partner to take their turn
+            if (couple?.id) {
+              const playerName = currentUser.name || "Your partner";
+              fetch("/api/push", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  coupleId: couple.id,
+                  senderUserId: currentUser.id,
+                  message: `${playerName} submitted their Rubik's cube time — your turn! 🧩`,
+                  url: `/rubiks/round/${round.id}`,
+                }),
+              }).catch(() => {});
+            }
           }
         }
       } catch (e) {
         console.error("Failed to submit solve:", e);
       }
     }
-  }, [round?.id, round?.mode, currentUser?.id, handleRoundComplete]);
+  }, [round?.id, round?.mode, currentUser?.id, couple?.id, currentUser?.name, handleRoundComplete]);
 
   useEffect(() => {
     return () => {
@@ -1110,7 +1129,7 @@ export default function LogPage() {
               )}
 
               {/* Timer controls — show if user has joined and hasn't submitted */}
-              {!mySolve && !timerRunning && (round.mode === "live" || round.joinedUserIds.includes(currentUser.id)) && (
+              {!mySolve && !round.submittedUserIds.includes(currentUser.id) && !timerRunning && (round.mode === "live" || round.joinedUserIds.includes(currentUser.id)) && (
                 <button
                   onClick={startTimer}
                   className="flex items-center justify-center gap-2 text-white font-[family-name:var(--font-suse)]
