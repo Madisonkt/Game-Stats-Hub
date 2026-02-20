@@ -139,7 +139,7 @@ export default function PlantPage() {
   }
 
   const stage = plant?.stage ?? 1;
-  const imgSrc = `/plant/anthurium-${stage}.svg`;
+  const imgSrc = `/plant/anthurium-${stage}.png`;
   const stageLabel = STAGE_LABELS[stage];
   const hint = plant ? statusLabel(plant.status) : null;
 
