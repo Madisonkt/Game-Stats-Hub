@@ -306,6 +306,9 @@ export default function LogPage() {
   // Mode picker modal
   const [showModeModal, setShowModeModal] = useState(false);
 
+  // Poke partner (async waiting state)
+  const [pokeSent, setPokeSent] = useState(false);
+
   // Track rounds that already triggered confetti (prevent duplicates from polling)
   const confettiFiredRef = useRef<Set<string>>(new Set());
 
@@ -585,6 +588,27 @@ export default function LogPage() {
       setActionLoading(false);
     }
   };
+
+  const handlePoke = useCallback(async () => {
+    if (!couple?.id || !currentUser?.id || pokeSent) return;
+    setPokeSent(true);
+    const playerName = currentUser.name || "Your partner";
+    fetch("/api/push", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        coupleId: couple.id,
+        senderUserId: currentUser.id,
+        message: `${playerName} says its your turn`,
+        url: round?.id ? `/rubiks/round/${round.id}` : "/",
+      }),
+    }).catch(() => {});
+    // Reset after 30s so they can poke again if needed
+    setTimeout(() => setPokeSent(false), 30000);
+  }, [couple?.id, currentUser?.id, currentUser?.name, round?.id, pokeSent]);
+
+  // Reset poke state when round changes
+  useEffect(() => { setPokeSent(false); }, [round?.id]);
 
   const handleJoinRound = async () => {
     if (!round?.id || !currentUser?.id) return;
@@ -1156,6 +1180,24 @@ export default function LogPage() {
                       <span className="text-[#98989D] ml-2">— waiting for partner…</span>
                     )}
                   </p>
+                  {round.mode === "async" && round.submittedUserIds.length < 2 && (
+                    <button
+                      onClick={handlePoke}
+                      disabled={pokeSent}
+                      className="flex items-center gap-1.5 font-[family-name:var(--font-suse)] transition-all active:scale-[0.97] disabled:opacity-50"
+                      style={{
+                        background: pokeSent ? "#E8E8E8" : "#F4F3F1",
+                        border: "1.5px solid #E0E0E0",
+                        borderRadius: 999,
+                        padding: "8px 20px",
+                        fontSize: 14,
+                        fontWeight: 600,
+                        color: "#292929",
+                      }}
+                    >
+                      {pokeSent ? "✓ Poke sent!" : "👉 Poke"}
+                    </button>
+                  )}
                   <button
                     onClick={handleResetSolve}
                     className="flex items-center gap-1 text-xs text-[#98989D] hover:text-red-500 transition-colors font-[family-name:var(--font-suse)]"
