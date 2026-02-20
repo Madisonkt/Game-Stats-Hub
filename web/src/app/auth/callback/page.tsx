@@ -88,20 +88,20 @@ export default function AuthCallbackPage() {
   // ── iOS Safari: show "return to PWA" prompt ───────────────
   if (showPWAPrompt) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-[#F3F0EA] dark:bg-[#0A0A0C] p-6">
+      <div className="flex min-h-screen items-center justify-center bg-[#FEFEFE] p-6">
         <div
-          className="flex flex-col items-center gap-5 w-full max-w-sm bg-[#ECE7DE] dark:bg-[#1A1A1C] p-8"
+          className="flex flex-col items-center gap-5 w-full max-w-sm bg-[#F4F3F1] p-8"
           style={{ borderRadius: 24 }}
         >
           <IoCheckmarkCircle className="text-green-500" style={{ fontSize: 56 }} />
           <h1
-            className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)] text-center"
+            className="text-[#292929] font-[family-name:var(--font-suse)] text-center"
             style={{ fontSize: 22, fontWeight: 800 }}
           >
             You&apos;re signed in!
           </h1>
           <p
-            className="text-[#636366] dark:text-[#98989D] font-[family-name:var(--font-suse)] text-center"
+            className="text-[#636366] font-[family-name:var(--font-suse)] text-center"
             style={{ fontSize: 14, lineHeight: 1.5 }}
           >
             Switch back to the <strong>Cheese Squeeze</strong> app on your home screen to continue.
@@ -110,16 +110,16 @@ export default function AuthCallbackPage() {
           {/* Visual hint */}
           <div className="flex items-center gap-3 mt-2">
             <div
-              className="flex items-center justify-center bg-[#3A7BD5] dark:bg-white"
+              className="flex items-center justify-center bg-[#292929]"
               style={{ width: 48, height: 48, borderRadius: 12 }}
             >
               <IoPhonePortraitOutline
-                className="text-white dark:text-[#0A0A0C]"
+                className="text-white"
                 style={{ fontSize: 24 }}
               />
             </div>
             <span
-              className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]"
+              className="text-[#292929] font-[family-name:var(--font-suse)]"
               style={{ fontSize: 13, fontWeight: 600 }}
             >
               Tap the app icon on your<br />home screen
@@ -129,7 +129,7 @@ export default function AuthCallbackPage() {
           {/* Fallback: continue in Safari */}
           <button
             onClick={() => { window.location.href = "/"; }}
-            className="mt-4 text-[#636366] dark:text-[#98989D] hover:text-[#0A0A0C] dark:hover:text-[#F3F0EA] transition-colors font-[family-name:var(--font-suse)] underline"
+            className="mt-4 text-[#636366] hover:text-[#292929] transition-colors font-[family-name:var(--font-suse)] underline"
             style={{ fontSize: 13, fontWeight: 600 }}
           >
             Or continue in Safari
@@ -141,7 +141,7 @@ export default function AuthCallbackPage() {
 
   // ── Default: loading ──────────────────────────────
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#F3F0EA] dark:bg-[#0A0A0C]">
+    <div className="flex min-h-screen items-center justify-center bg-[#FEFEFE]">
       <CloudLoader message={authed ? "Signed in! Redirecting..." : "Signing you in..."} />
     </div>
   );

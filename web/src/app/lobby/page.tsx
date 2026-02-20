@@ -82,13 +82,13 @@ export default function LobbyPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#F3F0EA] dark:bg-[#0A0A0C] p-6">
+    <div className="flex min-h-screen items-center justify-center bg-[#FEFEFE] p-6">
       <div className="w-full max-w-sm flex flex-col items-center gap-6">
-        <h1 className="text-2xl font-extrabold text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]">
+        <h1 className="text-2xl font-extrabold text-[#292929] font-[family-name:var(--font-suse)]">
           Waiting for partner...
         </h1>
 
-        <p className="text-sm text-[#636366] dark:text-[#98989D] text-center font-[family-name:var(--font-suse)]">
+        <p className="text-sm text-[#636366] text-center font-[family-name:var(--font-suse)]">
           Share this invite code with your partner
         </p>
 
@@ -96,10 +96,10 @@ export default function LobbyPage() {
         <button
           onClick={handleCopy}
           className="flex items-center gap-3 px-8 py-4 rounded-2xl
-            bg-[#ECE7DE] dark:bg-[#1A1A1C]
+            bg-[#F4F3F1]
             hover:opacity-80 active:scale-[0.98] transition-all group"
         >
-          <span className="text-3xl font-extrabold tracking-[0.3em] text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]">
+          <span className="text-3xl font-extrabold tracking-[0.3em] text-[#292929] font-[family-name:var(--font-suse)]">
             {inviteCode}
           </span>
           {copied ? (
@@ -117,7 +117,7 @@ export default function LobbyPage() {
 
         {/* Members list */}
         <div className="w-full mt-4">
-          <p className="text-xs font-semibold uppercase tracking-wider text-[#636366] dark:text-[#98989D] mb-2 font-[family-name:var(--font-suse)]">
+          <p className="text-xs font-semibold uppercase tracking-wider text-[#636366] mb-2 font-[family-name:var(--font-suse)]">
             Members ({session.couple?.members.length ?? 0} / 2)
           </p>
           {session.couple?.members.map((member, i) => (
@@ -129,7 +129,7 @@ export default function LobbyPage() {
                 ${i === 0 ? "bg-[#D4628A]" : "bg-[#3A7BD5]"}`}>
                 {member.name.charAt(0).toUpperCase()}
               </div>
-              <span className="text-sm font-semibold text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]">
+              <span className="text-sm font-semibold text-[#292929] font-[family-name:var(--font-suse)]">
                 {member.name}
                 {member.id === session.currentUser?.id && (
                   <span className="ml-2 text-xs text-[#98989D]">(you)</span>
@@ -141,7 +141,7 @@ export default function LobbyPage() {
           {/* Waiting slot for partner */}
           {(session.couple?.members.length ?? 0) < 2 && (
             <div className="flex items-center gap-3 py-2">
-              <div className="w-8 h-8 rounded-full flex items-center justify-center bg-[#ECE7DE] dark:bg-[#1A1A1C] border-2 border-dashed border-[#98989D]">
+              <div className="w-8 h-8 rounded-full flex items-center justify-center bg-[#F4F3F1] border-2 border-dashed border-[#98989D]">
                 <span className="text-[#98989D] text-xs">?</span>
               </div>
               <span className="text-sm text-[#98989D] italic font-[family-name:var(--font-suse)]">
@@ -153,8 +153,8 @@ export default function LobbyPage() {
 
         {/* Pulsing indicator */}
         <div className="flex items-center gap-2 mt-2">
-          <div className="w-2 h-2 rounded-full bg-[#3A7BD5] dark:bg-white animate-pulse" />
-          <p className="text-xs text-[#98989D] dark:text-[#636366] font-[family-name:var(--font-suse)]">
+          <div className="w-2 h-2 rounded-full bg-[#292929] animate-pulse" />
+          <p className="text-xs text-[#98989D] font-[family-name:var(--font-suse)]">
             Listening for partner via Supabase Realtime
           </p>
         </div>

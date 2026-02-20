@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #F3F0EA;
-  --foreground: #0A0A0C;
+  --background: #FEFEFE;
+  --foreground: #292929;
 }
 
 @theme inline {
@@ -12,12 +12,7 @@
   --font-suse-mono: var(--font-suse-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0A0A0C;
-    --foreground: #F3F0EA;
-  }
-}
+
 
 body {
   background: var(--background);
@@ -55,13 +50,7 @@ body {
   background-size: 24px 24px;
 }
 
-@media (prefers-color-scheme: dark) {
-  .garden-grid {
-    background-image:
-      linear-gradient(rgba(255,255,255,0.06) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.06) 1px, transparent 1px);
-  }
-}
+
 
 /* ── Liquid Glass tab bar ──────────────────────────────────── */
 .liquid-glass-bar {
@@ -80,16 +69,7 @@ body {
   width: 100%;
 }
 
-@media (prefers-color-scheme: dark) {
-  .liquid-glass-bar {
-    background: rgba(30, 30, 32, 0.55);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow:
-      0 8px 32px rgba(0, 0, 0, 0.4),
-      0 1px 0 rgba(255, 255, 255, 0.06) inset,
-      0 -1px 0 rgba(0, 0, 0, 0.2) inset;
-  }
-}
+
 
 /* Active tab pill */
 .liquid-glass-pill {
@@ -102,15 +82,7 @@ body {
   animation: pill-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-@media (prefers-color-scheme: dark) {
-  .liquid-glass-pill {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.12);
-    box-shadow:
-      0 2px 8px rgba(0, 0, 0, 0.2),
-      0 1px 0 rgba(255, 255, 255, 0.08) inset;
-  }
-}
+
 
 @keyframes pill-in {
   0% {

@@ -18,7 +18,7 @@ export default function TabLayout({ children }: { children: ReactNode }) {
   usePushSubscription();
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden bg-[#F3F0EA] dark:bg-[#0A0A0C]">
+    <div className="flex flex-col h-screen overflow-hidden bg-[#FEFEFE]">
       <KawaiiBackground>
         {/* Page content */}
         <main className="relative flex-1 overflow-auto pb-20 animate-fade-in">{children}</main>
@@ -43,8 +43,8 @@ export default function TabLayout({ children }: { children: ReactNode }) {
                   className={`relative flex flex-col items-center gap-0.5 px-6 py-2 transition-all duration-300 z-10
                     ${
                       isActive
-                        ? "text-[#0A0A0C] dark:text-white"
-                        : "text-[#98989D]/70 dark:text-[#636366] hover:text-[#636366] dark:hover:text-[#98989D]"
+                        ? "text-[#292929]"
+                        : "text-[#98989D]/70 hover:text-[#636366]"
                     }`}
                 >
                   <Icon className="text-[22px] relative z-10" />

@@ -76,8 +76,8 @@ function GameRow({
     <div className="relative">
       <button
         onClick={onSelect}
-        className={`flex items-center gap-3 w-full text-left bg-[#ECE7DE] dark:bg-[#1A1A1C] mb-2 active:scale-[0.98] transition-all ${
-          isActive ? "ring-2 ring-[#3A7BD5] dark:ring-white" : ""
+        className={`flex items-center gap-3 w-full text-left bg-[#F4F3F1] mb-2 active:scale-[0.98] transition-all ${
+          isActive ? "ring-2 ring-[#292929]" : ""
         }`}
         style={{ borderRadius: 18, padding: 14 }}
       >
@@ -89,18 +89,18 @@ function GameRow({
             height: 44,
             borderRadius: 12,
             backgroundColor: isActive
-              ? "rgba(58,123,213,0.15)"
+              ? "rgba(41,41,41,0.15)"
               : "rgba(150,150,150,0.1)",
           }}
         >
           {game.type === "timed" ? (
             <IoTimerOutline
-              className={isActive ? "text-[#3A7BD5] dark:text-white" : "text-[#98989D]"}
+              className={isActive ? "text-[#292929]" : "text-[#98989D]"}
               style={{ fontSize: 22 }}
             />
           ) : (
             <IoGameControllerOutline
-              className={isActive ? "text-[#3A7BD5] dark:text-white" : "text-[#98989D]"}
+              className={isActive ? "text-[#292929]" : "text-[#98989D]"}
               style={{ fontSize: 22 }}
             />
           )}
@@ -109,7 +109,7 @@ function GameRow({
         {/* Name + badges */}
         <div className="flex-1 flex flex-col min-w-0">
           <span
-            className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)] truncate"
+            className="text-[#292929] font-[family-name:var(--font-suse)] truncate"
             style={{ fontSize: 16, fontWeight: 700 }}
           >
             {game.name}
@@ -168,7 +168,7 @@ function GameRow({
                   )}
                 </div>
                 <span
-                  className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]"
+                  className="text-[#292929] font-[family-name:var(--font-suse)]"
                   style={{ fontSize: 12, fontWeight: 700 }}
                 >
                   {scores[m.id] ?? 0}
@@ -195,13 +195,13 @@ function GameRow({
         <>
           <div className="fixed inset-0 z-40" onClick={() => setShowActions(false)} />
           <div
-            className="absolute right-2 top-12 z-50 bg-white dark:bg-[#1A1A1C] shadow-lg border border-[#ECE7DE] dark:border-[#2A2A2C] flex flex-col py-1"
+            className="absolute right-2 top-12 z-50 bg-white shadow-lg border border-[#F4F3F1] flex flex-col py-1"
             style={{ borderRadius: 12, minWidth: 160 }}
           >
             {game.isArchived ? (
               <button
                 onClick={() => { onUnarchive(); setShowActions(false); }}
-                className="flex items-center gap-2 px-4 py-2.5 text-left text-sm text-[#0A0A0C] dark:text-[#F3F0EA] hover:bg-[#ECE7DE] dark:hover:bg-[#2A2A2C] font-[family-name:var(--font-suse)]"
+                className="flex items-center gap-2 px-4 py-2.5 text-left text-sm text-[#292929] hover:bg-[#F4F3F1] font-[family-name:var(--font-suse)]"
               >
                 <IoArchiveOutline style={{ fontSize: 16 }} />
                 Unarchive
@@ -209,7 +209,7 @@ function GameRow({
             ) : (
               <button
                 onClick={() => { onArchive(); setShowActions(false); }}
-                className="flex items-center gap-2 px-4 py-2.5 text-left text-sm text-[#0A0A0C] dark:text-[#F3F0EA] hover:bg-[#ECE7DE] dark:hover:bg-[#2A2A2C] font-[family-name:var(--font-suse)]"
+                className="flex items-center gap-2 px-4 py-2.5 text-left text-sm text-[#292929] hover:bg-[#F4F3F1] font-[family-name:var(--font-suse)]"
               >
                 <IoArchiveOutline style={{ fontSize: 16 }} />
                 Archive
@@ -217,14 +217,14 @@ function GameRow({
             )}
             <button
               onClick={() => { onReset(); setShowActions(false); }}
-              className="flex items-center gap-2 px-4 py-2.5 text-left text-sm text-[#FF9500] hover:bg-[#ECE7DE] dark:hover:bg-[#2A2A2C] font-[family-name:var(--font-suse)]"
+              className="flex items-center gap-2 px-4 py-2.5 text-left text-sm text-[#FF9500] hover:bg-[#F4F3F1] font-[family-name:var(--font-suse)]"
             >
               <IoRefresh style={{ fontSize: 16 }} />
               Reset Scores
             </button>
             <button
               onClick={() => { onDelete(); setShowActions(false); }}
-              className="flex items-center gap-2 px-4 py-2.5 text-left text-sm text-[#FF3B30] hover:bg-[#ECE7DE] dark:hover:bg-[#2A2A2C] font-[family-name:var(--font-suse)]"
+              className="flex items-center gap-2 px-4 py-2.5 text-left text-sm text-[#FF3B30] hover:bg-[#F4F3F1] font-[family-name:var(--font-suse)]"
             >
               <IoTrashOutline style={{ fontSize: 16 }} />
               Delete
@@ -441,7 +441,7 @@ export default function GamesPage() {
   if (!currentUser) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] p-6">
-        <p className="text-sm text-[#636366] dark:text-[#98989D] font-[family-name:var(--font-suse)]">
+        <p className="text-sm text-[#636366] font-[family-name:var(--font-suse)]">
           Not signed in
         </p>
       </div>
@@ -451,22 +451,22 @@ export default function GamesPage() {
   return (
     <div className="absolute inset-0 flex flex-col">
       {/* ── Header (non-scrolling) ──────────────────── */}
-      <div className="shrink-0 z-40 bg-[#F3F0EA] dark:bg-[#0A0A0C] max-w-lg mx-auto w-full px-5 pt-4 pb-3">
+      <div className="shrink-0 z-40 bg-[#FEFEFE] max-w-lg mx-auto w-full px-5 pt-4 pb-3">
         <div className="flex items-center justify-between">
           <h1
-            className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]"
+            className="text-[#292929] font-[family-name:var(--font-suse)]"
             style={{ fontSize: 28, fontWeight: 800 }}
           >
             Games
           </h1>
           <div className="flex items-center gap-4">
-            <button onClick={() => openAddGame()} className="text-[#3A7BD5] dark:text-white">
+            <button onClick={() => openAddGame()} className="text-[#292929]">
               <IoAddCircle style={{ fontSize: 28 }} />
             </button>
-            <button onClick={() => openLoveNote()} className="text-[#3A7BD5] dark:text-white">
+            <button onClick={() => openLoveNote()} className="text-[#292929]">
               <IoHeart style={{ fontSize: 22 }} />
             </button>
-            <button onClick={handleOpenPlayerSettings} className="text-[#3A7BD5] dark:text-white">
+            <button onClick={handleOpenPlayerSettings} className="text-[#292929]">
               <IoPeople style={{ fontSize: 24 }} />
             </button>
           </div>
@@ -482,7 +482,7 @@ export default function GamesPage() {
       {games.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-16 gap-4">
           <IoGameControllerOutline className="text-[#98989D]" style={{ fontSize: 64 }} />
-          <p className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]" style={{ fontSize: 18, fontWeight: 700 }}>
+          <p className="text-[#292929] font-[family-name:var(--font-suse)]" style={{ fontSize: 18, fontWeight: 700 }}>
             Create your first game
           </p>
           <p className="text-[#98989D] font-[family-name:var(--font-suse)] text-center" style={{ fontSize: 14 }}>
@@ -490,7 +490,7 @@ export default function GamesPage() {
           </p>
           <button
             onClick={() => openAddGame()}
-            className="flex items-center gap-2 bg-[#3A7BD5] dark:bg-white text-white dark:text-[#0A0A0C]
+            className="flex items-center gap-2 bg-[#292929] text-white
               font-[family-name:var(--font-suse)] active:scale-[0.98] transition-all"
             style={{ borderRadius: 14, padding: "12px 24px", fontSize: 15, fontWeight: 700 }}
           >
@@ -545,7 +545,7 @@ export default function GamesPage() {
       {/* ── Aquarium Card ───────────────────── */}
       <button
         onClick={() => router.push("/garden")}
-        className="w-full flex items-center gap-3 bg-[#ECE7DE] dark:bg-[#1A1A1C] card-press mb-2"
+        className="w-full flex items-center gap-3 bg-[#F4F3F1] card-press mb-2"
         style={{ borderRadius: 18, padding: 14 }}
       >
         <div
@@ -561,7 +561,7 @@ export default function GamesPage() {
         </div>
         <div className="flex flex-col items-start">
           <span
-            className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]"
+            className="text-[#292929] font-[family-name:var(--font-suse)]"
             style={{ fontSize: 16, fontWeight: 700 }}
           >
             Aquarium
@@ -608,7 +608,7 @@ export default function GamesPage() {
       {/* ── Invite Code ─────────────────────────────── */}
       {couple && (
         <div
-          className="flex items-center gap-3 bg-[#ECE7DE] dark:bg-[#1A1A1C] mt-4 mb-6"
+          className="flex items-center gap-3 bg-[#F4F3F1] mt-4 mb-6"
           style={{ borderRadius: 18, padding: 14 }}
         >
           <div className="flex flex-col flex-1 min-w-0">
@@ -619,7 +619,7 @@ export default function GamesPage() {
               Invite Code
             </span>
             <span
-              className="text-[#0A0A0C] dark:text-[#F3F0EA] font-mono tracking-widest"
+              className="text-[#292929] font-mono tracking-widest"
               style={{ fontSize: 20, fontWeight: 800 }}
             >
               {couple.inviteCode}
@@ -627,7 +627,7 @@ export default function GamesPage() {
           </div>
           <button
             onClick={handleCopyCode}
-            className="flex items-center gap-1 text-[#3A7BD5] dark:text-white hover:text-[#2C5F9E] dark:hover:text-[#ECE7DE] transition-colors font-[family-name:var(--font-suse)]"
+            className="flex items-center gap-1 text-[#292929] hover:text-[#1A1A1A] transition-colors font-[family-name:var(--font-suse)]"
             style={{ fontSize: 13, fontWeight: 600 }}
           >
             {codeCopied ? (<><IoCheckmark className="text-green-500" /> Copied</>) : (<><IoCopyOutline /> Copy</>)}
@@ -685,7 +685,7 @@ export default function GamesPage() {
                 }
               }}
               className="flex items-center justify-center gap-2 w-full font-[family-name:var(--font-suse)] active:scale-[0.98] transition-all"
-              style={{ borderRadius: 16, padding: 14, fontSize: 15, fontWeight: 700, color: "#3A7BD5", backgroundColor: "rgba(58,123,213,0.08)" }}
+              style={{ borderRadius: 16, padding: 14, fontSize: 15, fontWeight: 700, color: "#292929", backgroundColor: "rgba(41,41,41,0.08)" }}
             >
               <IoNotificationsOutline style={{ fontSize: 20 }} />
               Enable Notifications
@@ -718,7 +718,7 @@ export default function GamesPage() {
       {/* ── Add Game Modal ──────────────────────────── */}
       {showAddGame && createPortal(
         <div
-          className="fixed inset-0 bg-[#F3F0EA] dark:bg-[#0A0A0C] overflow-y-auto"
+          className="fixed inset-0 bg-[#FEFEFE] overflow-y-auto"
           style={{
             zIndex: 99999,
             transform: addGameVisible ? "translateY(0)" : "translateY(100%)",
@@ -729,17 +729,17 @@ export default function GamesPage() {
           <button
             onClick={closeAddGame}
             className="fixed top-4 right-4 flex items-center justify-center
-              bg-[#ECE7DE] dark:bg-[#1A1A1C] hover:bg-[#D6D1C8] dark:hover:bg-[#2A2A2C]
+              bg-[#F4F3F1] hover:bg-[#D6D1C8]
               transition-colors active:scale-95"
             style={{ zIndex: 100000, width: 36, height: 36, borderRadius: 18 }}
           >
-            <span className="text-[#0A0A0C] dark:text-[#F3F0EA]" style={{ fontSize: 18, lineHeight: 1 }}>&times;</span>
+            <span className="text-[#292929]" style={{ fontSize: 18, lineHeight: 1 }}>&times;</span>
           </button>
 
           <div className="px-6 pt-14 pb-8">
             <div className="max-w-sm mx-auto">
               <h2
-                className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)] mb-6"
+                className="text-[#292929] font-[family-name:var(--font-suse)] mb-6"
                 style={{ fontSize: 24, fontWeight: 800 }}
               >
                 New Game
@@ -751,7 +751,7 @@ export default function GamesPage() {
               value={newGameName}
               onChange={(e) => setNewGameName(e.target.value)}
               placeholder="Game name"
-              className="w-full px-4 py-3 bg-[#ECE7DE] dark:bg-[#1A1A1C] text-[#0A0A0C] dark:text-[#F3F0EA]
+              className="w-full px-4 py-3 bg-[#F4F3F1] text-[#292929]
                 placeholder:text-[#98989D] font-[family-name:var(--font-suse)] outline-none mb-4"
               style={{ borderRadius: 14, fontSize: 16, fontWeight: 600 }}
             />
@@ -759,8 +759,8 @@ export default function GamesPage() {
             {/* Quick preset */}
             <button
               onClick={() => { setNewGameName("Rubik's Cube"); setSelectedType("timed"); }}
-              className="flex items-center gap-2 w-full px-4 py-3 bg-[#ECE7DE] dark:bg-[#1A1A1C]
-                text-[#0A0A0C] dark:text-[#F3F0EA] active:scale-[0.98] transition-all mb-4 font-[family-name:var(--font-suse)]"
+              className="flex items-center gap-2 w-full px-4 py-3 bg-[#F4F3F1]
+                text-[#292929] active:scale-[0.98] transition-all mb-4 font-[family-name:var(--font-suse)]"
               style={{ borderRadius: 14, fontSize: 14, fontWeight: 600 }}
             >
               <IoTimerOutline style={{ fontSize: 18 }} />
@@ -779,18 +779,18 @@ export default function GamesPage() {
                 onClick={() => setSelectedType("simple")}
                 className={`flex-1 flex flex-col items-center gap-2 py-4 transition-all active:scale-[0.98] ${
                   selectedType === "simple"
-                    ? "ring-2 ring-[#3A7BD5] dark:ring-white bg-[#3A7BD5]/10 dark:bg-white/10"
-                    : "bg-[#ECE7DE] dark:bg-[#1A1A1C]"
+                    ? "ring-2 ring-[#292929] bg-[#292929]/10"
+                    : "bg-[#F4F3F1]"
                 }`}
                 style={{ borderRadius: 14 }}
               >
                 <IoGameControllerOutline
-                  className={selectedType === "simple" ? "text-[#3A7BD5] dark:text-white" : "text-[#98989D]"}
+                  className={selectedType === "simple" ? "text-[#292929]" : "text-[#98989D]"}
                   style={{ fontSize: 24 }}
                 />
                 <span
                   className={`font-[family-name:var(--font-suse)] ${
-                    selectedType === "simple" ? "text-[#3A7BD5] dark:text-white" : "text-[#98989D]"
+                    selectedType === "simple" ? "text-[#292929]" : "text-[#98989D]"
                   }`}
                   style={{ fontSize: 13, fontWeight: 700 }}
                 >
@@ -804,18 +804,18 @@ export default function GamesPage() {
                 onClick={() => setSelectedType("timed")}
                 className={`flex-1 flex flex-col items-center gap-2 py-4 transition-all active:scale-[0.98] ${
                   selectedType === "timed"
-                    ? "ring-2 ring-[#3A7BD5] dark:ring-white bg-[#3A7BD5]/10 dark:bg-white/10"
-                    : "bg-[#ECE7DE] dark:bg-[#1A1A1C]"
+                    ? "ring-2 ring-[#292929] bg-[#292929]/10"
+                    : "bg-[#F4F3F1]"
                 }`}
                 style={{ borderRadius: 14 }}
               >
                 <IoTimerOutline
-                  className={selectedType === "timed" ? "text-[#3A7BD5] dark:text-white" : "text-[#98989D]"}
+                  className={selectedType === "timed" ? "text-[#292929]" : "text-[#98989D]"}
                   style={{ fontSize: 24 }}
                 />
                 <span
                   className={`font-[family-name:var(--font-suse)] ${
-                    selectedType === "timed" ? "text-[#3A7BD5] dark:text-white" : "text-[#98989D]"
+                    selectedType === "timed" ? "text-[#292929]" : "text-[#98989D]"
                   }`}
                   style={{ fontSize: 13, fontWeight: 700 }}
                 >
@@ -831,8 +831,8 @@ export default function GamesPage() {
             <button
               onClick={handleAddGame}
               disabled={!newGameName.trim() || addingGame}
-              className="flex items-center justify-center gap-2 w-full text-white dark:text-[#0A0A0C] font-[family-name:var(--font-suse)]
-                bg-[#3A7BD5] dark:bg-white hover:bg-[#2C5F9E] dark:hover:bg-[#ECE7DE]
+              className="flex items-center justify-center gap-2 w-full text-white font-[family-name:var(--font-suse)]
+                bg-[#292929] hover:bg-[#1A1A1A]
                 active:scale-[0.98] transition-all disabled:opacity-40 disabled:cursor-not-allowed"
               style={{ borderRadius: 14, padding: 14, fontSize: 16, fontWeight: 700 }}
             >
@@ -847,7 +847,7 @@ export default function GamesPage() {
       {/* ── Player Settings Modal ───────────────────── */}
       {showPlayerSettings && createPortal(
         <div
-          className="fixed inset-0 bg-[#F3F0EA] dark:bg-[#0A0A0C] overflow-y-auto"
+          className="fixed inset-0 bg-[#FEFEFE] overflow-y-auto"
           style={{
             zIndex: 99999,
             transform: playerSettingsVisible ? "translateY(0)" : "translateY(100%)",
@@ -858,17 +858,17 @@ export default function GamesPage() {
           <button
             onClick={closePlayerSettings}
             className="fixed top-4 right-4 flex items-center justify-center
-              bg-[#ECE7DE] dark:bg-[#1A1A1C] hover:bg-[#D6D1C8] dark:hover:bg-[#2A2A2C]
+              bg-[#F4F3F1] hover:bg-[#D6D1C8]
               transition-colors active:scale-95"
             style={{ zIndex: 100000, width: 36, height: 36, borderRadius: 18 }}
           >
-            <span className="text-[#0A0A0C] dark:text-[#F3F0EA]" style={{ fontSize: 18, lineHeight: 1 }}>&times;</span>
+            <span className="text-[#292929]" style={{ fontSize: 18, lineHeight: 1 }}>&times;</span>
           </button>
 
           <div className="flex flex-col items-center px-6 pt-16 pb-16">
             <div className="max-w-sm w-full">
               <h2
-                className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)] mb-8"
+                className="text-[#292929] font-[family-name:var(--font-suse)] mb-8"
                 style={{ fontSize: 24, fontWeight: 800 }}
               >
                 Player Settings
@@ -893,10 +893,10 @@ export default function GamesPage() {
                   )}
                 </div>
                 <div
-                  className="absolute -bottom-1 -right-1 bg-[#3A7BD5] dark:bg-white flex items-center justify-center"
+                  className="absolute -bottom-1 -right-1 bg-[#292929] flex items-center justify-center"
                   style={{ width: 22, height: 22, borderRadius: 11 }}
                 >
-                  <IoCamera className="text-white dark:text-[#0A0A0C]" style={{ fontSize: 12 }} />
+                  <IoCamera className="text-white" style={{ fontSize: 12 }} />
                 </div>
               </button>
               <input ref={fileInputRef} type="file" accept="image/*" className="hidden" onChange={handleAvatarPick} />
@@ -908,7 +908,7 @@ export default function GamesPage() {
               value={editName}
               onChange={(e) => setEditName(e.target.value)}
               placeholder="Your name"
-              className="w-full px-4 py-3 bg-[#ECE7DE] dark:bg-[#1A1A1C] text-[#0A0A0C] dark:text-[#F3F0EA]
+              className="w-full px-4 py-3 bg-[#F4F3F1] text-[#292929]
                 font-[family-name:var(--font-suse)] outline-none mb-4"
               style={{ borderRadius: 14, fontSize: 16, fontWeight: 600 }}
             />
@@ -916,8 +916,8 @@ export default function GamesPage() {
             {/* Save */}
             <button
               onClick={handleSavePlayer}
-              className="flex items-center justify-center gap-2 w-full text-white dark:text-[#0A0A0C] font-[family-name:var(--font-suse)]
-                bg-[#3A7BD5] dark:bg-white hover:bg-[#2C5F9E] dark:hover:bg-[#ECE7DE] active:scale-[0.98] transition-all"
+              className="flex items-center justify-center gap-2 w-full text-white font-[family-name:var(--font-suse)]
+                bg-[#292929] hover:bg-[#1A1A1A] active:scale-[0.98] transition-all"
               style={{ borderRadius: 14, padding: 14, fontSize: 16, fontWeight: 700 }}
             >
               <IoSave style={{ fontSize: 18 }} />
@@ -926,7 +926,7 @@ export default function GamesPage() {
 
             {/* Set Password */}
             <div className="w-full mt-5 pt-5" style={{ borderTop: "1px solid rgba(150,150,150,0.2)" }}>
-              <p className="text-xs font-semibold uppercase tracking-wider text-[#636366] dark:text-[#98989D] mb-2 font-[family-name:var(--font-suse)]">
+              <p className="text-xs font-semibold uppercase tracking-wider text-[#636366] mb-2 font-[family-name:var(--font-suse)]">
                 Set / Update Password
               </p>
               <input
@@ -934,8 +934,8 @@ export default function GamesPage() {
                 placeholder="New password (6+ chars)"
                 value={newPassword}
                 onChange={(e) => { setNewPassword(e.target.value); setPasswordMsg(null); }}
-                className="w-full px-4 py-3 bg-[#ECE7DE] dark:bg-[#1A1A1C] text-[#0A0A0C] dark:text-[#F3F0EA]
-                  placeholder:text-[#636366] dark:placeholder:text-[#98989D]
+                className="w-full px-4 py-3 bg-[#F4F3F1] text-[#292929]
+                  placeholder:text-[#636366]
                   font-[family-name:var(--font-suse)] outline-none mb-2"
                 style={{ borderRadius: 14, fontSize: 15, fontWeight: 600 }}
               />
@@ -961,8 +961,8 @@ export default function GamesPage() {
                 }}
                 disabled={savingPassword || !newPassword}
                 className="flex items-center justify-center gap-2 w-full font-[family-name:var(--font-suse)]
-                  text-[#3A7BD5] dark:text-white border border-[#3A7BD5] dark:border-white
-                  hover:bg-[#3A7BD5]/10 dark:hover:bg-white/10 active:scale-[0.98] transition-all
+                  text-[#292929] border border-[#292929]
+                  hover:bg-[#292929]/10 active:scale-[0.98] transition-all
                   disabled:opacity-40 disabled:cursor-not-allowed"
                 style={{ borderRadius: 14, padding: 12, fontSize: 15, fontWeight: 700 }}
               >
@@ -979,7 +979,7 @@ export default function GamesPage() {
       {/* ── Valentine's Day Note ─ Full-screen slide-up sheet ── */}
       {showLoveNote && createPortal(
         <div
-          className="fixed inset-0 bg-[#F3F0EA] dark:bg-[#0A0A0C] overflow-y-auto"
+          className="fixed inset-0 bg-[#FEFEFE] overflow-y-auto"
           style={{
             zIndex: 99999,
             transform: loveNoteVisible ? "translateY(0)" : "translateY(100%)",
@@ -991,18 +991,18 @@ export default function GamesPage() {
           <button
             onClick={closeLoveNote}
             className="fixed top-4 right-4 flex items-center justify-center
-              bg-[#ECE7DE] dark:bg-[#1A1A1C] hover:bg-[#D6D1C8] dark:hover:bg-[#2A2A2C]
+              bg-[#F4F3F1] hover:bg-[#D6D1C8]
               transition-colors active:scale-95"
             style={{ zIndex: 100000, width: 36, height: 36, borderRadius: 18 }}
           >
-            <span className="text-[#0A0A0C] dark:text-[#F3F0EA]" style={{ fontSize: 18, lineHeight: 1 }}>&times;</span>
+            <span className="text-[#292929]" style={{ fontSize: 18, lineHeight: 1 }}>&times;</span>
           </button>
 
           {/* Content */}
           <div className="flex flex-col items-center px-8 pt-16 pb-16 min-h-full justify-center">
             <div className="max-w-sm w-full">
               <p
-                className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)] whitespace-pre-line leading-relaxed"
+                className="text-[#292929] font-[family-name:var(--font-suse)] whitespace-pre-line leading-relaxed"
                 style={{ fontSize: 16, fontWeight: 500, lineHeight: 1.8 }}
               >
                 hello sir{"\n"}happy valentines day{"\n"}{"\n"}congrats on not being shawty-lesss this year.{"\n"}I feel very lucky to have found someone who makes me smile as much as you do.{"\n"}{"\n"}thank you for opening up to me these past months, I feel like I&apos;ve learned so much about how your mind works, what your goals and fears are and I dont take that for granted. I appreciate you trusting me with this and want you to know that I am your biggest fan. You&apos;re capable of doing amazing things and I hope you can lean on me when you need to. Im consistently inspired by your drive, self conviction and creativity. You push me, challenge me, and support me and Im very grateful to be growing alongside u. Even though we may not always see eye to eye, getting to understand you more deeply has been an infinitely rewarding experience. love madison {"<3"}
@@ -1016,17 +1016,17 @@ export default function GamesPage() {
       {/* ── Confirmation dialog ─────────────────────── */}
       {showConfirm && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 px-6 modal-backdrop">
-          <div className="w-full max-w-sm bg-white dark:bg-[#0A0A0C] shadow-xl flex flex-col gap-4 modal-content" style={{ borderRadius: 20, padding: 24 }}>
-            <h3 className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]" style={{ fontSize: 18, fontWeight: 800 }}>
+          <div className="w-full max-w-sm bg-white shadow-xl flex flex-col gap-4 modal-content" style={{ borderRadius: 20, padding: 24 }}>
+            <h3 className="text-[#292929] font-[family-name:var(--font-suse)]" style={{ fontSize: 18, fontWeight: 800 }}>
               {showConfirm === "signout" ? "Sign out?" : "Leave room?"}
             </h3>
-            <p className="text-sm text-[#636366] dark:text-[#98989D] font-[family-name:var(--font-suse)]">
+            <p className="text-sm text-[#636366] font-[family-name:var(--font-suse)]">
               {showConfirm === "signout"
                 ? "You'll need to sign in again with your email."
                 : "You'll leave this room and your partner will be alone. You can re-join with the invite code."}
             </p>
             <div className="flex gap-3">
-              <button onClick={() => setShowConfirm(null)} className="flex-1 py-3 text-sm font-semibold text-[#0A0A0C] dark:text-[#F3F0EA] bg-[#ECE7DE] dark:bg-[#1A1A1C] hover:opacity-80 transition-all font-[family-name:var(--font-suse)]" style={{ borderRadius: 12 }}>Cancel</button>
+              <button onClick={() => setShowConfirm(null)} className="flex-1 py-3 text-sm font-semibold text-[#292929] bg-[#F4F3F1] hover:opacity-80 transition-all font-[family-name:var(--font-suse)]" style={{ borderRadius: 12 }}>Cancel</button>
               <button
                 onClick={showConfirm === "signout" ? handleSignOut : handleExitRoom}
                 disabled={signingOut || exitingRoom}

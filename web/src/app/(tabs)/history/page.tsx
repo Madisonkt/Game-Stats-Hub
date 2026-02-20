@@ -178,7 +178,7 @@ function EventRow({
 }) {
   return (
     <div
-      className="flex items-center gap-2.5 bg-[#ECE7DE] dark:bg-[#1A1A1C]"
+      className="flex items-center gap-2.5 bg-[#F4F3F1]"
       style={{ borderRadius: 18, padding: 14 }}
     >
       {/* Winner dot */}
@@ -404,7 +404,7 @@ export default function HistoryPage() {
   if (!couple || !currentUser) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] p-6">
-        <p className="text-sm text-[#636366] dark:text-[#98989D] font-[family-name:var(--font-suse)]">
+        <p className="text-sm text-[#636366] font-[family-name:var(--font-suse)]">
           Join or create a room first
         </p>
       </div>
@@ -427,7 +427,7 @@ export default function HistoryPage() {
       {/* ── Header ──────────────────────────────────── */}
       <div className="px-5 pt-4 pb-3">
         <h1
-          className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]"
+          className="text-[#292929] font-[family-name:var(--font-suse)]"
           style={{ fontSize: 28, fontWeight: 800 }}
         >
           History
@@ -461,7 +461,7 @@ export default function HistoryPage() {
       {/* ── Timed Stats Card ────────────────────────── */}
       {(timedStatsA?.roundCount ?? 0) > 0 || (timedStatsB?.roundCount ?? 0) > 0 ? (
         <div
-          className="mx-4 mb-3 bg-[#ECE7DE] dark:bg-[#1A1A1C] flex flex-col"
+          className="mx-4 mb-3 bg-[#F4F3F1] flex flex-col"
           style={{ borderRadius: 18, padding: 16 }}
         >
           {/* Player header row */}
@@ -485,11 +485,11 @@ export default function HistoryPage() {
           </div>
 
           {/* Divider */}
-          <div className="h-px bg-[#D6D1C8] dark:bg-[#2A2A2C] mb-4" />
+          <div className="h-px bg-[#D6D1C8] mb-4" />
 
           {/* BEST TIME */}
           <div className="flex items-center mb-1">
-            <span className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)] uppercase tracking-wide" style={{ fontSize: 11, fontWeight: 800 }}>
+            <span className="text-[#292929] font-[family-name:var(--font-suse)] uppercase tracking-wide" style={{ fontSize: 11, fontWeight: 800 }}>
               Best Time
             </span>
           </div>
@@ -507,11 +507,11 @@ export default function HistoryPage() {
           </div>
 
           {/* Divider */}
-          <div className="h-px bg-[#D6D1C8] dark:bg-[#2A2A2C] mb-4" />
+          <div className="h-px bg-[#D6D1C8] mb-4" />
 
           {/* AVG TIME */}
           <div className="flex items-center mb-1">
-            <span className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)] uppercase tracking-wide" style={{ fontSize: 11, fontWeight: 800 }}>
+            <span className="text-[#292929] font-[family-name:var(--font-suse)] uppercase tracking-wide" style={{ fontSize: 11, fontWeight: 800 }}>
               Avg Time
             </span>
           </div>
@@ -529,11 +529,11 @@ export default function HistoryPage() {
           </div>
 
           {/* Divider */}
-          <div className="h-px bg-[#D6D1C8] dark:bg-[#2A2A2C] mb-4" />
+          <div className="h-px bg-[#D6D1C8] mb-4" />
 
           {/* WIN RATE */}
           <div className="flex items-center mb-1">
-            <span className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)] uppercase tracking-wide" style={{ fontSize: 11, fontWeight: 800 }}>
+            <span className="text-[#292929] font-[family-name:var(--font-suse)] uppercase tracking-wide" style={{ fontSize: 11, fontWeight: 800 }}>
               Win Rate
             </span>
           </div>
@@ -567,7 +567,7 @@ export default function HistoryPage() {
         <div className="flex flex-col items-center pt-16 gap-3">
           <IoTimeOutline className="text-[#98989D]" style={{ fontSize: 64 }} />
           <p
-            className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]"
+            className="text-[#292929] font-[family-name:var(--font-suse)]"
             style={{ fontSize: 20, fontWeight: 700 }}
           >
             No wins recorded yet
@@ -643,7 +643,7 @@ export default function HistoryPage() {
               style={{
                 maxWidth: 380,
                 borderRadius: 28,
-                backgroundColor: "#0A0A0C",
+                backgroundColor: "#292929",
                 minHeight: 420,
               }}
               onClick={(e) => e.stopPropagation()}
@@ -681,7 +681,7 @@ export default function HistoryPage() {
                   <div
                     className="absolute inset-0"
                     style={{
-                      background: "linear-gradient(to right, #0A0A0C 0%, rgba(10,10,12,0.92) 15%, rgba(10,10,12,0.55) 35%, rgba(10,10,12,0.15) 55%, transparent 75%)",
+                      background: "linear-gradient(to right, #292929 0%, rgba(10,10,12,0.92) 15%, rgba(10,10,12,0.55) 35%, rgba(10,10,12,0.15) 55%, transparent 75%)",
                     }}
                   />
                   {/* Bottom fade */}

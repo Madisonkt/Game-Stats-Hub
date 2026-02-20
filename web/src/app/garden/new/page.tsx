@@ -172,14 +172,14 @@ export default function NewDoodlePage() {
 
   if (!couple || !currentUser) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-[#F3F0EA] dark:bg-[#0A0A0C]">
+      <div className="flex items-center justify-center min-h-screen bg-[#FEFEFE]">
         <p className="text-[#98989D] font-[family-name:var(--font-suse)]">Not signed in</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[#F3F0EA] dark:bg-[#0A0A0C]">
+    <div className="min-h-screen bg-[#FEFEFE]">
       {/* Header */}
       <div className="flex items-center justify-between px-5 pt-4 pb-3 max-w-lg mx-auto">
         <button
@@ -189,7 +189,7 @@ export default function NewDoodlePage() {
           <IoArrowBack style={{ fontSize: 22 }} />
         </button>
         <h1
-          className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]"
+          className="text-[#292929] font-[family-name:var(--font-suse)]"
           style={{ fontSize: 18, fontWeight: 800 }}
         >
           New Doodle
@@ -217,7 +217,7 @@ export default function NewDoodlePage() {
             onPointerMove={handlePointerMove}
             onPointerUp={handlePointerUp}
             onPointerCancel={handlePointerUp}
-            className="relative bg-white dark:bg-[#1A1A1C] touch-none select-none"
+            className="relative bg-white touch-none select-none"
             style={{
               borderRadius: 16,
               aspectRatio: "1",
@@ -257,8 +257,8 @@ export default function NewDoodlePage() {
           <button
             onClick={handleUndo}
             disabled={committedStrokes.current.length === 0}
-            className="flex items-center gap-1 px-4 py-2 bg-[#ECE7DE] dark:bg-[#1A1A1C]
-              text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]
+            className="flex items-center gap-1 px-4 py-2 bg-[#F4F3F1]
+              text-[#292929] font-[family-name:var(--font-suse)]
               active:scale-[0.95] transition-all disabled:opacity-30"
             style={{ borderRadius: 12, fontSize: 13, fontWeight: 600 }}
           >
@@ -268,8 +268,8 @@ export default function NewDoodlePage() {
           <button
             onClick={handleClear}
             disabled={committedStrokes.current.length === 0}
-            className="flex items-center gap-1 px-4 py-2 bg-[#ECE7DE] dark:bg-[#1A1A1C]
-              text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]
+            className="flex items-center gap-1 px-4 py-2 bg-[#F4F3F1]
+              text-[#292929] font-[family-name:var(--font-suse)]
               active:scale-[0.95] transition-all disabled:opacity-30"
             style={{ borderRadius: 12, fontSize: 13, fontWeight: 600 }}
           >
@@ -287,7 +287,7 @@ export default function NewDoodlePage() {
                 height: 28,
                 borderRadius: 14,
                 backgroundColor: c,
-                border: inkColor === c ? "3px solid #0A0A0C" : "2px solid rgba(255,255,255,0.6)",
+                border: inkColor === c ? "3px solid #292929" : "2px solid rgba(255,255,255,0.6)",
                 transform: inkColor === c ? "scale(1.2)" : "scale(1)",
                 transition: "transform 0.15s, border 0.15s",
                 flexShrink: 0,
@@ -299,12 +299,12 @@ export default function NewDoodlePage() {
         {/* Photo attachment */}
         <button
           onClick={() => fileInputRef.current?.click()}
-          className="flex items-center gap-2 w-full px-4 py-3 bg-[#ECE7DE] dark:bg-[#1A1A1C]
-            text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]
+          className="flex items-center gap-2 w-full px-4 py-3 bg-[#F4F3F1]
+            text-[#292929] font-[family-name:var(--font-suse)]
             active:scale-[0.98] transition-all"
           style={{ borderRadius: 14, fontSize: 14, fontWeight: 600 }}
         >
-          <IoImage style={{ fontSize: 18, color: "#3A7BD5" }} />
+          <IoImage style={{ fontSize: 18, color: "#292929" }} />
           {photo ? `📷 ${photo.name}` : "Attach a photo"}
         </button>
         <input
@@ -321,7 +321,7 @@ export default function NewDoodlePage() {
           value={caption}
           onChange={(e) => setCaption(e.target.value)}
           placeholder="Add a caption (optional)"
-          className="w-full px-4 py-3 bg-[#ECE7DE] dark:bg-[#1A1A1C] text-[#0A0A0C] dark:text-[#F3F0EA]
+          className="w-full px-4 py-3 bg-[#F4F3F1] text-[#292929]
             placeholder:text-[#98989D] font-[family-name:var(--font-suse)] outline-none"
           style={{ borderRadius: 14, fontSize: 14, fontWeight: 600 }}
         />
@@ -332,7 +332,7 @@ export default function NewDoodlePage() {
           value={linkUrl}
           onChange={(e) => setLinkUrl(e.target.value)}
           placeholder="Attach a link (optional)"
-          className="w-full px-4 py-3 bg-[#ECE7DE] dark:bg-[#1A1A1C] text-[#0A0A0C] dark:text-[#F3F0EA]
+          className="w-full px-4 py-3 bg-[#F4F3F1] text-[#292929]
             placeholder:text-[#98989D] font-[family-name:var(--font-suse)] outline-none"
           style={{ borderRadius: 14, fontSize: 14, fontWeight: 600 }}
         />
@@ -348,7 +348,7 @@ export default function NewDoodlePage() {
             padding: 16,
             fontSize: 16,
             fontWeight: 800,
-            backgroundColor: "#3A7BD5",
+            backgroundColor: "#292929",
           }}
         >
           {saving ? "Adding..." : "Add to Tank 🐟"}

@@ -1,10 +1,10 @@
 const palette = {
   // Paper + print texture
-  paper: "#F3F0EA",
-  paperAlt: "#ECE7DE",
+  paper: "#FEFEFE",
+  paperAlt: "#F4F3F1",
 
   // Ink (neutral dark greys)
-  ink: "#0A0A0C",
+  ink: "#292929",
   inkMuted: "#1A1A1C",
 
   // Player A – Blue tones
@@ -58,29 +58,7 @@ const Colors = {
     gradientA: palette.gradientPink,
     gradientB: palette.gradientBlue,
   },
-  dark: {
-    text: palette.paper,
-    textSecondary: palette.mutedLight,
-    background: palette.ink,
-    card: palette.inkMuted,
-    cardBorder: palette.mutedLight,
-    tint: "#FFFFFF",
-    tintSecondary: palette.blueDark,
-    tintText: palette.ink,
-    tabIconDefault: palette.muted,
-    tabIconSelected: palette.blueLight,
-    border: palette.inkMuted,
-    playerA: palette.coralLight,
-    playerALight: palette.coralDark,
-    playerB: palette.blueLight,
-    playerBLight: palette.blueDark,
-    gold: palette.clay,
-    success: palette.blue,
-    surface: palette.inkMuted,
-    danger: palette.danger,
-    gradientA: palette.gradientPink,
-    gradientB: palette.gradientBlue,
-  },
+
 };
 
 export default Colors;

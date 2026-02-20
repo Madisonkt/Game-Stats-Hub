@@ -75,7 +75,7 @@ function GameFilterPills({
     // Single game — just show the name
     return (
       <h1
-        className="text-center text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)] mb-4"
+        className="text-center text-[#292929] font-[family-name:var(--font-suse)] mb-4"
         style={{ fontSize: 22, fontWeight: 800 }}
       >
         {activeGame?.name ?? "No Game"}
@@ -93,8 +93,8 @@ function GameFilterPills({
             onClick={() => setActiveGameId(game.id)}
             className={`whitespace-nowrap font-[family-name:var(--font-suse)] active:scale-[0.95] transition-all ${
               isActive
-                ? "bg-[#0A0A0C] dark:bg-[#F3F0EA] text-white dark:text-[#0A0A0C]"
-                : "bg-[#ECE7DE] dark:bg-[#1A1A1C] text-[#0A0A0C] dark:text-[#F3F0EA]"
+                ? "bg-[#292929] text-white"
+                : "bg-[#F4F3F1] text-[#292929]"
             }`}
             style={{
               borderRadius: 999,
@@ -223,7 +223,7 @@ function ScrambleCard({
 }) {
   return (
     <div
-      className="w-full bg-[#ECE7DE] dark:bg-[#1A1A1C]"
+      className="w-full bg-[#F4F3F1]"
       style={{ borderRadius: 18, padding: 14 }}
     >
       <p
@@ -236,7 +236,7 @@ function ScrambleCard({
       {/* Scramble text + 3D Cube */}
       <div className="flex items-center gap-3">
         <p
-          className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)] flex-1"
+          className="text-[#292929] font-[family-name:var(--font-suse)] flex-1"
           style={{ fontSize: 15, fontWeight: 700, lineHeight: "22px" }}
         >
           {scramble}
@@ -601,7 +601,7 @@ export default function LogPage() {
   if (!couple || !currentUser) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] p-6">
-        <p className="text-sm text-[#636366] dark:text-[#98989D] font-[family-name:var(--font-suse)]">
+        <p className="text-sm text-[#636366] font-[family-name:var(--font-suse)]">
           Join or create a room first
         </p>
       </div>
@@ -630,7 +630,7 @@ export default function LogPage() {
       <div className="flex flex-col items-center px-5 pt-4 pb-2 max-w-lg mx-auto">
         {/* Game name */}
         <h1
-          className="text-center text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)] mb-4"
+          className="text-center text-[#292929] font-[family-name:var(--font-suse)] mb-4"
           style={{ fontSize: 22, fontWeight: 800 }}
         >
           {activeGame?.name ?? "No Game"}
@@ -644,8 +644,8 @@ export default function LogPage() {
               className="flex-1 animate-pulse"
               style={{
                 background: i === 0
-                  ? "linear-gradient(135deg, #3A3A3C, #2C2C2E)"
-                  : "linear-gradient(135deg, #2C2C2E, #3A3A3C)",
+                  ? "linear-gradient(135deg, #E8E6E3, #DDDBD8)"
+                  : "linear-gradient(135deg, #DDDBD8, #E8E6E3)",
                 borderRadius: 22,
                 padding: 14,
                 paddingTop: 34,
@@ -685,7 +685,7 @@ export default function LogPage() {
 
         {/* Skeleton status text */}
         <div
-          className="w-full bg-[#ECE7DE] dark:bg-[#1A1A1C] mb-4 animate-pulse"
+          className="w-full bg-[#F4F3F1] mb-4 animate-pulse"
           style={{ borderRadius: 16, padding: 14 }}
         >
           <div
@@ -695,13 +695,12 @@ export default function LogPage() {
               borderRadius: 6,
               backgroundColor: "rgba(0,0,0,0.08)",
             }}
-            className="dark:!bg-white/10"
           />
         </div>
 
         {/* Skeleton round area */}
         <div
-          className="w-full bg-[#ECE7DE] dark:bg-[#1A1A1C] animate-pulse"
+          className="w-full bg-[#F4F3F1] animate-pulse"
           style={{ borderRadius: 22, padding: 24, height: 120 }}
         />
       </div>
@@ -759,7 +758,7 @@ export default function LogPage() {
       {/* ── Header title — game name (hidden during round) ── */}
       {!round && (
         <h1
-          className="text-center text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)] mb-4"
+          className="text-center text-[#292929] font-[family-name:var(--font-suse)] mb-4"
           style={{ fontSize: 22, fontWeight: 800 }}
         >
           {activeGame?.name ?? "No Game"}
@@ -790,7 +789,7 @@ export default function LogPage() {
 
           {/* ── Status text ─────────────────────────────── */}
           <div
-            className="w-full bg-[#ECE7DE] dark:bg-[#1A1A1C] mb-4"
+            className="w-full bg-[#F4F3F1] mb-4"
             style={{ borderRadius: 16, padding: 14 }}
           >
             <p
@@ -831,8 +830,8 @@ export default function LogPage() {
           <button
             onClick={handleCreateRound}
             disabled={actionLoading}
-            className="flex items-center justify-center gap-2 text-white dark:text-[#0A0A0C] font-[family-name:var(--font-suse)]
-              bg-[#3A7BD5] dark:bg-white hover:bg-[#2C5F9E] dark:hover:bg-[#ECE7DE] active:scale-[0.98] transition-all
+            className="flex items-center justify-center gap-2 text-white font-[family-name:var(--font-suse)]
+              bg-[#292929] hover:bg-[#1A1A1A] active:scale-[0.98] transition-all
               disabled:opacity-50 disabled:cursor-not-allowed"
             style={{
               borderRadius: 999,
@@ -856,7 +855,7 @@ export default function LogPage() {
         <div className="w-full flex flex-col gap-4">
           {/* Header */}
           <h2
-            className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]"
+            className="text-[#292929] font-[family-name:var(--font-suse)]"
             style={{ fontSize: 20, fontWeight: 800 }}
           >
             Game in Progress
@@ -989,7 +988,7 @@ export default function LogPage() {
                   return (
                     <div
                       key={member.id}
-                      className="flex-1 flex flex-col items-center gap-2 bg-[#ECE7DE] dark:bg-[#1A1A1C]"
+                      className="flex-1 flex flex-col items-center gap-2 bg-[#F4F3F1]"
                       style={{
                         borderRadius: 16,
                         padding: 14,
@@ -1019,7 +1018,7 @@ export default function LogPage() {
                         )}
                       </div>
                       <span
-                        className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)] uppercase"
+                        className="text-[#292929] font-[family-name:var(--font-suse)] uppercase"
                         style={{ fontSize: 13, fontWeight: 600 }}
                       >
                         {member.name}
@@ -1048,7 +1047,7 @@ export default function LogPage() {
               {!timerRunning && (
                 <div className="flex flex-col items-center gap-2 mt-2">
                   <p
-                    className="tabular-nums text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]"
+                    className="tabular-nums text-[#292929] font-[family-name:var(--font-suse)]"
                     style={{ fontSize: 64, fontWeight: 800 }}
                   >
                     {formatMsDisplay(timerElapsed)}
@@ -1060,8 +1059,8 @@ export default function LogPage() {
               {!mySolve && !timerRunning && (
                 <button
                   onClick={startTimer}
-                  className="flex items-center justify-center gap-2 text-white dark:text-[#0A0A0C] font-[family-name:var(--font-suse)]
-                    bg-[#3A7BD5] dark:bg-white hover:bg-[#2C5F9E] dark:hover:bg-[#ECE7DE] active:scale-[0.98] transition-all self-center"
+                  className="flex items-center justify-center gap-2 text-white font-[family-name:var(--font-suse)]
+                    bg-[#292929] hover:bg-[#1A1A1A] active:scale-[0.98] transition-all self-center"
                   style={{
                     borderRadius: 999,
                     paddingLeft: 56,
@@ -1126,7 +1125,7 @@ export default function LogPage() {
                       )}
                     </div>
                     <span
-                      className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]"
+                      className="text-[#292929] font-[family-name:var(--font-suse)]"
                       style={{ fontSize: 16, fontWeight: 700 }}
                     >
                       {member.name}
@@ -1155,8 +1154,8 @@ export default function LogPage() {
           <button
             onClick={handleCreateRound}
             disabled={actionLoading}
-            className="flex items-center justify-center gap-2 text-white dark:text-[#0A0A0C] font-[family-name:var(--font-suse)]
-              bg-[#3A7BD5] dark:bg-white hover:bg-[#2C5F9E] dark:hover:bg-[#ECE7DE] active:scale-[0.98] transition-all
+            className="flex items-center justify-center gap-2 text-white font-[family-name:var(--font-suse)]
+              bg-[#292929] hover:bg-[#1A1A1A] active:scale-[0.98] transition-all
               disabled:opacity-50 disabled:cursor-not-allowed"
             style={{
               borderRadius: 999,
@@ -1201,7 +1200,7 @@ function RoundResults({
       <div className="flex items-center gap-2">
         <IoCheckmarkCircle className="text-green-500" style={{ fontSize: 24 }} />
         <h2
-          className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]"
+          className="text-[#292929] font-[family-name:var(--font-suse)]"
           style={{ fontSize: 20, fontWeight: 800 }}
         >
           Round Complete!
@@ -1228,7 +1227,7 @@ function RoundResults({
           return (
             <div
               key={member.id}
-              className="flex-1 flex flex-col items-center gap-2 bg-[#ECE7DE] dark:bg-[#1A1A1C]"
+              className="flex-1 flex flex-col items-center gap-2 bg-[#F4F3F1]"
               style={{
                 borderRadius: 16,
                 padding: 14,
@@ -1259,7 +1258,7 @@ function RoundResults({
                 )}
               </div>
               <span
-                className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]"
+                className="text-[#292929] font-[family-name:var(--font-suse)]"
                 style={{ fontSize: 13, fontWeight: 600 }}
               >
                 {member.name}

@@ -66,15 +66,15 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-[#F3F0EA] dark:bg-[#0A0A0C] p-6">
+    <div className="flex min-h-screen items-center justify-center bg-[#FEFEFE] p-6">
       <div className="w-full max-w-sm">
         {/* Title */}
         <div className="flex flex-col items-center gap-3 mb-10">
-          <IoGameController className="text-5xl text-[#3A7BD5] dark:text-white" />
-          <h1 className="text-3xl font-extrabold text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)]">
+          <IoGameController className="text-5xl text-[#292929]" />
+          <h1 className="text-3xl font-extrabold text-[#292929] font-[family-name:var(--font-suse)]">
             {mode === "sign-in" ? "Welcome back" : "Create account"}
           </h1>
-          <p className="text-sm text-[#636366] dark:text-[#98989D] text-center font-[family-name:var(--font-suse)]">
+          <p className="text-sm text-[#636366] text-center font-[family-name:var(--font-suse)]">
             {mode === "sign-in" ? "Sign in to continue" : "Sign up to get started"}
           </p>
         </div>
@@ -82,7 +82,7 @@ export default function LoginPage() {
         {/* Form */}
         <div className="flex flex-col gap-3">
           <div>
-            <label className="text-xs font-semibold uppercase tracking-wider text-[#636366] dark:text-[#98989D] font-[family-name:var(--font-suse)]">
+            <label className="text-xs font-semibold uppercase tracking-wider text-[#636366] font-[family-name:var(--font-suse)]">
               Email
             </label>
             <input
@@ -94,18 +94,18 @@ export default function LoginPage() {
               autoComplete="email"
               disabled={loading}
               className="w-full px-4 py-3.5 rounded-xl text-base font-semibold mt-1
-                bg-[#ECE7DE] dark:bg-[#1A1A1C]
-                text-[#0A0A0C] dark:text-[#F3F0EA]
-                border border-[#ECE7DE] dark:border-[#1A1A1C]
-                placeholder:text-[#636366] dark:placeholder:text-[#98989D]
-                focus:outline-none focus:ring-2 focus:ring-[#3A7BD5] dark:focus:ring-white
+                bg-[#F4F3F1]
+                text-[#292929]
+                border border-[#F4F3F1]
+                placeholder:text-[#636366]
+                focus:outline-none focus:ring-2 focus:ring-[#292929]
                 disabled:opacity-50
                 font-[family-name:var(--font-suse)]"
             />
           </div>
 
           <div>
-            <label className="text-xs font-semibold uppercase tracking-wider text-[#636366] dark:text-[#98989D] font-[family-name:var(--font-suse)]">
+            <label className="text-xs font-semibold uppercase tracking-wider text-[#636366] font-[family-name:var(--font-suse)]">
               Password
             </label>
             <input
@@ -117,11 +117,11 @@ export default function LoginPage() {
               disabled={loading}
               onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
               className="w-full px-4 py-3.5 rounded-xl text-base font-semibold mt-1
-                bg-[#ECE7DE] dark:bg-[#1A1A1C]
-                text-[#0A0A0C] dark:text-[#F3F0EA]
-                border border-[#ECE7DE] dark:border-[#1A1A1C]
-                placeholder:text-[#636366] dark:placeholder:text-[#98989D]
-                focus:outline-none focus:ring-2 focus:ring-[#3A7BD5] dark:focus:ring-white
+                bg-[#F4F3F1]
+                text-[#292929]
+                border border-[#F4F3F1]
+                placeholder:text-[#636366]
+                focus:outline-none focus:ring-2 focus:ring-[#292929]
                 disabled:opacity-50
                 font-[family-name:var(--font-suse)]"
             />
@@ -137,13 +137,13 @@ export default function LoginPage() {
             onClick={handleSubmit}
             disabled={loading}
             className="flex items-center justify-center gap-2.5 w-full py-4 rounded-2xl mt-1
-              bg-[#3A7BD5] text-white dark:bg-white dark:text-[#0A0A0C] font-bold text-lg
-              hover:bg-[#2C5F9E] dark:hover:bg-[#ECE7DE] active:scale-[0.98] transition-all
+              bg-[#292929] text-white font-bold text-lg
+              hover:bg-[#1A1A1A] active:scale-[0.98] transition-all
               disabled:opacity-60 disabled:cursor-not-allowed
               font-[family-name:var(--font-suse)]"
           >
             {loading ? (
-              <div className="h-5 w-5 animate-spin rounded-full border-2 border-white dark:border-[#0A0A0C] border-t-transparent" />
+              <div className="h-5 w-5 animate-spin rounded-full border-2 border-white border-t-transparent" />
             ) : mode === "sign-in" ? (
               <>
                 <IoLogInOutline className="text-xl" />
@@ -163,7 +163,7 @@ export default function LoginPage() {
               setMode(mode === "sign-in" ? "sign-up" : "sign-in");
               setError(null);
             }}
-            className="text-sm text-[#636366] dark:text-[#98989D] hover:text-[#0A0A0C] dark:hover:text-[#F3F0EA]
+            className="text-sm text-[#636366] hover:text-[#292929]
               transition-colors font-[family-name:var(--font-suse)] mt-2 text-center"
           >
             {mode === "sign-in" ? (

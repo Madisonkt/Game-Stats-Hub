@@ -214,7 +214,7 @@ function GridView({
                 paddingLeft: 8,
                 fontSize: 13,
                 fontWeight: 700,
-                color: "#3A7BD5",
+                color: "#292929",
               }}
             >
               {cell.label}
@@ -328,7 +328,7 @@ function DetailModal({
       onClick={handleClose}
     >
       <div
-        className="relative w-full max-w-sm bg-[#F3F0EA] dark:bg-[#0A0A0C] overflow-hidden transition-all duration-250"
+        className="relative w-full max-w-sm bg-[#FEFEFE] overflow-hidden transition-all duration-250"
         style={{
           borderRadius: 20,
           transform: visible ? "scale(1) translateY(0)" : "scale(0.9) translateY(20px)",
@@ -356,7 +356,7 @@ function DetailModal({
         {/* Doodle preview (if no photo) */}
         {!photoUrl && (
           <div
-            className="bg-white dark:bg-[#1A1A1C]"
+            className="bg-white"
             style={{ aspectRatio: "1", padding: 16 }}
             dangerouslySetInnerHTML={{ __html: item.doodleSvg }}
           />
@@ -366,7 +366,7 @@ function DetailModal({
         <div className="p-4">
           {item.caption && (
             <p
-              className="text-[#0A0A0C] dark:text-[#F3F0EA] font-[family-name:var(--font-suse)] mb-2"
+              className="text-[#292929] font-[family-name:var(--font-suse)] mb-2"
               style={{ fontSize: 16, fontWeight: 700 }}
             >
               {item.caption}
@@ -383,7 +383,7 @@ function DetailModal({
                   window.open(url, "_blank", "noopener,noreferrer");
                 }
               }}
-              className="flex items-center gap-1.5 text-[#3A7BD5] font-[family-name:var(--font-suse)] mb-2 hover:underline"
+              className="flex items-center gap-1.5 text-[#292929] font-[family-name:var(--font-suse)] mb-2 hover:underline"
               style={{ fontSize: 13, fontWeight: 600 }}
             >
               🔗 {(() => { try { return new URL(item.linkUrl.startsWith("http") ? item.linkUrl : "https://" + item.linkUrl).hostname; } catch { return item.linkUrl; } })()}
@@ -464,7 +464,7 @@ export default function GardenPage() {
 
   if (!couple || !currentUser) {
     return (
-      <div className="flex items-center justify-center min-h-screen bg-[#F3F0EA] dark:bg-[#0A0A0C]">
+      <div className="flex items-center justify-center min-h-screen bg-[#FEFEFE]">
         <p className="text-[#98989D] font-[family-name:var(--font-suse)]">Not signed in</p>
       </div>
     );
@@ -485,7 +485,7 @@ export default function GardenPage() {
           <div className="flex items-center gap-2">
             <h1
               className="font-[family-name:var(--font-suse-mono)]"
-              style={{ fontSize: 24, fontWeight: 800, color: "#3A7BD5" }}
+              style={{ fontSize: 24, fontWeight: 800, color: "#292929" }}
             >
               Aquarium
             </h1>
@@ -495,7 +495,7 @@ export default function GardenPage() {
           {/* View toggle — text button */}
           <button
             onClick={() => setView(view === "moss" ? "grid" : "moss")}
-            className="font-[family-name:var(--font-suse-mono)] text-[#3A7BD5] hover:opacity-80 transition-all"
+            className="font-[family-name:var(--font-suse-mono)] text-[#292929] hover:opacity-80 transition-all"
             style={{ fontSize: 13, fontWeight: 700 }}
           >
             {view === "moss" ? "grid view" : "tank view"}
@@ -586,7 +586,7 @@ export default function GardenPage() {
             fontSize: 15,
             fontWeight: 700,
             color: "#fff",
-            backgroundColor: "#3A7BD5",
+            backgroundColor: "#292929",
           }}
         >
           + new fish

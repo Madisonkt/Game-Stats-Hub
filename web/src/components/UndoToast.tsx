@@ -51,7 +51,7 @@ export default function UndoToast({
       <div
         className="flex items-center justify-between gap-3 w-full shadow-xl"
         style={{
-          backgroundColor: color || "#0A0A0C",
+          backgroundColor: color || "#292929",
           borderRadius: 16,
           paddingLeft: 20,
           paddingRight: 20,
