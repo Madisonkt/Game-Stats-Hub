@@ -784,7 +784,6 @@ export default function LogPage() {
                   avatarUrl={member.avatarUrl}
                   initial={member.name?.charAt(0)?.toUpperCase() || "?"}
                   isLeading={score > 0 && score > otherScore}
-                  scoreColor={i === 1 ? "#F1899C" : undefined}
                 />
               );
             })}

@@ -455,7 +455,8 @@ export default function HistoryPage() {
           avatarUrl={members[1]?.avatarUrl}
           initial={members[1]?.name?.charAt(0)?.toUpperCase() || "2"}
           isLeading={overallB > overallA}
-          playerColor="#F1899C"          scoreColor="#F1899C"          onClick={() => setStatSheetPlayer(1)}
+          playerColor="#F1899C"
+          onClick={() => setStatSheetPlayer(1)}
         />
       </div>
 
