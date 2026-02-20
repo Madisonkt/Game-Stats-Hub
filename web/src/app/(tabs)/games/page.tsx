@@ -604,13 +604,13 @@ export default function GamesPage() {
             className="text-[#292929] font-[family-name:var(--font-suse)]"
             style={{ fontSize: 16, fontWeight: 700 }}
           >
-            Couple Plant
+            Anthurium
           </span>
           <span
             className="text-[#98989D] font-[family-name:var(--font-suse)]"
             style={{ fontSize: 12, fontWeight: 500 }}
           >
-            Anthurium
+            Couple plant
           </span>
         </div>
       </button>

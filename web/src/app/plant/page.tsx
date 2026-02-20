@@ -222,51 +222,10 @@ export default function PlantPage() {
       <div style={{ height: 64 }} />
 
       {/* ── Scene ─────────────────────────────────────── */}
-      <div className="flex-1 min-h-0 relative max-w-lg mx-auto w-full">
+      <div className="flex-1 min-h-0 flex flex-col items-center justify-center max-w-lg mx-auto w-full px-0">
 
-        {/* Table / tile background image — covers bottom portion */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src="/plant/anthurium-table.png"
-          alt=""
-          className="absolute inset-x-0 bottom-0 w-full pointer-events-none select-none"
-          style={{ height: "62%", objectFit: "cover", objectPosition: "center top" }}
-        />
-
-        {/* Plant illustration — sits on the counter */}
-        {loading ? (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div
-              className="rounded-full border-2 border-[#7DC858] border-t-transparent animate-spin"
-              style={{ width: 36, height: 36 }}
-            />
-          </div>
-        ) : (
-          <div
-            className="absolute left-1/2"
-            style={{
-              transform: "translateX(-50%)",
-              bottom: "26%",
-              width: "68%",
-              maxWidth: 300,
-              zIndex: 10,
-            }}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={imgSrc}
-              alt={`Anthurium stage ${stage}`}
-              className="w-full object-contain"
-              style={{
-                transition: "opacity 0.5s ease",
-                filter: "drop-shadow(0 8px 20px rgba(60,40,10,0.22))",
-              }}
-            />
-          </div>
-        )}
-
-        {/* Stage + status text — top of scene, above the table */}
-        <div className="absolute top-3 left-0 right-0 flex flex-col items-center gap-1">
+        {/* Stage + status text + progress bar — above scene */}
+        <div className="flex flex-col items-center gap-1 mb-4">
           <span
             className="font-[family-name:var(--font-suse)] uppercase tracking-widest"
             style={{ fontSize: 11, fontWeight: 700, color: "#8B6E45", letterSpacing: "0.15em" }}
@@ -281,29 +240,68 @@ export default function PlantPage() {
               {hint}
             </span>
           )}
+          {/* Growth bar — directly below status text */}
+          {plant && (
+            <div style={{ width: 140, marginTop: 6 }}>
+              <div
+                className="w-full rounded-full overflow-hidden"
+                style={{ height: 3, backgroundColor: "rgba(139,110,69,0.22)" }}
+              >
+                <div
+                  className="h-full rounded-full"
+                  style={{
+                    width: `${Math.min(100, plant.growthPoints)}%`,
+                    backgroundColor: "#7DC858",
+                    transition: "width 0.6s ease",
+                  }}
+                />
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Growth bar — bottom of scene */}
-        {plant && (
-          <div
-            className="absolute bottom-4 left-1/2"
-            style={{ transform: "translateX(-50%)", width: 140, zIndex: 20 }}
-          >
-            <div
-              className="w-full rounded-full overflow-hidden"
-              style={{ height: 3, backgroundColor: "rgba(139,110,69,0.22)" }}
-            >
+        {/* Table + plant — centered block */}
+        <div className="relative w-full" style={{ maxWidth: 420 }}>
+          {/* Table / tile background image — full image visible */}
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/plant/anthurium-table.png"
+            alt=""
+            className="w-full pointer-events-none select-none block"
+            style={{ objectFit: "contain" }}
+          />
+
+          {/* Plant illustration — centered, sits on the counter surface */}
+          {loading ? (
+            <div className="absolute inset-0 flex items-center justify-center">
               <div
-                className="h-full rounded-full"
+                className="rounded-full border-2 border-[#7DC858] border-t-transparent animate-spin"
+                style={{ width: 36, height: 36 }}
+              />
+            </div>
+          ) : (
+            <div
+              className="absolute left-1/2"
+              style={{
+                transform: "translateX(-50%)",
+                bottom: "28%",
+                width: "62%",
+                zIndex: 10,
+              }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={imgSrc}
+                alt={`Anthurium stage ${stage}`}
+                className="w-full object-contain"
                 style={{
-                  width: `${Math.min(100, plant.growthPoints)}%`,
-                  backgroundColor: "#7DC858",
-                  transition: "width 0.6s ease",
+                  transition: "opacity 0.5s ease",
+                  filter: "drop-shadow(0 8px 20px rgba(60,40,10,0.22))",
                 }}
               />
             </div>
-          </div>
-        )}
+          )}
+        </div>
       </div>
 
       {/* ── Toast ─────────────────────────────────────── */}
