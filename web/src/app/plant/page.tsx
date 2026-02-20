@@ -100,7 +100,7 @@ export default function PlantPage() {
     // Optimistic update
     if (plant) {
       const newPts = Math.min(plantRepo.MAX_POINTS, plant.growthPoints + plantRepo.WATER_BOOST);
-      setPlant({ ...plant, growthPoints: newPts, stage: plantRepo.computeStage(newPts), lastWateredAt: new Date(), status: plantRepo.computeStage(newPts) >= 3 ? "happy" : plant.status });
+      setPlant({ ...plant, growthPoints: newPts, stage: plantRepo.computeStage(newPts), lastWateredAt: new Date(), status: "happy" });
     }
     try {
       const updated = await plantRepo.water(couple.id, currentUser.id);
@@ -138,7 +138,8 @@ export default function PlantPage() {
   }
 
   const stage = plant?.stage ?? 1;
-  const imgSrc = `/plant/anthurium-${stage}.png`;
+  const isDying = plant?.status === "needs-water" || plant?.status === "needs-sun";
+  const imgSrc = isDying ? `/plant/anthurium-dead-${stage}.png` : `/plant/anthurium-${stage}.png`;
   const stageLabel = STAGE_LABELS[stage];
   const hint = plant ? statusLabel(plant.status) : null;
 
