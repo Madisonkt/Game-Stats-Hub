@@ -796,7 +796,7 @@ export default function LogPage() {
           >
             <p
               className="font-[family-name:var(--font-suse-mono)] text-center"
-              style={{ fontSize: 16, fontWeight: 500, color: "#000" }}
+              style={{ fontSize: 16, fontWeight: 600, color: "#000" }}
             >
               {statusText}
             </p>
