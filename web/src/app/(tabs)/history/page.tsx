@@ -36,8 +36,8 @@ function formatTime(timestamp: number): string {
   return new Date(timestamp).toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
-const GRADIENT_A = "linear-gradient(160deg, #F5D5C8, #F0B89E, #E8956E, #E07850, #D4628A)";
-const GRADIENT_B = "linear-gradient(160deg, #A8C8F0, #88BDE8, #6CB4EE, #7DD4D4, #90DBC8)";
+const GRADIENT_A = "radial-gradient(248.46% 209.77% at 0% -122.17%, #FAD6BE 56.97%, #FB834F 100%)";
+const GRADIENT_B = "radial-gradient(153.92% 152.12% at 92.94% 12.61%, #F0869A 0%, #FBE1D2 100%)";
 
 function getPlayerColor(index: number): string {
   return index === 0 ? "#E07850" : "#3A7BD5";
@@ -484,67 +484,58 @@ export default function HistoryPage() {
             </div>
           </div>
 
-          {/* Divider */}
-          <div className="h-px bg-[#D6D1C8] mb-4" />
-
           {/* BEST TIME */}
           <div className="flex items-center mb-1">
-            <span className="text-[#292929] font-[family-name:var(--font-suse)] uppercase tracking-wide" style={{ fontSize: 11, fontWeight: 800 }}>
+            <span className="font-[family-name:var(--font-suse)] uppercase tracking-wide" style={{ fontSize: 11, fontWeight: 500, color: "#98989D" }}>
               Best Time
             </span>
           </div>
           <div className="flex items-center mb-4">
             <div className="flex-1">
-              <span className="font-[family-name:var(--font-suse)] tabular-nums" style={{ fontSize: 16, fontWeight: 600, color: getPlayerColor(0) }}>
+              <span className="font-[family-name:var(--font-suse)] tabular-nums" style={{ fontSize: 16, fontWeight: 700, color: getPlayerColor(0) }}>
                 {timedStatsA?.bestTime ? formatMs(timedStatsA.bestTime) : "—"}
               </span>
             </div>
             <div className="flex-1 text-right">
-              <span className="font-[family-name:var(--font-suse)] tabular-nums" style={{ fontSize: 16, fontWeight: 600, color: getPlayerColor(1) }}>
+              <span className="font-[family-name:var(--font-suse)] tabular-nums" style={{ fontSize: 16, fontWeight: 700, color: getPlayerColor(1) }}>
                 {timedStatsB?.bestTime ? formatMs(timedStatsB.bestTime) : "—"}
               </span>
             </div>
           </div>
 
-          {/* Divider */}
-          <div className="h-px bg-[#D6D1C8] mb-4" />
-
           {/* AVG TIME */}
           <div className="flex items-center mb-1">
-            <span className="text-[#292929] font-[family-name:var(--font-suse)] uppercase tracking-wide" style={{ fontSize: 11, fontWeight: 800 }}>
+            <span className="font-[family-name:var(--font-suse)] uppercase tracking-wide" style={{ fontSize: 11, fontWeight: 500, color: "#98989D" }}>
               Avg Time
             </span>
           </div>
           <div className="flex items-center mb-4">
             <div className="flex-1">
-              <span className="font-[family-name:var(--font-suse)] tabular-nums" style={{ fontSize: 16, fontWeight: 600, color: getPlayerColor(0) }}>
+              <span className="font-[family-name:var(--font-suse)] tabular-nums" style={{ fontSize: 16, fontWeight: 700, color: getPlayerColor(0) }}>
                 {timedStatsA?.avgTime ? formatMs(timedStatsA.avgTime) : "—"}
               </span>
             </div>
             <div className="flex-1 text-right">
-              <span className="font-[family-name:var(--font-suse)] tabular-nums" style={{ fontSize: 16, fontWeight: 600, color: getPlayerColor(1) }}>
+              <span className="font-[family-name:var(--font-suse)] tabular-nums" style={{ fontSize: 16, fontWeight: 700, color: getPlayerColor(1) }}>
                 {timedStatsB?.avgTime ? formatMs(timedStatsB.avgTime) : "—"}
               </span>
             </div>
           </div>
 
-          {/* Divider */}
-          <div className="h-px bg-[#D6D1C8] mb-4" />
-
           {/* WIN RATE */}
           <div className="flex items-center mb-1">
-            <span className="text-[#292929] font-[family-name:var(--font-suse)] uppercase tracking-wide" style={{ fontSize: 11, fontWeight: 800 }}>
+            <span className="font-[family-name:var(--font-suse)] uppercase tracking-wide" style={{ fontSize: 11, fontWeight: 500, color: "#98989D" }}>
               Win Rate
             </span>
           </div>
           <div className="flex items-center">
             <div className="flex-1">
-              <span className="font-[family-name:var(--font-suse)] tabular-nums" style={{ fontSize: 16, fontWeight: 600, color: getPlayerColor(0) }}>
+              <span className="font-[family-name:var(--font-suse)] tabular-nums" style={{ fontSize: 16, fontWeight: 700, color: getPlayerColor(0) }}>
                 {timedStatsA?.winRate ?? 0}%
               </span>
             </div>
             <div className="flex-1 text-right">
-              <span className="font-[family-name:var(--font-suse)] tabular-nums" style={{ fontSize: 16, fontWeight: 600, color: getPlayerColor(1) }}>
+              <span className="font-[family-name:var(--font-suse)] tabular-nums" style={{ fontSize: 16, fontWeight: 700, color: getPlayerColor(1) }}>
                 {timedStatsB?.winRate ?? 0}%
               </span>
             </div>
