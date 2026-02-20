@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
 import { useSession } from "@/lib/auth-context";
 import * as plantRepo from "@/lib/repos/plantRepo";
 import type { PlantState } from "@/lib/repos/plantRepo";
@@ -146,93 +145,97 @@ export default function PlantPage() {
   return (
     <div
       className="fixed inset-0 flex flex-col overflow-hidden"
-      style={{ backgroundColor: "#F5EED8" }}
+      style={{ backgroundColor: "#F8F4D1" }}
     >
-      {/* ── Header ───────────────────────────────────── */}
-      <div className="shrink-0 flex items-center justify-between px-4 pt-10 pb-3 max-w-lg mx-auto w-full">
-        {/* Back + title */}
-        <button
-          onClick={() => router.back()}
-          className="flex items-center gap-1.5 text-[#3A2A18] active:opacity-60 transition-opacity"
-        >
-          <IoArrowBack style={{ fontSize: 20 }} />
-          <span
-            className="font-[family-name:var(--font-suse)]"
-            style={{ fontSize: 18, fontWeight: 800, color: "#3A2A18" }}
-          >
-            Anthurium
-          </span>
-        </button>
+      {/* ── Header (fixed, frosted) ───────────────────── */}
+      <div
+        className="shrink-0 fixed top-0 inset-x-0 z-40"
+        style={{
+          backgroundColor: "rgba(248,244,209,0.82)",
+          backdropFilter: "blur(16px)",
+          WebkitBackdropFilter: "blur(16px)",
+        }}
+      >
+        <div className="flex items-center justify-between px-5 pt-4 pb-3 max-w-lg mx-auto">
+          {/* Back + title */}
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => router.back()}
+              className="text-[#98989D] hover:text-[#636366] transition-colors"
+            >
+              <IoArrowBack style={{ fontSize: 22 }} />
+            </button>
+            <h1
+              className="font-[family-name:var(--font-suse-mono)]"
+              style={{ fontSize: 24, fontWeight: 800, color: "#292929" }}
+            >
+              Anthurium
+            </h1>
+          </div>
 
-        {/* Action buttons */}
-        <div className="flex flex-col gap-2">
-          {/* Water button */}
-          <button
-            onClick={handleWater}
-            disabled={busyWater}
-            className="flex items-center justify-center transition-all disabled:opacity-50"
-            style={{
-              width: 40,
-              height: 40,
-              borderRadius: 10,
-              backgroundColor: waterPressed ? "#B8D8F0" : "#D6EEF8",
-              color: "#1A6FA0",
-              transform: waterPressed ? "scale(0.90)" : "scale(1)",
-              transition: "transform 0.15s ease, background-color 0.15s ease",
-              boxShadow: "0 1px 3px rgba(0,0,0,0.12)",
-            }}
-            aria-label="Water plant"
-          >
-            <WaterIcon size={20} />
-          </button>
+          {/* Action buttons */}
+          <div className="flex gap-2">
+            {/* Water button */}
+            <button
+              onClick={handleWater}
+              disabled={busyWater}
+              className="flex items-center justify-center transition-all disabled:opacity-50"
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: 10,
+                backgroundColor: waterPressed ? "#B8D8F0" : "#D6EEF8",
+                color: "#1A6FA0",
+                transform: waterPressed ? "scale(0.90)" : "scale(1)",
+                transition: "transform 0.15s ease, background-color 0.15s ease",
+                boxShadow: "0 1px 3px rgba(0,0,0,0.10)",
+              }}
+              aria-label="Water plant"
+            >
+              <WaterIcon size={18} />
+            </button>
 
-          {/* Sun button */}
-          <button
-            onClick={handleSun}
-            disabled={busySun}
-            className="flex items-center justify-center transition-all disabled:opacity-50"
-            style={{
-              width: 40,
-              height: 40,
-              borderRadius: 10,
-              backgroundColor: sunPressed ? "#F5D870" : "#FFF0A0",
-              color: "#B87800",
-              transform: sunPressed ? "scale(0.90)" : "scale(1)",
-              transition: "transform 0.15s ease, background-color 0.15s ease",
-              boxShadow: "0 1px 3px rgba(0,0,0,0.12)",
-            }}
-            aria-label="Give sunlight"
-          >
-            <SunIcon size={20} />
-          </button>
+            {/* Sun button */}
+            <button
+              onClick={handleSun}
+              disabled={busySun}
+              className="flex items-center justify-center transition-all disabled:opacity-50"
+              style={{
+                width: 40,
+                height: 40,
+                borderRadius: 10,
+                backgroundColor: sunPressed ? "#F5D870" : "#FFF0A0",
+                color: "#B87800",
+                transform: sunPressed ? "scale(0.90)" : "scale(1)",
+                transition: "transform 0.15s ease, background-color 0.15s ease",
+                boxShadow: "0 1px 3px rgba(0,0,0,0.10)",
+              }}
+              aria-label="Give sunlight"
+            >
+              <SunIcon size={18} />
+            </button>
+          </div>
         </div>
       </div>
 
-      {/* ── Main area ─────────────────────────────────── */}
-      <div className="flex-1 min-h-0 flex flex-col items-center justify-center max-w-lg mx-auto w-full px-6 relative">
+      {/* Spacer for fixed header */}
+      <div style={{ height: 64 }} />
 
-        {/* Subtle tiled wall grid mid-section */}
-        <div
-          className="absolute inset-x-0"
-          style={{
-            top: "10%",
-            height: "55%",
-            backgroundImage: `
-              linear-gradient(rgba(180,148,100,0.08) 1px, transparent 1px),
-              linear-gradient(90deg, rgba(180,148,100,0.08) 1px, transparent 1px)
-            `,
-            backgroundSize: "32px 32px",
-            borderTop: "1px solid rgba(180,148,100,0.15)",
-            borderBottom: "1px solid rgba(180,148,100,0.12)",
-          }}
+      {/* ── Scene ─────────────────────────────────────── */}
+      <div className="flex-1 min-h-0 relative max-w-lg mx-auto w-full">
+
+        {/* Table / tile background image — covers bottom portion */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/plant/anthurium-table.png"
+          alt=""
+          className="absolute inset-x-0 bottom-0 w-full pointer-events-none select-none"
+          style={{ height: "62%", objectFit: "cover", objectPosition: "center top" }}
         />
 
-        {/* Plant illustration */}
+        {/* Plant illustration — sits on the counter */}
         {loading ? (
-          <div
-            className="flex items-center justify-center"
-            style={{ width: 200, height: 200 }}
-          >
+          <div className="absolute inset-0 flex items-center justify-center">
             <div
               className="rounded-full border-2 border-[#7DC858] border-t-transparent animate-spin"
               style={{ width: 36, height: 36 }}
@@ -240,24 +243,30 @@ export default function PlantPage() {
           </div>
         ) : (
           <div
-            className="relative flex items-center justify-center"
-            style={{ width: 220, height: 270 }}
+            className="absolute left-1/2"
+            style={{
+              transform: "translateX(-50%)",
+              bottom: "26%",
+              width: "68%",
+              maxWidth: 300,
+              zIndex: 10,
+            }}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={imgSrc}
               alt={`Anthurium stage ${stage}`}
-              className="w-full h-full object-contain drop-shadow-md"
+              className="w-full object-contain"
               style={{
                 transition: "opacity 0.5s ease",
-                filter: "drop-shadow(0 6px 18px rgba(80,60,20,0.18))",
+                filter: "drop-shadow(0 8px 20px rgba(60,40,10,0.22))",
               }}
             />
           </div>
         )}
 
-        {/* Stage + status text */}
-        <div className="mt-4 flex flex-col items-center gap-1 z-10">
+        {/* Stage + status text — top of scene, above the table */}
+        <div className="absolute top-3 left-0 right-0 flex flex-col items-center gap-1">
           <span
             className="font-[family-name:var(--font-suse)] uppercase tracking-widest"
             style={{ fontSize: 11, fontWeight: 700, color: "#8B6E45", letterSpacing: "0.15em" }}
@@ -274,15 +283,15 @@ export default function PlantPage() {
           )}
         </div>
 
-        {/* Growth points bar (minimal) */}
+        {/* Growth bar — bottom of scene */}
         {plant && (
           <div
-            className="mt-5 z-10"
-            style={{ width: 160 }}
+            className="absolute bottom-4 left-1/2"
+            style={{ transform: "translateX(-50%)", width: 140, zIndex: 20 }}
           >
             <div
               className="w-full rounded-full overflow-hidden"
-              style={{ height: 4, backgroundColor: "rgba(139,110,69,0.18)" }}
+              style={{ height: 3, backgroundColor: "rgba(139,110,69,0.22)" }}
             >
               <div
                 className="h-full rounded-full"
