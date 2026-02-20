@@ -34,7 +34,7 @@ function formatMsDisplay(ms: number): string {
   return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}.${String(centis).padStart(2, "0")}`;
 }
 
-const GRADIENT_A = "linear-gradient(160deg, #F5D5C8, #F0B89E, #E8956E, #E07850, #D4628A)";
+const GRADIENT_A = "radial-gradient(248.46% 209.77% at 0% -122.17%, #FAD6BE 56.97%, #FB834F 100%)";
 const GRADIENT_B = "radial-gradient(153.92% 152.12% at 92.94% 12.61%, #F0869A 0%, #FBE1D2 100%)";
 
 function getPlayerColor(index: number): string {
