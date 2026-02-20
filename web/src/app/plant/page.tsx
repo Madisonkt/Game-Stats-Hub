@@ -159,7 +159,7 @@ export default function PlantPage() {
   const isDying = plant?.status === "needs-water" || plant?.status === "needs-sun";
   const imgSrc = isDying ? `/plant/anthurium-dead-${stage}.png` : `/plant/anthurium-${stage}.png`;
   // Scale plant size progressively across stages
-  const STAGE_WIDTHS: Record<number, string> = { 1: "32%", 2: "52%", 3: "62%", 4: "68%", 5: "76%" };
+  const STAGE_WIDTHS: Record<number, string> = { 1: "26%", 2: "58%", 3: "68%", 4: "72%", 5: "80%" };
   const stageLabel = STAGE_LABELS[stage];
   const hint = plant ? statusLabel(plant.status) : null;
 
