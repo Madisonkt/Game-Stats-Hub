@@ -493,7 +493,7 @@ export default function LogPage() {
                 body: JSON.stringify({
                   coupleId: couple.id,
                   senderUserId: currentUser.id,
-                  message: `${playerName} submitted their Rubik's cube time — your turn! 🧩`,
+                  message: `${playerName} submitted their cube time - your turn pls`,
                   url: `/rubiks/round/${round.id}`,
                 }),
               }).catch(() => {});
