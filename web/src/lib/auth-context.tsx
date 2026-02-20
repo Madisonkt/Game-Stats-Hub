@@ -117,7 +117,15 @@ export function SessionProvider({ children }: { children: ReactNode }) {
       // Load couple from Supabase (source of truth)
       getCoupleForUser(authUser.id).then((couple) => {
         setSession((prev) => {
-          const next: Session = { ...prev, couple };
+          // Sync currentUser name/avatar from couple member data
+          let currentUser = prev.currentUser;
+          if (couple && currentUser) {
+            const me = couple.members.find((m) => m.id === currentUser!.id);
+            if (me) {
+              currentUser = { ...currentUser, name: me.name, avatarUrl: me.avatarUrl };
+            }
+          }
+          const next: Session = { ...prev, couple, currentUser };
           persistSession(next);
           return next;
         });
@@ -141,7 +149,15 @@ export function SessionProvider({ children }: { children: ReactNode }) {
 
     unsubMembersRef.current = subscribeToMembers(coupleId, (updatedCouple) => {
       setSession((prev) => {
-        const next: Session = { ...prev, couple: updatedCouple };
+        // Sync currentUser name/avatar from updated couple member data
+        let currentUser = prev.currentUser;
+        if (currentUser) {
+          const me = updatedCouple.members.find((m) => m.id === currentUser!.id);
+          if (me) {
+            currentUser = { ...currentUser, name: me.name, avatarUrl: me.avatarUrl };
+          }
+        }
+        const next: Session = { ...prev, couple: updatedCouple, currentUser };
         persistSession(next);
         return next;
       });

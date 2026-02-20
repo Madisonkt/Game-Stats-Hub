@@ -394,8 +394,10 @@ export default function GamesPage() {
   };
 
   const handleOpenPlayerSettings = () => {
-    setEditName(currentUser?.name || "");
-    setEditAvatarUrl(currentUser?.avatarUrl);
+    // Use couple member data as source of truth for name/avatar
+    const me = couple?.members.find((m) => m.id === currentUser?.id);
+    setEditName(me?.name || currentUser?.name || "");
+    setEditAvatarUrl(me?.avatarUrl || currentUser?.avatarUrl);
     openPlayerSettings();
   };
 
