@@ -200,7 +200,7 @@ function ScoreCard({
           </span>
           <span
             className="text-white font-[family-name:var(--font-suse)]"
-            style={{ fontSize: 48, fontWeight: 800, lineHeight: "52px" }}
+            style={{ fontSize: 48, fontWeight: 700, lineHeight: "52px" }}
           >
             {score}
           </span>
