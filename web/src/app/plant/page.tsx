@@ -45,12 +45,12 @@ function statusLabel(status: PlantState["status"]): string | null {
 // ── Stage label ──────────────────────────────────────────────
 
 const STAGE_LABELS: Record<number, string> = {
-  1: "seedling",
-  2: "sprouting",
+  1: "growing",
+  2: "growing",
   3: "growing",
-  4: "blooming",
-  5: "thriving",
-  6: "flourishing",
+  4: "growing",
+  5: "growing",
+  6: "grown",
 };
 
 // Max dead stage with its own image
