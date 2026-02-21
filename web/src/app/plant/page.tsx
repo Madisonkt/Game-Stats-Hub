@@ -335,7 +335,7 @@ export default function PlantPage() {
               style={{
                 transform: "translateX(-50%)",
                 bottom: "38%",
-                width: ["30%", "44%", "57%", "66%", "74%"][stage - 1],
+                width: "68%",
                 zIndex: 10,
               }}
             >
