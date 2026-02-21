@@ -62,10 +62,8 @@ export default function PlantPage() {
 
   const [plant, setPlant] = useState<PlantState | null>(null);
   const [loading, setLoading] = useState(true);
-  const [waterPressed, setWaterPressed] = useState(false);
-  const [sunPressed, setSunPressed] = useState(false);
   const [busyWater, setBusyWater] = useState(false);
-  const [busySun, setBusySun] = useState(false);
+  const [tapAnim, setTapAnim] = useState(false);
   const [actionToast, setActionToast] = useState<string | null>(null);
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [showMenu, setShowMenu] = useState(false);
@@ -131,26 +129,6 @@ export default function PlantPage() {
     }
   };
 
-  const handleSun = async () => {
-    if (!couple?.id || !currentUser?.id || busySun) return;
-    setSunPressed(true);
-    setTimeout(() => setSunPressed(false), 180);
-    setBusySun(true);
-    if (plant) {
-      const newPts = Math.min(plantRepo.MAX_POINTS, plant.growthPoints + plantRepo.SUN_BOOST);
-      setPlant({ ...plant, growthPoints: newPts, stage: plantRepo.computeStage(newPts), lastSunnedAt: new Date(), status: "happy" });
-    }
-    try {
-      const updated = await plantRepo.sun(couple.id, currentUser.id);
-      setPlant(updated);
-      showToast("Sunshine ☀️");
-    } catch (e) {
-      console.error(e);
-    } finally {
-      setBusySun(false);
-    }
-  };
-
   if (!currentUser || !couple) {
     return null;
   }
@@ -166,6 +144,15 @@ export default function PlantPage() {
       className="fixed inset-0 flex flex-col overflow-hidden"
       style={{ backgroundColor: "#F8F4D1" }}
     >
+      <style>{`
+        @keyframes plantTap {
+          0%   { transform: translateX(-50%) scale(1); }
+          25%  { transform: translateX(-50%) scale(0.91); }
+          60%  { transform: translateX(-50%) scale(1.06); }
+          80%  { transform: translateX(-50%) scale(0.97); }
+          100% { transform: translateX(-50%) scale(1); }
+        }
+      `}</style>
       {/* ── Header (fixed, frosted) ───────────────────── */}
       <div
         className="shrink-0 fixed top-0 inset-x-0 z-40"
@@ -192,81 +179,48 @@ export default function PlantPage() {
             </h1>
           </div>
 
-          {/* Action buttons */}
-          <div className="flex items-center gap-2">
-            {/* ⋯ menu */}
-            <div className="relative">
-              <button
-                onClick={() => setShowMenu((v) => !v)}
-                className="flex items-center justify-center text-[#98989D] hover:text-[#636366] transition-colors"
-                style={{ width: 36, height: 36 }}
-                aria-label="More options"
-              >
-                <IoEllipsisVertical style={{ fontSize: 20 }} />
-              </button>
-              {showMenu && (
-                <>
-                  <div className="fixed inset-0 z-40" onClick={() => setShowMenu(false)} />
-                  <div
-                    className="absolute right-0 top-10 z-50 bg-white rounded-2xl overflow-hidden"
-                    style={{ minWidth: 160, boxShadow: "0 4px 24px rgba(0,0,0,0.13)" }}
+          {/* ⋯ menu */}
+          <div className="relative">
+            <button
+              onClick={() => setShowMenu((v) => !v)}
+              className="flex items-center justify-center text-[#98989D] hover:text-[#636366] transition-colors"
+              style={{ width: 36, height: 36 }}
+              aria-label="More options"
+            >
+              <IoEllipsisVertical style={{ fontSize: 20 }} />
+            </button>
+            {showMenu && (
+              <>
+                <div className="fixed inset-0 z-40" onClick={() => setShowMenu(false)} />
+                <div
+                  className="absolute right-0 top-10 z-50 bg-white rounded-2xl overflow-hidden"
+                  style={{ minWidth: 160, boxShadow: "0 4px 24px rgba(0,0,0,0.13)" }}
+                >
+                  <button
+                    onClick={handleReset}
+                    disabled={busyReset}
+                    className="flex items-center gap-2 w-full px-4 py-3 text-left text-sm text-[#FF3B30] hover:bg-[#FFF5F5] font-[family-name:var(--font-suse)] disabled:opacity-40"
+                    style={{ fontWeight: 600 }}
                   >
-                    <button
-                      onClick={handleReset}
-                      disabled={busyReset}
-                      className="flex items-center gap-2 w-full px-4 py-3 text-left text-sm text-[#FF3B30] hover:bg-[#FFF5F5] font-[family-name:var(--font-suse)] disabled:opacity-40"
-                      style={{ fontWeight: 600 }}
-                    >
-                      <IoRefresh style={{ fontSize: 16 }} />
-                      Reset plant
-                    </button>
-                  </div>
-                </>
-              )}
-            </div>
-
-            {/* Water button */}
-            <button
-              onClick={handleWater}
-              disabled={busyWater}
-              className="flex items-center justify-center transition-all disabled:opacity-50"
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: 10,
-                backgroundColor: waterPressed ? "#B8D8F0" : "#D6EEF8",
-                color: "#1A6FA0",
-                transform: waterPressed ? "scale(0.90)" : "scale(1)",
-                transition: "transform 0.15s ease, background-color 0.15s ease",
-                boxShadow: "0 1px 3px rgba(0,0,0,0.10)",
-              }}
-              aria-label="Water plant"
-            >
-              <WaterIcon size={18} />
-            </button>
-
-            {/* Sun button */}
-            <button
-              onClick={handleSun}
-              disabled={busySun}
-              className="flex items-center justify-center transition-all disabled:opacity-50"
-              style={{
-                width: 40,
-                height: 40,
-                borderRadius: 10,
-                backgroundColor: sunPressed ? "#F5D870" : "#FFF0A0",
-                color: "#B87800",
-                transform: sunPressed ? "scale(0.90)" : "scale(1)",
-                transition: "transform 0.15s ease, background-color 0.15s ease",
-                boxShadow: "0 1px 3px rgba(0,0,0,0.10)",
-              }}
-              aria-label="Give sunlight"
-            >
-              <SunIcon size={18} />
-            </button>
+                    <IoRefresh style={{ fontSize: 16 }} />
+                    Reset plant
+                  </button>
+                </div>
+              </>
+            )}
           </div>
         </div>
       </div>
+
+      <style>{`
+        @keyframes plantTap {
+          0%   { transform: translateX(-50%) scale(1); }
+          25%  { transform: translateX(-50%) scale(0.91); }
+          60%  { transform: translateX(-50%) scale(1.06); }
+          80%  { transform: translateX(-50%) scale(0.97); }
+          100% { transform: translateX(-50%) scale(1); }
+        }
+      `}</style>
 
       {/* Spacer for fixed header */}
       <div style={{ height: 64 }} />
@@ -330,14 +284,18 @@ export default function PlantPage() {
               />
             </div>
           ) : (
-            <div
-              className="absolute left-1/2"
+            <button
+              onClick={handleWater}
+              disabled={busyWater}
+              className="absolute left-1/2 cursor-pointer select-none bg-transparent border-0 p-0"
               style={{
                 transform: "translateX(-50%)",
                 bottom: "38%",
                 width: "68%",
                 zIndex: 10,
+                animation: tapAnim ? "plantTap 0.4s ease" : "none",
               }}
+              aria-label="Water plant"
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -347,9 +305,10 @@ export default function PlantPage() {
                 style={{
                   transition: "opacity 0.5s ease",
                   filter: "drop-shadow(0 8px 20px rgba(60,40,10,0.22))",
+                  pointerEvents: "none",
                 }}
               />
-            </div>
+            </button>
           )}
         </div>
       </div>
