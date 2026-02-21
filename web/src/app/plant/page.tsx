@@ -50,7 +50,11 @@ const STAGE_LABELS: Record<number, string> = {
   3: "growing",
   4: "blooming",
   5: "thriving",
+  6: "flourishing",
 };
+
+// Max dead stage with its own image
+const MAX_DEAD_STAGE = 5;
 
 // ── Main component ───────────────────────────────────────────
 
@@ -135,7 +139,8 @@ export default function PlantPage() {
 
   const stage = plant?.stage ?? 1;
   const isDying = plant?.status === "needs-water" || plant?.status === "needs-sun";
-  const imgSrc = isDying ? `/plant/anthurium-dead-${stage}.png?v=3` : `/plant/anthurium-${stage}.png?v=3`;
+  const deadStage = Math.min(stage, MAX_DEAD_STAGE);
+  const imgSrc = isDying ? `/plant/anthurium-dead-${deadStage}.png?v=3` : `/plant/anthurium-${stage}.png?v=3`;
   const stageLabel = STAGE_LABELS[stage];
   const hint = plant ? statusLabel(plant.status) : null;
 

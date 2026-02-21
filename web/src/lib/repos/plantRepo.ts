@@ -15,10 +15,11 @@ export const MAX_POINTS = 100;
 
 // Stage thresholds (lower-bound inclusive)
 const STAGE_THRESHOLDS = [
-  { stage: 5, min: 80 },
-  { stage: 4, min: 60 },
-  { stage: 3, min: 40 },
-  { stage: 2, min: 20 },
+  { stage: 6, min: 85 },
+  { stage: 5, min: 68 },
+  { stage: 4, min: 51 },
+  { stage: 3, min: 34 },
+  { stage: 2, min: 17 },
   { stage: 1, min: 0 },
 ];
 
@@ -27,7 +28,7 @@ const STAGE_THRESHOLDS = [
 export interface PlantState {
   coupleId: string;
   growthPoints: number;      // after decay applied
-  stage: 1 | 2 | 3 | 4 | 5;
+  stage: 1 | 2 | 3 | 4 | 5 | 6;
   lastWateredAt: Date | null;
   lastSunnedAt: Date | null;
   updatedAt: Date;
@@ -46,9 +47,9 @@ interface PlantRow {
 
 // ── Helpers ──────────────────────────────────────────────────
 
-export function computeStage(growthPoints: number): 1 | 2 | 3 | 4 | 5 {
+export function computeStage(growthPoints: number): 1 | 2 | 3 | 4 | 5 | 6 {
   for (const { stage, min } of STAGE_THRESHOLDS) {
-    if (growthPoints >= min) return stage as 1 | 2 | 3 | 4 | 5;
+    if (growthPoints >= min) return stage as 1 | 2 | 3 | 4 | 5 | 6;
   }
   return 1;
 }
