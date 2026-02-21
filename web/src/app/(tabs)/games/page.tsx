@@ -606,6 +606,12 @@ export default function GamesPage() {
           >
             Anthurium
           </span>
+          <span
+            className="font-[family-name:var(--font-suse)]"
+            style={{ fontSize: 12, fontWeight: 500, color: "#9E7A50" }}
+          >
+            my fav plant fr
+          </span>
         </div>
       </button>
 
