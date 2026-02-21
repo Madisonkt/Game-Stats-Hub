@@ -140,7 +140,7 @@ export default function PlantPage() {
   const stage = plant?.stage ?? 1;
   const isDying = plant?.status === "needs-water" || plant?.status === "needs-sun";
   const deadStage = Math.min(stage, MAX_DEAD_STAGE);
-  const imgSrc = isDying ? `/plant/anthurium-dead-${deadStage}.png?v=3` : `/plant/anthurium-${stage}.png?v=3`;
+  const imgSrc = isDying ? `/plant/anthurium-dead-${deadStage}.png?v=4` : `/plant/anthurium-${stage}.png?v=4`;
   const stageLabel = STAGE_LABELS[stage];
   const hint = plant ? statusLabel(plant.status) : null;
 
