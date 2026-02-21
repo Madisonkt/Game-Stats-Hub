@@ -94,8 +94,8 @@ export default function PlantPage() {
 
   const handleWater = async () => {
     if (!couple?.id || !currentUser?.id || busyWater) return;
-    setWaterPressed(true);
-    setTimeout(() => setWaterPressed(false), 180);
+    setTapAnim(true);
+    setTimeout(() => setTapAnim(false), 400);
     setBusyWater(true);
     // Optimistic update
     if (plant) {
