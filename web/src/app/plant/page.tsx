@@ -262,6 +262,12 @@ export default function PlantPage() {
               </div>
             </div>
           )}
+          <span
+            className="font-[family-name:var(--font-suse)]"
+            style={{ fontSize: 11, color: "rgba(139,110,69,0.55)", marginTop: 6, letterSpacing: "0.03em" }}
+          >
+            tap to water 💧
+          </span>
         </div>
 
         {/* Table + plant — centered block */}
