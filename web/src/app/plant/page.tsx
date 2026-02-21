@@ -264,9 +264,9 @@ export default function PlantPage() {
           )}
           <span
             className="font-[family-name:var(--font-suse)]"
-            style={{ fontSize: 11, color: "rgba(139,110,69,0.55)", marginTop: 6, letterSpacing: "0.03em" }}
+            style={{ fontSize: 13, color: "rgba(139,110,69,0.55)", marginTop: 6, letterSpacing: "0.03em" }}
           >
-            tap to water 💧
+            tap to water
           </span>
         </div>
 
