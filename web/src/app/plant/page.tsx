@@ -157,7 +157,7 @@ export default function PlantPage() {
 
   const stage = plant?.stage ?? 1;
   const isDying = plant?.status === "needs-water" || plant?.status === "needs-sun";
-  const imgSrc = isDying ? `/plant/anthurium-dead-${stage}.png` : `/plant/anthurium-${stage}.png`;
+  const imgSrc = isDying ? `/plant/anthurium-dead-${stage}.png?v=3` : `/plant/anthurium-${stage}.png?v=3`;
   const stageLabel = STAGE_LABELS[stage];
   const hint = plant ? statusLabel(plant.status) : null;
 
@@ -315,7 +315,7 @@ export default function PlantPage() {
           {/* Table / tile background image — full image visible */}
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/plant/anthurium-table.png"
+            src="/plant/anthurium-table.png?v=3"
             alt=""
             className="w-full pointer-events-none select-none block"
             style={{ objectFit: "contain" }}

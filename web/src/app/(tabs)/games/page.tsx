@@ -594,7 +594,7 @@ export default function GamesPage() {
         >
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img
-            src="/plant/anthurium-3.png"
+            src="/plant/anthurium-3.png?v=3"
             alt=""
             style={{ width: 36, height: 36, objectFit: "contain" }}
           />
