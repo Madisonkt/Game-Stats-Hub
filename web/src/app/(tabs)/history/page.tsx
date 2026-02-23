@@ -855,6 +855,15 @@ function RoundDetailSheet({
       ? validSolves.reduce((a, b) => (a.timeMs < b.timeMs ? a : b))
       : null;
 
+  // Show cat for 1s if player 1 (index 0) won
+  const player1Won = winner?.userId === members[0]?.id;
+  const [showCat, setShowCat] = useState(player1Won);
+  useEffect(() => {
+    if (!player1Won) return;
+    const t = setTimeout(() => setShowCat(false), 1000);
+    return () => clearTimeout(t);
+  }, [player1Won]);
+
   const ts = round.closedAt ?? round.startedAt;
   const dateLabel = new Date(ts).toLocaleDateString("en-US", {
     weekday: "short",
@@ -872,6 +881,17 @@ function RoundDetailSheet({
       className="fixed inset-0 z-[200] flex flex-col"
       style={{ backgroundColor: "#F4F3F1" }}
     >
+      {/* Cat overlay — 1s on open when player 1 won */}
+      {showCat && (
+        <div className="absolute inset-0 z-10 pointer-events-none" style={{ backgroundColor: "#000" }}>
+          <img
+            src="/images/cat-small.jpg"
+            alt="Cat celebration"
+            className="cat-overlay"
+            style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }}
+          />
+        </div>
+      )}
       {/* Header */}
       <div
         className="flex items-center gap-3 px-4 pt-4 pb-3"
