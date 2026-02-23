@@ -91,7 +91,7 @@ self.addEventListener("push", (event) => {
   if (!event.data) return;
   try {
     const payload = event.data.json();
-    const title = payload.title || "Cheese Squeeze";
+    const title = payload.title || "";
     const options = {
       body: payload.body || "",
       icon: "/images/icon-192.png",

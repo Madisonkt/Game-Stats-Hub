@@ -65,8 +65,7 @@ export async function POST(req: NextRequest) {
     }
 
     const payload = JSON.stringify({
-      title: "Cheese Squeeze",
-      body: message,
+      title: message,
       data: { url: url || "/" },
     });
 
