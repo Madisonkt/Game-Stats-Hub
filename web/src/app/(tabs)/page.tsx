@@ -485,6 +485,28 @@ export default function LogPage() {
             await rubiksRepo.revealAndCloseRound(round.id);
             const allSolves = await rubiksRepo.getSolves(round.id);
             handleRoundComplete(round.id, allSolves);
+            // Notify both players of the winner
+            if (couple?.id) {
+              const validSolves = allSolves.filter((s) => !s.dnf);
+              const winner = validSolves.length > 0
+                ? validSolves.reduce((a, b) => a.timeMs < b.timeMs ? a : b)
+                : null;
+              const winnerName = winner
+                ? (couple.members.find((m) => m.id === winner.userId)?.name ?? "Someone")
+                : "Nobody";
+              const winnerTime = winner ? formatMs(winner.timeMs) : "DNF";
+              fetch("/api/push", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  coupleId: couple.id,
+                  senderUserId: currentUser.id,
+                  sendToAll: true,
+                  message: `🏆 ${winnerName} won the cube challenge! (${winnerTime})`,
+                  url: "/",
+                }),
+              }).catch(() => {});
+            }
           } else if (updatedRound) {
             setRound(updatedRound);
             // First to submit — notify partner to take their turn

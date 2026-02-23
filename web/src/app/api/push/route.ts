@@ -32,7 +32,7 @@ export async function POST(req: NextRequest) {
   try {
     initVapid();
     const body = await req.json();
-    const { coupleId, senderUserId, message, url } = body;
+    const { coupleId, senderUserId, message, url, sendToAll } = body;
 
     if (!coupleId || !senderUserId || !message) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
@@ -44,11 +44,16 @@ export async function POST(req: NextRequest) {
     // Use service role to read partner's push subscriptions
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    const { data: subscriptions, error } = await supabase
+    let query = supabase
       .from("push_subscriptions")
       .select("endpoint, p256dh, auth")
-      .eq("couple_id", coupleId)
-      .neq("user_id", senderUserId);
+      .eq("couple_id", coupleId);
+
+    if (!sendToAll) {
+      query = query.neq("user_id", senderUserId);
+    }
+
+    const { data: subscriptions, error } = await query;
 
     if (error) {
       console.error("Failed to fetch subscriptions:", error);
