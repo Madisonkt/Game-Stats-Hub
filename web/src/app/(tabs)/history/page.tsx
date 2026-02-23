@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { createPortal } from "react-dom";
+import dynamic from "next/dynamic";
 import { useSession } from "@/lib/auth-context";
 import CloudLoader from "@/components/CloudLoader";
 import * as rubiksRepo from "@/lib/repos/rubiksRepo";
@@ -10,8 +12,12 @@ import {
   IoTrashOutline,
   IoEllipsisVertical,
   IoTimeOutline,
+  IoArrowBack,
+  IoTrophyOutline,
 } from "react-icons/io5";
 import { SwipeRow } from "@/components/SwipeRow";
+
+const CubePreview = dynamic(() => import("@/components/CubePreview"), { ssr: false });
 
 // ── helpers ─────────────────────────────────────────────────
 
@@ -56,6 +62,14 @@ function CrownIcon() {
         fill="rgba(255,255,255,0.85)"
         strokeLinejoin="round"
       />
+    </svg>
+  );
+}
+
+function CrownIconGold() {
+  return (
+    <svg width={20} height={16} viewBox="0 0 24 20" fill="none">
+      <path d="M2 7L5 17H19L22 7L17 11L12 3L7 11L2 7Z" fill="#FFD93D" strokeLinejoin="round" />
     </svg>
   );
 }
@@ -170,6 +184,7 @@ function EventRow({
   winnerInitial,
   timeText,
   elapsedDisplay,
+  onClick,
 }: {
   winnerName: string;
   winnerColor: string;
@@ -177,11 +192,13 @@ function EventRow({
   winnerInitial: string;
   timeText: string;
   elapsedDisplay?: string;
+  onClick?: () => void;
 }) {
   return (
-    <div
-      className="flex items-center gap-2.5 bg-[#FEFEFE]"
+    <button
+      className="w-full flex items-center gap-2.5 bg-[#FEFEFE] active:scale-[0.99] transition-transform text-left"
       style={{ borderRadius: 18, padding: 14 }}
+      onClick={onClick}
     >
       {/* Winner dot */}
       <div
@@ -250,7 +267,7 @@ function EventRow({
           {winnerName} won{elapsedDisplay ? ` — ${elapsedDisplay}` : ""}
         </span>
       </div>
-    </div>
+    </button>
   );
 }
 
@@ -339,6 +356,7 @@ export default function HistoryPage() {
   const [loading, setLoading] = useState(true);
   const [statSheetPlayer, setStatSheetPlayer] = useState<number | null>(null);
   const [openSwipeId, setOpenSwipeId] = useState<string | null>(null);
+  const [selectedEntry, setSelectedEntry] = useState<{ round: Round; roundSolves: Solve[] } | null>(null);
 
   useEffect(() => {
     if (!couple?.id) {
@@ -609,6 +627,7 @@ export default function HistoryPage() {
                   winnerInitial={winnerMember?.name?.charAt(0)?.toUpperCase() ?? "?"}
                   timeText={formatTime(ts)}
                   elapsedDisplay={winner ? formatMs(winner.timeMs) : undefined}
+                  onClick={() => setSelectedEntry({ round, roundSolves })}
                 />
               </SwipeRow>
             );
@@ -616,8 +635,18 @@ export default function HistoryPage() {
         </div>
       )}
 
-      {/* ── Player Stat Sheet Modal ─────────────────── */}
-      {statSheetPlayer !== null && (() => {
+      {/* ── Round Detail Sheet ──────────────────────── */}
+      {selectedEntry && createPortal(
+        <RoundDetailSheet
+          round={selectedEntry.round}
+          solves={selectedEntry.roundSolves}
+          members={members}
+          onClose={() => setSelectedEntry(null)}
+        />,
+        document.body
+      )}
+
+      {/* ── Player Stat Sheet Modal ─────────────────── */}      {statSheetPlayer !== null && (() => {
         const player = members[statSheetPlayer];
         const stats = playerStatsMap[player?.id];
         const playerScore = stats?.totalWins ?? 0;
@@ -803,6 +832,201 @@ export default function HistoryPage() {
           </div>
         );
       })()}
+    </div>
+  );
+}
+
+// ── Round Detail Sheet ──────────────────────────────────────
+
+function RoundDetailSheet({
+  round,
+  solves,
+  members,
+  onClose,
+}: {
+  round: Round;
+  solves: Solve[];
+  members: User[];
+  onClose: () => void;
+}) {
+  const validSolves = solves.filter((s) => !s.dnf);
+  const winner =
+    validSolves.length >= 1
+      ? validSolves.reduce((a, b) => (a.timeMs < b.timeMs ? a : b))
+      : null;
+
+  const ts = round.closedAt ?? round.startedAt;
+  const dateLabel = new Date(ts).toLocaleDateString("en-US", {
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
+  const timeLabel = new Date(ts).toLocaleTimeString("en-US", {
+    hour: "numeric",
+    minute: "2-digit",
+  });
+
+  return (
+    <div
+      className="fixed inset-0 z-[200] flex flex-col"
+      style={{ backgroundColor: "#F4F3F1" }}
+    >
+      {/* Header */}
+      <div
+        className="flex items-center gap-3 px-4 pt-4 pb-3"
+        style={{ borderBottom: "1px solid rgba(0,0,0,0.06)" }}
+      >
+        <button
+          onClick={onClose}
+          className="flex items-center justify-center text-[#292929] active:opacity-60 transition-opacity"
+          style={{ width: 36, height: 36, borderRadius: 18, background: "#FEFEFE" }}
+        >
+          <IoArrowBack style={{ fontSize: 20 }} />
+        </button>
+        <div className="flex flex-col">
+          <span
+            className="text-[#292929] font-[family-name:var(--font-suse)]"
+            style={{ fontSize: 17, fontWeight: 800 }}
+          >
+            Round Details
+          </span>
+          <span
+            className="text-[#98989D] font-[family-name:var(--font-suse)]"
+            style={{ fontSize: 12, fontWeight: 500 }}
+          >
+            {dateLabel} · {timeLabel}
+          </span>
+        </div>
+      </div>
+
+      {/* Scrollable content */}
+      <div className="flex-1 overflow-y-auto">
+        <div className="flex flex-col gap-4 max-w-lg mx-auto px-4 pt-4 pb-8">
+
+          {/* Scramble card */}
+          {round.scramble && (
+            <div
+              className="w-full bg-[#FEFEFE]"
+              style={{ borderRadius: 18, padding: 14 }}
+            >
+              <p
+                className="text-[#98989D] font-[family-name:var(--font-suse)] mb-1.5"
+                style={{ fontSize: 12, fontWeight: 600, textTransform: "uppercase", letterSpacing: 1 }}
+              >
+                Scramble
+              </p>
+              <div className="flex items-center gap-3">
+                <p
+                  className="text-[#292929] font-[family-name:var(--font-suse)] flex-1"
+                  style={{ fontSize: 15, fontWeight: 700, lineHeight: "22px" }}
+                >
+                  {round.scramble}
+                </p>
+                <div className="shrink-0" style={{ marginRight: -8, marginTop: -8, marginBottom: -8 }}>
+                  <CubePreview scramble={round.scramble} />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Winner banner */}
+          {winner && (() => {
+            const winnerMember = members.find((m) => m.id === winner.userId);
+            const winnerIdx = winnerMember ? members.indexOf(winnerMember) : 0;
+            return (
+              <div
+                className="flex items-center justify-center gap-2"
+                style={{
+                  background: getPlayerGradient(winnerIdx),
+                  borderRadius: 18,
+                  padding: "14px 20px",
+                }}
+              >
+                <CrownIcon />
+                <span
+                  className="text-white font-[family-name:var(--font-suse)]"
+                  style={{ fontSize: 17, fontWeight: 800 }}
+                >
+                  {winnerMember?.name ?? "Unknown"} wins!
+                </span>
+              </div>
+            );
+          })()}
+
+          {/* Player score cards */}
+          <div className="flex gap-3">
+            {members.map((member, i) => {
+              const solve = solves.find((s) => s.userId === member.id);
+              const isWinner = winner?.userId === member.id;
+              return (
+                <div
+                  key={member.id}
+                  className="flex-1 flex flex-col items-center gap-2 bg-[#FEFEFE]"
+                  style={{
+                    borderRadius: 18,
+                    padding: "16px 12px",
+                    borderWidth: 2.5,
+                    borderStyle: "solid",
+                    borderColor: isWinner ? getPlayerColor(i) : "rgba(0,0,0,0.06)",
+                  }}
+                >
+                  {isWinner && <CrownIconGold />}
+                  {/* Avatar */}
+                  <div
+                    className="flex items-center justify-center overflow-hidden text-white font-bold"
+                    style={{
+                      width: 48,
+                      height: 48,
+                      borderRadius: 24,
+                      backgroundColor: getPlayerColor(i),
+                      fontSize: 16,
+                    }}
+                  >
+                    {member.avatarUrl ? (
+                      <img
+                        src={member.avatarUrl}
+                        alt={member.name}
+                        className="w-full h-full object-cover rounded-full"
+                      />
+                    ) : (
+                      member.name?.charAt(0)?.toUpperCase() || "?"
+                    )}
+                  </div>
+                  {/* Name */}
+                  <span
+                    className="text-[#292929] font-[family-name:var(--font-suse)] uppercase text-center"
+                    style={{ fontSize: 12, fontWeight: 700, letterSpacing: 0.5 }}
+                  >
+                    {member.name}
+                  </span>
+                  {/* Time */}
+                  {solve ? (
+                    <span
+                      className="tabular-nums font-[family-name:var(--font-suse-mono)] text-center"
+                      style={{
+                        fontSize: 22,
+                        fontWeight: 700,
+                        color: isWinner ? getPlayerColor(i) : "#98989D",
+                      }}
+                    >
+                      {solve.dnf ? "DNF" : formatMs(solve.timeMs)}
+                    </span>
+                  ) : (
+                    <span
+                      className="italic font-[family-name:var(--font-suse)] text-center"
+                      style={{ fontSize: 14, color: "#98989D" }}
+                    >
+                      No time
+                    </span>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+        </div>
+      </div>
     </div>
   );
 }
