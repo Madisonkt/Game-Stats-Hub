@@ -971,7 +971,10 @@ function RoundDetailSheet({
                     borderColor: isWinner ? getPlayerColor(i) : "rgba(0,0,0,0.06)",
                   }}
                 >
-                  {isWinner && <CrownIconGold />}
+                  {/* Crown slot — always reserves height so both cards stay aligned */}
+                  <div style={{ height: 16, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    {isWinner && <CrownIconGold />}
+                  </div>
                   {/* Avatar */}
                   <div
                     className="flex items-center justify-center overflow-hidden text-white font-bold"
