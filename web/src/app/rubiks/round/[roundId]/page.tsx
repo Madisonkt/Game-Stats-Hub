@@ -60,6 +60,7 @@ export default function AsyncRoundPage() {
   const [showResult, setShowResult] = useState(false);
   const [resultSolves, setResultSolves] = useState<Solve[]>([]);
   const confettiFiredRef = useRef(false);
+  const revealingRef = useRef(false); // prevent duplicate reveal calls
 
   // ── Load round ─────────────────────────────────────────────
   useEffect(() => {
@@ -128,6 +129,30 @@ export default function AsyncRoundPage() {
       unsubSolves();
     };
   }, [round?.id]);
+
+  // ── Fallback reveal when both IDs present but reveal event not yet received ─
+  useEffect(() => {
+    if (!round?.id) return;
+    if (round.submittedUserIds.length < 2) return;
+    if (showResult || revealingRef.current) return;
+    if (round.status === "closed" || round.revealStatus === "revealed") return;
+
+    // Both submitted but round not yet revealed — we may have missed the reveal event.
+    // Call revealAndCloseRound (idempotent) and show result.
+    revealingRef.current = true;
+    const doReveal = async () => {
+      try {
+        await rubiksRepo.revealAndCloseRound(round.id);
+      } catch {
+        // Already revealed by the other device — that's fine
+      }
+      const allSolves = await rubiksRepo.getSolves(round.id);
+      setResultSolves(allSolves);
+      setShowResult(true);
+    };
+    doReveal();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [round?.submittedUserIds.length, round?.id, showResult]);
 
   // ── Timer logic ───────────────────────────────────────────
   const startTimer = useCallback(() => {
@@ -569,7 +594,17 @@ export default function AsyncRoundPage() {
               Waiting for your partner to submit…
             </p>
           </div>
-        ) : null}
+        ) : (
+          /* Both submitted — revealing results */
+          <div className="w-full flex flex-col items-center gap-2 py-2">
+            <p
+              className="text-[#292929] font-[family-name:var(--font-suse)] animate-pulse"
+              style={{ fontSize: 15, fontWeight: 700 }}
+            >
+              Revealing results…
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );

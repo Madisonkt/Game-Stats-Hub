@@ -312,6 +312,12 @@ export default function LogPage() {
   // Track rounds that already triggered confetti (prevent duplicates from polling)
   const confettiFiredRef = useRef<Set<string>>(new Set());
 
+  // Persist the current round ID across renders (so we can check it after state clears)
+  const roundIdRef = useRef<string | null>(null);
+  useEffect(() => {
+    roundIdRef.current = round?.id ?? null;
+  }, [round?.id]);
+
   // ── Compute scores helper ─────────────────────────────────
   const computeScores = useCallback(
     async (coupleId: string, gk: string) => {
@@ -415,11 +421,13 @@ export default function LogPage() {
   // ── Realtime: subscribe to rounds ─────────────────────────
   useEffect(() => {
     if (!couple?.id) return;
-    const unsub = rubiksRepo.subscribeToRounds(couple.id, (updatedRound) => {
-      setRound(updatedRound);
+    const unsub = rubiksRepo.subscribeToRounds(couple.id, async (updatedRound) => {
       if (updatedRound) {
+        // Keep round state and solves fresh
+        setRound(updatedRound);
         rubiksRepo.getSolves(updatedRound.id).then(setSolves);
-        // Async: if both players have submitted, reveal + close the round
+
+        // Async: if both submitted and still hidden, reveal + close
         if (
           updatedRound.mode === "async" &&
           updatedRound.submittedUserIds.length >= 2 &&
@@ -428,14 +436,46 @@ export default function LogPage() {
           rubiksRepo.revealAndCloseRound(updatedRound.id).then(async () => {
             const allSolves = await rubiksRepo.getSolves(updatedRound.id);
             handleRoundComplete(updatedRound.id, allSolves);
-          }).catch(() => {/* ignore — other device may have revealed already */});
+          }).catch(() => {/* ignore — other device may have already revealed */});
+        }
+
+        // Already revealed/closed (e.g. other device beat us to it)
+        if (updatedRound.status === "closed" || updatedRound.revealStatus === "revealed") {
+          const allSolves = await rubiksRepo.getSolves(updatedRound.id);
+          handleRoundComplete(updatedRound.id, allSolves);
         }
       } else {
+        // getActiveRound returned null — round was closed.
+        // Capture the ID before clearing state and check for completion.
+        const prevId = roundIdRef.current;
+        setRound(null);
         setSolves([]);
+        if (prevId) {
+          const closedRound = await rubiksRepo.getRound(prevId);
+          if (closedRound && (closedRound.status === "closed" || closedRound.revealStatus === "revealed")) {
+            const allSolves = await rubiksRepo.getSolves(prevId);
+            handleRoundComplete(prevId, allSolves);
+          }
+        }
       }
     });
     return () => unsub();
   }, [couple?.id, handleRoundComplete]);
+
+  // ── Realtime: subscribe to current round directly (catches close/reveal events) ──
+  useEffect(() => {
+    if (!round?.id) return;
+    const roundId = round.id;
+    const unsub = rubiksRepo.subscribeToRound(roundId, async (updated) => {
+      if (!updated) return;
+      setRound(updated);
+      if (updated.status === "closed" || updated.revealStatus === "revealed") {
+        const allSolves = await rubiksRepo.getSolves(roundId);
+        handleRoundComplete(roundId, allSolves);
+      }
+    });
+    return () => unsub();
+  }, [round?.id, handleRoundComplete]);
 
   // ── Realtime: subscribe to solves ─────────────────────────
   useEffect(() => {

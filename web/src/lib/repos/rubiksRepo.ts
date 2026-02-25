@@ -255,9 +255,19 @@ export async function revealAndCloseRound(roundId: string): Promise<void> {
 }
 
 /**
- * Track that a user has submitted their async solve.
- * Appends userId to submitted_user_ids (idempotent).
- * Returns the updated round so the caller knows if both have submitted.
+ * Atomically track that a user has submitted their async solve.
+ *
+ * Uses the `append_submitted_user_id` Postgres RPC (array_append in a single
+ * UPDATE statement) to prevent the race condition where two near-simultaneous
+ * submits can overwrite each other via a read-modify-write cycle.
+ *
+ * SQL prerequisite (run supabase-atomic-submit.sql in Supabase SQL Editor):
+ *   create function public.append_submitted_user_id(p_round_id uuid, p_user_id uuid)
+ *   returns setof public.rounds as $$ update rounds set submitted_user_ids =
+ *   array_append(submitted_user_ids, p_user_id) where id = p_round_id
+ *   and not (p_user_id = any(submitted_user_ids)) returning *; $$ language sql security definer;
+ *
+ * Falls back to a direct fetch if the RPC returns no rows (already tracked).
  */
 export async function trackSolveSubmitted(
   roundId: string,
@@ -265,34 +275,23 @@ export async function trackSolveSubmitted(
 ): Promise<Round | null> {
   const supabase = createSupabaseBrowserClient();
 
-  const { data: current } = await supabase
-    .from("rounds")
-    .select("submitted_user_ids")
-    .eq("id", roundId)
-    .single();
+  // Atomic array_append — only appends if userId not already present
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const { data: rpcRows, error: rpcError } = await (supabase as any)
+    .rpc("append_submitted_user_id", { p_round_id: roundId, p_user_id: userId });
 
-  if (!current) return null;
-
-  const existing = (current.submitted_user_ids as string[]) ?? [];
-  if (existing.includes(userId)) {
-    // Already tracked — fetch and return current state
-    const { data } = await supabase
-      .from("rounds")
-      .select("*")
-      .eq("id", roundId)
-      .single();
-    return data ? toDomainRound(data as RoundRow) : null;
+  if (!rpcError && rpcRows && (rpcRows as RoundRow[]).length > 0) {
+    return toDomainRound((rpcRows as RoundRow[])[0]);
   }
 
-  const newIds = [...existing, userId];
-  const { data: updated } = await supabase
+  // No-op (already tracked) or RPC not yet deployed — fetch current state
+  const { data } = await supabase
     .from("rounds")
-    .update({ submitted_user_ids: newIds })
+    .select("*")
     .eq("id", roundId)
-    .select()
     .single();
 
-  return updated ? toDomainRound(updated as RoundRow) : null;
+  return data ? toDomainRound(data as RoundRow) : null;
 }
 
 /**

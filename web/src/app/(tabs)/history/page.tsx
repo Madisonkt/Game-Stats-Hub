@@ -16,6 +16,7 @@ import {
   IoTrophyOutline,
 } from "react-icons/io5";
 import { SwipeRow } from "@/components/SwipeRow";
+import { useSwipeable } from "react-swipeable";
 
 const CubePreview = dynamic(() => import("@/components/CubePreview"), { ssr: false });
 
@@ -864,6 +865,14 @@ function RoundDetailSheet({
     return () => clearTimeout(t);
   }, [player1Won]);
 
+  // Swipe right to close
+  const swipeHandlers = useSwipeable({
+    onSwipedRight: () => onClose(),
+    trackTouch: true,
+    trackMouse: false,
+    delta: 60,
+  });
+
   const ts = round.closedAt ?? round.startedAt;
   const dateLabel = new Date(ts).toLocaleDateString("en-US", {
     weekday: "short",
@@ -878,6 +887,7 @@ function RoundDetailSheet({
 
   return (
     <div
+      {...swipeHandlers}
       className="fixed inset-0 z-[200] flex flex-col"
       style={{ backgroundColor: "#F4F3F1" }}
     >
