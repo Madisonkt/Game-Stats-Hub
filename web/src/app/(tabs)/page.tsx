@@ -351,6 +351,13 @@ export default function LogPage() {
       if (confettiFiredRef.current.has(roundId)) return;
       confettiFiredRef.current.add(roundId);
 
+      // Immediately reflect the closed state locally so the UI transitions without waiting on realtime
+      setRound((prev) => {
+        if (!prev || prev.id !== roundId) return prev;
+        return { ...prev, status: "closed", revealStatus: "revealed" };
+      });
+      setSolves(roundSolves);
+
       try {
         await rubiksRepo.closeRound(roundId);
       } catch {
