@@ -154,7 +154,31 @@ export default function AsyncRoundPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [round?.submittedUserIds.length, round?.id, showResult]);
 
-  // ── Timer logic ───────────────────────────────────────────
+  // ── Polling fallback: check round status every 3s while waiting for reveal ──
+  // Realtime can miss events — this guarantees we catch the closed/revealed state.
+  useEffect(() => {
+    if (!round?.id || showResult) return;
+    // Only poll once the current user has submitted (otherwise no need)
+    const myId = currentUser?.id;
+    if (!myId || !round.submittedUserIds.includes(myId)) return;
+
+    const pollId = setInterval(async () => {
+      const latest = await rubiksRepo.getRound(round.id);
+      if (!latest) return;
+      setRound(latest);
+      if (latest.revealStatus === "revealed" || latest.status === "closed") {
+        clearInterval(pollId);
+        const allSolves = await rubiksRepo.getSolves(latest.id);
+        setResultSolves(allSolves);
+        setShowResult(true);
+      }
+    }, 3000);
+
+    return () => clearInterval(pollId);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [round?.id, round?.submittedUserIds.length, showResult, currentUser?.id]);
+
+  // ── Timer logic ─────────────────────────────────────────────────────────
   const startTimer = useCallback(() => {
     timerStartRef.current = Date.now();
     setTimerElapsed(0);

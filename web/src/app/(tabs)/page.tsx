@@ -490,7 +490,34 @@ export default function LogPage() {
     return () => unsub();
   }, [round?.id, round?.status, round?.mode, handleRoundComplete]);
 
-  // ── Timer logic ───────────────────────────────────────────
+  // ── Polling fallback: check round status every 3s while waiting for partner ──
+  // Realtime can miss events — this guarantees the waiting player catches the result.
+  useEffect(() => {
+    if (!round?.id || !currentUser?.id) return;
+    if (round.mode !== "async") return;
+    // Only poll once the current user has submitted their time
+    const myId = currentUser.id;
+    const mySubmitted = round.submittedUserIds.includes(myId);
+    if (!mySubmitted) return;
+    // Stop polling if round is already closed
+    if (round.status === "closed" || round.revealStatus === "revealed") return;
+
+    const pollId = setInterval(async () => {
+      const latest = await rubiksRepo.getRound(round.id);
+      if (!latest) return;
+      setRound(latest);
+      if (latest.status === "closed" || latest.revealStatus === "revealed") {
+        clearInterval(pollId);
+        const allSolves = await rubiksRepo.getSolves(latest.id);
+        handleRoundComplete(latest.id, allSolves);
+      }
+    }, 3000);
+
+    return () => clearInterval(pollId);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [round?.id, round?.submittedUserIds.length, round?.status, currentUser?.id]);
+
+  // ── Timer logic ─────────────────────────────────────────────────────
   const startTimer = useCallback(() => {
     timerStartRef.current = Date.now();
     setTimerElapsed(0);
