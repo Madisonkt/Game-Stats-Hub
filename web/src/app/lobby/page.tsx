@@ -3,7 +3,7 @@
 import { useSession } from "@/lib/auth-context";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { subscribeToMembers, getCoupleForUser } from "@/lib/repos/coupleRepo";
+import { getCoupleForUser } from "@/lib/repos/coupleRepo";
 import { IoCopy, IoCheckmark } from "react-icons/io5";
 
 export default function LobbyPage() {
@@ -40,16 +40,8 @@ export default function LobbyPage() {
     };
   }, [coupleId, userId, pollForPartner]);
 
-  // ── Realtime: subscribe to couple_members changes (backup) ───────────
-  useEffect(() => {
-    if (!coupleId) return;
-
-    const unsub = subscribeToMembers(coupleId, (updatedCouple) => {
-      setCouple(updatedCouple);
-    });
-
-    return () => unsub();
-  }, [coupleId, setCouple]);
+  // ── Realtime handled by auth-context's subscribeToMembers subscription ──
+  // (which now also watches couples.status — no duplicate channel needed here)
 
   // ── Auto-navigate when couple status becomes "ready" ─────────────────
   useEffect(() => {
@@ -155,7 +147,7 @@ export default function LobbyPage() {
         <div className="flex items-center gap-2 mt-2">
           <div className="w-2 h-2 rounded-full bg-[#292929] animate-pulse" />
           <p className="text-xs text-[#98989D] font-[family-name:var(--font-suse)]">
-            Listening for partner via Supabase Realtime
+            Listening for partner…
           </p>
         </div>
       </div>

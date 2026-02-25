@@ -297,7 +297,8 @@ export function subscribeToMembers(
   };
 
   channel = supabase
-    .channel(`couple_members:${coupleId}`)
+    .channel(`couple_full:${coupleId}`)
+    // Watch member joins/leaves
     .on(
       "postgres_changes",
       {
@@ -306,10 +307,18 @@ export function subscribeToMembers(
         table: "couple_members",
         filter: `couple_id=eq.${coupleId}`,
       },
-      () => {
-        // Any INSERT/UPDATE/DELETE → re-fetch full state
-        fetchAndNotify();
-      }
+      () => fetchAndNotify()
+    )
+    // Also watch the couple row itself (status: 'ready' update)
+    .on(
+      "postgres_changes",
+      {
+        event: "UPDATE",
+        schema: "public",
+        table: "couples",
+        filter: `id=eq.${coupleId}`,
+      },
+      () => fetchAndNotify()
     )
     .subscribe();
 
