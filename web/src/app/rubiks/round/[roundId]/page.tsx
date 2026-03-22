@@ -260,6 +260,28 @@ export default function AsyncRoundPage() {
     };
   }, []);
 
+  // Lock page scrolling while fullscreen timer is active so tap-to-stop
+  // doesn't get treated as a scroll gesture on mobile browsers.
+  useEffect(() => {
+    if (typeof document === "undefined" || !timerRunning) return;
+
+    const body = document.body;
+    const html = document.documentElement;
+    const prevBodyOverflow = body.style.overflow;
+    const prevBodyTouchAction = body.style.touchAction;
+    const prevHtmlOverflow = html.style.overflow;
+
+    body.style.overflow = "hidden";
+    body.style.touchAction = "none";
+    html.style.overflow = "hidden";
+
+    return () => {
+      body.style.overflow = prevBodyOverflow;
+      body.style.touchAction = prevBodyTouchAction;
+      html.style.overflow = prevHtmlOverflow;
+    };
+  }, [timerRunning]);
+
   // ── Render states ─────────────────────────────────────────
 
   if (sessionLoading || loading) {
@@ -469,7 +491,7 @@ export default function AsyncRoundPage() {
       <div
         className="fixed inset-0 z-[100] flex flex-col items-center justify-center cursor-pointer select-none"
         style={{ backgroundColor: "#E53E3E" }}
-        onClick={stopTimer}
+        onPointerDown={stopTimer}
       >
         <p
           className="text-white tabular-nums font-[family-name:var(--font-suse)]"

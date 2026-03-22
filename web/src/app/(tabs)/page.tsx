@@ -497,6 +497,17 @@ export default function LogPage() {
     return () => unsub();
   }, [round?.id, round?.status, round?.mode, handleRoundComplete]);
 
+  // ── Reconciliation guard: close live round when both solves already exist ──
+  // This catches cases where realtime events were missed and state is loaded
+  // from network with an in_progress live round that already has both solves.
+  useEffect(() => {
+    if (!round?.id) return;
+    if (round.mode === "async") return;
+    if (round.status !== "in_progress") return;
+    if (solves.length < 2) return;
+    handleRoundComplete(round.id, solves);
+  }, [round?.id, round?.status, round?.mode, solves, handleRoundComplete]);
+
   // ── Polling fallback: check round status every 3s while waiting for partner ──
   // Realtime can miss events — this guarantees the waiting player catches the result.
   useEffect(() => {
@@ -523,6 +534,36 @@ export default function LogPage() {
     return () => clearInterval(pollId);
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [round?.id, round?.submittedUserIds.length, round?.status, currentUser?.id]);
+
+  // ── Polling fallback (live): detect completion if solve events are missed ──
+  useEffect(() => {
+    if (!round?.id) return;
+    if (round.mode === "async") return;
+    if (round.status !== "in_progress") return;
+
+    const pollId = setInterval(async () => {
+      const [latestRound, latestSolves] = await Promise.all([
+        rubiksRepo.getRound(round.id),
+        rubiksRepo.getSolves(round.id),
+      ]);
+      if (!latestRound) return;
+
+      setRound(latestRound);
+      setSolves(latestSolves);
+
+      if (
+        latestRound.status === "closed" ||
+        (latestRound.mode !== "async" &&
+          latestRound.status === "in_progress" &&
+          latestSolves.length >= 2)
+      ) {
+        clearInterval(pollId);
+        await handleRoundComplete(round.id, latestSolves);
+      }
+    }, 3000);
+
+    return () => clearInterval(pollId);
+  }, [round?.id, round?.mode, round?.status, handleRoundComplete]);
 
   // ── Timer logic ─────────────────────────────────────────────────────
   const startTimer = useCallback(() => {
@@ -610,6 +651,28 @@ export default function LogPage() {
       if (timerRef.current) cancelAnimationFrame(timerRef.current);
     };
   }, []);
+
+  // Lock page scrolling while fullscreen timer is active so taps are not
+  // interpreted as scroll gestures on mobile browsers.
+  useEffect(() => {
+    if (typeof document === "undefined" || !timerRunning) return;
+
+    const body = document.body;
+    const html = document.documentElement;
+    const prevBodyOverflow = body.style.overflow;
+    const prevBodyTouchAction = body.style.touchAction;
+    const prevHtmlOverflow = html.style.overflow;
+
+    body.style.overflow = "hidden";
+    body.style.touchAction = "none";
+    html.style.overflow = "hidden";
+
+    return () => {
+      body.style.overflow = prevBodyOverflow;
+      body.style.touchAction = prevBodyTouchAction;
+      html.style.overflow = prevHtmlOverflow;
+    };
+  }, [timerRunning]);
 
   // ── Reset timer when a new round appears ─────────────────
   const prevRoundIdRef = useRef<string | null>(null);
@@ -977,7 +1040,7 @@ export default function LogPage() {
         <div
           className="fixed inset-0 z-[100] flex flex-col items-center justify-center cursor-pointer select-none"
           style={{ backgroundColor: "#E53E3E" }}
-          onClick={stopTimer}
+          onPointerDown={stopTimer}
         >
           <p
             className="text-white tabular-nums font-[family-name:var(--font-suse)]"
